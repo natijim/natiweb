@@ -96,72 +96,23 @@
         }
 
         /* --- CUSTOM CURSOR --- */
-        /* --- EDIT CURSOR HERE --- */
-        /* Change background-color to edit the circle color */
-        /* Change width/height to edit the size */
         .cursor {
             position: fixed;
             top: 0;
             left: 0;
-            width: 20px;
-            height: 20px;
-            background-color: var(--cursor-color);
-            /* Use variable */
+            width: 14px;
+            height: 14px;
+            background-color: #000;
             border-radius: 50%;
             pointer-events: none;
             z-index: 9999;
             transform: translate(-50%, -50%);
-            mix-blend-mode: normal;
-            /* Changed from difference to normal for color control */
-            transition: width 0.2s, height 0.2s, background-color 0.2s;
-            display: flex;
-            /* Added for centering */
-            justify-content: center;
-            /* Added for centering */
-            align-items: center;
-            /* Added for centering */
+            mix-blend-mode: exclusion;
         }
 
-        /* --- EDIT CURSOR FONT HERE --- */
+        /* Hide cursor text - no longer used */
         .cursor-text {
-            opacity: 0;
-            color: white;
-            font-family: var(--font-main);
-            font-size: 12px;
-            font-weight: 500;
-            white-space: nowrap;
-            transition: opacity 0.2s;
-        }
-
-        .cursor.hover-link {
-            width: 40px;
-            height: 40px;
-            background: var(--cursor-hover-bg);
-            backdrop-filter: blur(2px);
-        }
-
-        .cursor.hover-project {
-            width: 120px;
-            height: 120px;
-            background: #0000009d;
-            backdrop-filter: blur(4px);
-        }
-
-        /* Specific style for Coming Soon (disabled) state */
-        /* --- EDIT COMING SOON CURSOR HERE --- */
-        .cursor.hover-project[data-type="coming-soon"] {
-            background: #c7c7c72b;
-            backdrop-filter: blur(4px);
-            /* Light Gray */
-        }
-
-        .cursor.hover-project[data-type="coming-soon"] .cursor-text {
-            color: var(--coming-soon-text);
-            /* White Text for visibility in dark mode */
-        }
-
-        .cursor.hover-project .cursor-text {
-            opacity: 1;
+            display: none;
         }
 
         /* --- SOCIAL DROPDOWN --- */
@@ -1468,7 +1419,7 @@
             });
 
             // --- TOOLTIP, CURSOR & MAGNETIC EFFECT FOR HERO IMAGES ---
-            const magneticStrength = 0.3; // How much the element follows the cursor (0-1)
+            const magneticStrength = 0.15; // How much the element follows the cursor (0-1)
 
             heroImages.forEach(img => {
                 // Magnetic effect - element follows cursor
@@ -1498,17 +1449,10 @@
                     // Bring to front
                     img.style.zIndex = "100";
 
-                    // Check for Cursor
-                    if (img.hasAttribute('data-cursor')) {
-                        cursor.classList.add('hover-project');
-                        cursorText.innerText = img.getAttribute('data-cursor');
-                    }
-                    // Check for Tooltip
+                    // Show Tooltip
                     if (img.hasAttribute('data-tooltip')) {
                         tooltip.innerText = img.getAttribute('data-tooltip');
                         tooltip.style.opacity = 1;
-                        // Add UI-like cursor style (hover-link)
-                        cursor.classList.add('hover-link');
                     }
                 });
 
@@ -1527,15 +1471,10 @@
                     // Reset z-index with delay for smooth transition
                     setTimeout(() => {
                         img.style.zIndex = "";
-                    }, 500); // 500ms delay matches the transition feel
+                    }, 500);
 
-                    // Reset Cursor
-                    cursor.classList.remove('hover-project');
-                    cursorText.innerText = "";
                     // Reset Tooltip
                     tooltip.style.opacity = 0;
-                    // Remove UI-like cursor style
-                    cursor.classList.remove('hover-link');
                 });
             });
 
@@ -1585,55 +1524,7 @@
                 });
             }
 
-            document.querySelectorAll('[data-cursor]').forEach(img => {
-                // Avoid double binding for hero images which are handled above
-                if (img.classList.contains('hero-img')) return;
-
-                img.addEventListener('mouseenter', () => {
-                    if (!isIntroDone) return;
-                    cursor.classList.add('hover-project');
-                    const text = img.getAttribute('data-cursor');
-                    cursorText.innerText = text;
-
-                    // Check if it's "Coming Soon" to apply specific style
-                    if (text === "Coming Soon") {
-                        cursor.setAttribute('data-type', 'coming-soon');
-                    } else {
-                        cursor.removeAttribute('data-type');
-                    }
-                });
-                img.addEventListener('mouseleave', () => {
-                    cursor.classList.remove('hover-project');
-                    cursor.removeAttribute('data-type'); // Reset type
-                    cursorText.innerText = "";
-                });
-            });
-            // Updated selector to include the new contact buttons and links
-            document.querySelectorAll('button, a, .nav-pill, .contact-btn, .contact-highlight, .a11y-toggle').forEach(link => {
-                link.addEventListener('mouseenter', () => {
-                    if (!isIntroDone) return;
-                    // Check if it has data-cursor (like the disabled buttons)
-                    if (link.hasAttribute('data-cursor')) {
-                        cursor.classList.add('hover-project');
-                        const text = link.getAttribute('data-cursor');
-                        cursorText.innerText = text;
-
-                        if (text === "Coming Soon") {
-                            cursor.setAttribute('data-type', 'coming-soon');
-                        } else {
-                            cursor.removeAttribute('data-type');
-                        }
-                    } else {
-                        cursor.classList.add('hover-link');
-                    }
-                });
-                link.addEventListener('mouseleave', () => {
-                    cursor.classList.remove('hover-link');
-                    cursor.classList.remove('hover-project');
-                    cursor.removeAttribute('data-type');
-                    cursorText.innerText = "";
-                });
-            });
+            // Cursor hover states removed - cursor stays constant with exclusion blend mode
 
 
             // --- 2. LENIS + GSAP SYNC (THE FIX FOR SHAKING) ---

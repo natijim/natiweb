@@ -379,6 +379,62 @@
             }
         }
 
+        /* --- DYNAMIC BOTTOM BAR --- */
+        .dynamic-bar {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 6px;
+            border-radius: 60px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            filter: blur(5px);
+        }
+
+        .bar-content-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+
+        .nav-link {
+            background: transparent;
+            border: none;
+            padding: 12px 16px;
+            border-radius: 20px;
+            font-size: .75rem;
+            font-weight: 500;
+            color: #767676;
+            text-decoration: none;
+            transition: background 0.2s, color 0.2s;
+            font-family: var(--font-main);
+            cursor: none;
+        }
+
+        .nav-link:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .bar-divider {
+            width: 1px;
+            height: 20px;
+            background: #ddd;
+            margin: 0 4px;
+        }
+
         /* --- ANIMATIONS --- */
         .fade-in {
             opacity: 0;
@@ -469,13 +525,25 @@
             </p>
         </div>
 
-        <!-- BACK LINK -->
-        <a href="index.html" class="back-link fade-in">
+        <!-- BACK LINK (hidden, replaced by dynamic bar) -->
+        <a href="index.html" class="back-link fade-in" style="display: none;">
             <span>&larr;</span>
             <span>Back to Home</span>
         </a>
 
     </main>
+
+    <!-- DYNAMIC BOTTOM BAR -->
+    <div class="dynamic-bar" id="dynamic-bar">
+        <div class="bar-content-wrapper">
+            <nav class="nav-menu">
+                <a href="index.html#projects" class="nav-link">Projects</a>
+                <button class="nav-link" id="btn-about">About</button>
+                <span class="bar-divider"></span>
+                <a href="index.html" class="nav-link">← Back Home</a>
+            </nav>
+        </div>
+    </div>
 
     <script>
         // --- CUSTOM CURSOR ---
@@ -512,10 +580,12 @@
             const header = document.querySelector('.site-header');
             const mainContent = document.querySelector('main');
             const fadeElements = document.querySelectorAll('.fade-in');
+            const dynamicBar = document.getElementById('dynamic-bar');
 
             // Initial states
             gsap.set(header, { opacity: 0, y: -20 });
             gsap.set(fadeElements, { opacity: 0, y: 40 });
+            gsap.set(dynamicBar, { opacity: 0, y: 20, filter: "blur(5px)" });
 
             // Create entry timeline
             const entryTl = gsap.timeline({ delay: 0.1 });
@@ -527,6 +597,15 @@
                 duration: 0.5,
                 ease: "power3.out"
             });
+
+            // Dynamic bar fades in with header
+            entryTl.to(dynamicBar, {
+                opacity: 1,
+                y: 0,
+                filter: "blur(0px)",
+                duration: 0.6,
+                ease: "power3.out"
+            }, "-=0.3");
 
             // Main content elements stagger in
             entryTl.to(fadeElements, {
