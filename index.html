@@ -985,13 +985,13 @@
 
         .email-link {
             font-size: 14px;
-            color: var(--text-color);
+            color: gray;
             text-decoration: none;
             transition: color 0.2s;
         }
 
         .email-link:hover {
-            color: var(--text-color);
+            color: black;
             opacity: 0.6;
         }
 
@@ -1468,8 +1468,32 @@
                 });
             });
 
-            // --- TOOLTIP & CURSOR LOGIC FOR HERO IMAGES ---
+            // --- TOOLTIP, CURSOR & MAGNETIC EFFECT FOR HERO IMAGES ---
+            const magneticStrength = 0.3; // How much the element follows the cursor (0-1)
+
             heroImages.forEach(img => {
+                // Magnetic effect - element follows cursor
+                img.addEventListener('mousemove', (e) => {
+                    if (!isIntroDone) return;
+
+                    const rect = img.getBoundingClientRect();
+                    const centerX = rect.left + rect.width / 2;
+                    const centerY = rect.top + rect.height / 2;
+
+                    // Calculate distance from cursor to center
+                    const deltaX = e.clientX - centerX;
+                    const deltaY = e.clientY - centerY;
+
+                    // Apply magnetic pull (move element towards cursor)
+                    gsap.to(img, {
+                        x: deltaX * magneticStrength,
+                        y: deltaY * magneticStrength,
+                        duration: 0.3,
+                        ease: "power2.out",
+                        overwrite: "auto"
+                    });
+                });
+
                 img.addEventListener('mouseenter', () => {
                     if (!isIntroDone) return;
                     // Bring to front
@@ -1488,7 +1512,19 @@
                         cursor.classList.add('hover-link');
                     }
                 });
+
                 img.addEventListener('mouseleave', () => {
+                    if (!isIntroDone) return;
+
+                    // Reset magnetic position with smooth animation
+                    gsap.to(img, {
+                        x: 0,
+                        y: 0,
+                        duration: 0.5,
+                        ease: "elastic.out(1, 0.5)",
+                        overwrite: "auto"
+                    });
+
                     // Reset z-index with delay for smooth transition
                     setTimeout(() => {
                         img.style.zIndex = "";
