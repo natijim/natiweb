@@ -1967,10 +1967,20 @@
                     otherContent.forEach(el => el.classList.add('fade-out-content'));
 
                     // Target position for project-logo (in project page content area)
-                    // Project page has: padding 120px top, 40px left, logo is 48px
-                    const targetX = 64; // 40px padding + 24px (half of 48px logo)
-                    const targetY = 144; // 120px padding + 24px (half of 48px logo)
-                    const targetSize = 48;
+                    // Project page has: max-width: 900px, centered, with responsive padding
+                    const viewportWidth = window.innerWidth;
+                    const mainMaxWidth = 900;
+                    const mainWidth = Math.min(mainMaxWidth, viewportWidth);
+                    const mainLeftOffset = Math.max(0, (viewportWidth - mainMaxWidth) / 2);
+
+                    // Responsive padding values from project.html CSS
+                    const isTablet = viewportWidth <= 768;
+                    const leftPadding = isTablet ? 20 : 40;
+                    const topPadding = isTablet ? 100 : 120;
+
+                    const targetSize = isTablet && viewportWidth <= 480 ? 40 : 48;
+                    const targetX = mainLeftOffset + leftPadding + (targetSize / 2);
+                    const targetY = topPadding + (targetSize / 2);
 
                     // Timeline with setTimeout for predictable timing
                     // Step 1: Wait 400ms for fade out
