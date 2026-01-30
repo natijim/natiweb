@@ -32,6 +32,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            cursor: none;
         }
 
         html {
@@ -44,8 +45,24 @@
             font-family: var(--font-main);
             background-color: var(--bg-color);
             color: var(--text-color);
+            cursor: none;
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- CUSTOM CURSOR --- */
+        .cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 14px;
+            height: 14px;
+            background-color: #000;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            mix-blend-mode: exclusion;
         }
 
         /* --- HEADER --- */
@@ -88,13 +105,13 @@
 
         .email-link {
             font-size: 14px;
-            color: var(--text-color);
+            color: #999;
             text-decoration: none;
-            transition: opacity 0.2s;
+            transition: color 0.2s;
         }
 
         .email-link:hover {
-            opacity: 0.6;
+            color: var(--text-color);
         }
 
         .copy-btn {
@@ -372,6 +389,9 @@
 
 <body data-barba="wrapper">
 
+    <!-- CUSTOM CURSOR -->
+    <div class="cursor"></div>
+
     <!-- HEADER -->
     <header class="site-header">
         <div class="header-left">
@@ -458,6 +478,16 @@
     </main>
 
     <script>
+        // --- CUSTOM CURSOR ---
+        const cursor = document.querySelector('.cursor');
+        const xTo = gsap.quickTo(cursor, "x", { duration: 0.1, ease: "power3" });
+        const yTo = gsap.quickTo(cursor, "y", { duration: 0.1, ease: "power3" });
+
+        window.addEventListener("mousemove", (e) => {
+            xTo(e.clientX);
+            yTo(e.clientY);
+        });
+
         // Get project data from URL or localStorage
         document.addEventListener('DOMContentLoaded', () => {
             // Try to get clicked image from localStorage (set by index.html)

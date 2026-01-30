@@ -985,14 +985,13 @@
 
         .email-link {
             font-size: 14px;
-            color: gray;
+            color: #999;
             text-decoration: none;
             transition: color 0.2s;
         }
 
         .email-link:hover {
-            color: black;
-            opacity: 0.6;
+            color: var(--text-color);
         }
 
         .copy-btn {
@@ -1516,12 +1515,12 @@
                 img.addEventListener('mouseleave', () => {
                     if (!isIntroDone) return;
 
-                    // Reset magnetic position with smooth animation
+                    // Reset magnetic position with soft, subtle animation
                     gsap.to(img, {
                         x: 0,
                         y: 0,
-                        duration: 0.5,
-                        ease: "elastic.out(1, 0.5)",
+                        duration: 0.7,
+                        ease: "power3.out",
                         overwrite: "auto"
                     });
 
