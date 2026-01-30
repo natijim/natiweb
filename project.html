@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Detail - Natalia Buendia</title>
+    <link rel="icon" type="image/png" href="/img/favicon.png">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/lenis@1.0.45/dist/lenis.min.js"></script>
+    <script src="https://unpkg.com/@barba/core"></script>
+    <style>
+        /* --- FONT SETUP --- */
+        @font-face {
+            font-family: 'Acid Grotesk';
+            src: url('./fonts/FFF-AcidGrotesk-Book.otf') format('opentype');
+            font-weight: 400;
+        }
+
+        :root {
+            --font-main: 'Acid Grotesk', 'Inter', Helvetica, Arial, sans-serif;
+            --bg-color: #FAFAFA;
+            --text-color: #1a1a1a;
+            --text-secondary: #666666;
+            --text-muted: #999999;
+            --card-bg: #F3F3F3;
+            --border-color: #E5E5E5;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: var(--font-main);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- HEADER --- */
+        .site-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: var(--bg-color);
+        }
+
+        .header-left a {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-color);
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .header-left a:hover {
+            opacity: 0.6;
+        }
+
+        .header-right a {
+            font-size: 14px;
+            color: var(--text-color);
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .header-right a:hover {
+            opacity: 0.6;
+        }
+
+        /* --- MAIN CONTENT --- */
+        main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 120px 40px 80px;
+        }
+
+        /* --- PROJECT HEADER --- */
+        .project-header {
+            margin-bottom: 40px;
+        }
+
+        .project-badge {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .project-logo {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: var(--card-bg);
+            flex-shrink: 0;
+        }
+
+        .project-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .project-meta {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-name {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .project-category {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        /* --- TITLE & DESCRIPTION --- */
+        .project-title {
+            font-size: clamp(32px, 5vw, 48px);
+            font-weight: 500;
+            line-height: 1.2;
+            margin-bottom: 24px;
+            color: var(--text-color);
+        }
+
+        .project-description {
+            font-size: 18px;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            margin-bottom: 48px;
+        }
+
+        .project-description a {
+            color: var(--text-color);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        /* --- INFO CARDS --- */
+        .info-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 60px;
+        }
+
+        .info-card {
+            background: var(--card-bg);
+            padding: 20px 24px;
+            border-radius: 16px;
+        }
+
+        .info-label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .info-value {
+            font-size: 15px;
+            color: var(--text-color);
+            line-height: 1.5;
+        }
+
+        /* --- HERO IMAGE --- */
+        .project-hero-image {
+            width: 100%;
+            border-radius: 24px;
+            overflow: hidden;
+            margin-bottom: 80px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        }
+
+        .project-hero-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* --- CONTENT SECTIONS --- */
+        .content-section {
+            margin-bottom: 80px;
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 500;
+            margin-bottom: 24px;
+            color: var(--text-color);
+        }
+
+        .section-subtitle {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            margin-top: 32px;
+            color: var(--text-color);
+        }
+
+        .section-text {
+            font-size: 16px;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        .section-image {
+            width: 100%;
+            border-radius: 16px;
+            overflow: hidden;
+            margin: 32px 0;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+        }
+
+        .section-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* --- BACK LINK --- */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin-top: 60px;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: var(--text-color);
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            .site-header {
+                padding: 16px 20px;
+            }
+
+            main {
+                padding: 100px 20px 60px;
+            }
+
+            .project-title {
+                font-size: 28px;
+            }
+
+            .project-description {
+                font-size: 16px;
+            }
+
+            .info-cards {
+                gap: 10px;
+            }
+
+            .project-hero-image {
+                border-radius: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .project-badge {
+                margin-bottom: 24px;
+            }
+
+            .project-logo {
+                width: 40px;
+                height: 40px;
+            }
+        }
+
+        /* --- ANIMATIONS --- */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+    </style>
+</head>
+
+<body data-barba="wrapper">
+
+    <!-- HEADER -->
+    <header class="site-header">
+        <div class="header-left">
+            <a href="index.html">Natalia Buendía</a>
+        </div>
+        <div class="header-right">
+            <a href="mailto:hello@natalia.com">Email</a>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main data-barba="container" data-barba-namespace="project">
+
+        <!-- PROJECT HEADER -->
+        <div class="project-header">
+            <div class="project-badge fade-in">
+                <div class="project-logo">
+                    <img src="" alt="Project Logo" id="project-logo">
+                </div>
+                <div class="project-meta">
+                    <span class="project-name" id="project-name">Project Name</span>
+                    <span class="project-category" id="project-category">Product Design</span>
+                </div>
+            </div>
+
+            <h1 class="project-title fade-in" id="project-title">Project Title Goes Here</h1>
+
+            <p class="project-description fade-in" id="project-description">
+                This is a detailed description of the project. It explains the work done, the challenges faced, and the outcomes achieved.
+            </p>
+        </div>
+
+        <!-- INFO CARDS -->
+        <div class="info-cards">
+            <div class="info-card fade-in">
+                <div class="info-label">Role</div>
+                <div class="info-value" id="project-role">Product Designer</div>
+            </div>
+            <div class="info-card fade-in">
+                <div class="info-label">Team</div>
+                <div class="info-value" id="project-team">Design Lead, Product Manager, Engineers</div>
+            </div>
+            <div class="info-card fade-in">
+                <div class="info-label">Duration</div>
+                <div class="info-value" id="project-duration">2024 - 2025</div>
+            </div>
+        </div>
+
+        <!-- HERO IMAGE -->
+        <div class="project-hero-image fade-in">
+            <img src="" alt="Project Hero" id="hero-image">
+        </div>
+
+        <!-- CONTENT SECTIONS -->
+        <div class="content-section fade-in">
+            <h2 class="section-title">Overview</h2>
+            <p class="section-text" id="overview-text">
+                Project overview content goes here. This section describes the context and background of the project.
+            </p>
+
+            <h3 class="section-subtitle">Goals</h3>
+            <p class="section-text" id="goals-text">
+                The goals of this project were to create a scalable foundation and improve the user experience.
+            </p>
+        </div>
+
+        <!-- BACK LINK -->
+        <a href="index.html" class="back-link fade-in">
+            <span>&larr;</span>
+            <span>Back to Home</span>
+        </a>
+
+    </main>
+
+    <script>
+        // Get project data from URL or localStorage
+        document.addEventListener('DOMContentLoaded', () => {
+            // Try to get clicked image from localStorage (set by index.html)
+            const clickedImageSrc = localStorage.getItem('clickedImageSrc');
+            const clickedTooltip = localStorage.getItem('clickedTooltip');
+
+            if (clickedImageSrc) {
+                // Set the images
+                document.getElementById('hero-image').src = clickedImageSrc;
+                document.getElementById('project-logo').src = clickedImageSrc;
+
+                // Set project name from tooltip if available
+                if (clickedTooltip) {
+                    document.getElementById('project-name').textContent = clickedTooltip;
+                }
+            }
+
+            // Register GSAP
+            gsap.registerPlugin(ScrollTrigger);
+
+            // Entry animation - content slides up and fades in
+            const header = document.querySelector('.site-header');
+            const mainContent = document.querySelector('main');
+            const fadeElements = document.querySelectorAll('.fade-in');
+
+            // Initial states
+            gsap.set(header, { opacity: 0, y: -20 });
+            gsap.set(fadeElements, { opacity: 0, y: 40 });
+
+            // Create entry timeline
+            const entryTl = gsap.timeline({ delay: 0.1 });
+
+            // Header fades in first (thumbnail is already in position from transition)
+            entryTl.to(header, {
+                opacity: 1,
+                y: 0,
+                duration: 0.5,
+                ease: "power3.out"
+            });
+
+            // Main content elements stagger in
+            entryTl.to(fadeElements, {
+                opacity: 1,
+                y: 0,
+                duration: 0.7,
+                ease: "power3.out",
+                stagger: 0.08
+            }, "-=0.2");
+
+            // Smooth scroll with Lenis
+            const lenis = new Lenis({
+                duration: 1.2,
+                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+                smooth: true,
+            });
+
+            function raf(time) {
+                lenis.raf(time);
+                requestAnimationFrame(raf);
+            }
+            requestAnimationFrame(raf);
+        });
+    </script>
+</body>
+
+</html>

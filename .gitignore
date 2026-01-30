@@ -1,0 +1,14 @@
+# OS files
+.DS_Store
+
+# IDE
+.vscode/
+
+# Debug screenshots (root level only)
+/*.png
+
+# Playwright
+.playwright-mcp/
+
+# Claude
+.claude/
