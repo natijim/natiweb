@@ -971,15 +971,82 @@
             opacity: 0.6;
         }
 
-        .header-right a {
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .email-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .email-link {
             font-size: 14px;
             color: var(--text-color);
             text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .email-link:hover {
+            color: var(--text-color);
+            opacity: 0.6;
+        }
+
+        .copy-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            background: transparent;
+            border: none;
+            padding: 0;
+            cursor: none;
+            opacity: 0.4;
             transition: opacity 0.2s;
         }
 
-        .header-right a:hover {
-            opacity: 0.6;
+        .copy-btn:hover {
+            opacity: 1;
+        }
+
+        .copy-btn svg {
+            width: 14px;
+            height: 14px;
+            stroke: var(--text-color);
+            fill: none;
+            stroke-width: 1.5;
+        }
+
+        .copy-btn .check-icon {
+            display: none;
+            stroke: #22c55e;
+        }
+
+        .copy-btn.copied .copy-icon {
+            display: none;
+        }
+
+        .copy-btn.copied .check-icon {
+            display: block;
+            animation: checkPop 0.3s ease-out;
+        }
+
+        @keyframes checkPop {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
 
         /* --- ACCESSIBILITY TOGGLE (HIDDEN) --- */
@@ -1142,7 +1209,18 @@
             <a href="/">Natalia Buendía</a>
         </div>
         <div class="header-right">
-            <a href="mailto:hello@natalia.com">Email</a>
+            <div class="email-wrapper">
+                <a href="mailto:hi@nataliabuendia.com" class="email-link">hi@nataliabuendia.com</a>
+                <button class="copy-btn" id="copy-email-btn" data-email="hi@nataliabuendia.com" aria-label="Copy email to clipboard">
+                    <svg class="copy-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <svg class="check-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                </button>
+            </div>
         </div>
     </header>
 
@@ -1170,7 +1248,7 @@
                         <a href="/" class="nav-link mobile-home-link">Home</a>
                         <button class="nav-link" id="btn-projects" data-cursor="Coming Soon">Projects</button>
                         <button class="nav-link" id="btn-about">About</button>
-                        <a href="mailto:hello@natalia.com" class="nav-link" id="btn-contact"
+                        <a href="mailto:hi@nataliabuendia.com" class="nav-link" id="btn-contact"
                             style="text-decoration: none;">Contact</a>
                     </nav>
                 </div>
@@ -1245,10 +1323,10 @@
                     <div class="contact-layout">
                         <h2 class="contact-text">
                             If you made it this far<br>
-                            might as well <a href="mailto:hello@natalia.com" class="contact-highlight">say hi!</a>
+                            might as well <a href="mailto:hi@nataliabuendia.com" class="contact-highlight">say hi!</a>
                         </h2>
                         <div class="contact-buttons">
-                            <a href="mailto:hello@natalia.com" class="contact-btn">📫 Mail</a>
+                            <a href="mailto:hi@nataliabuendia.com" class="contact-btn">📫 Mail</a>
                             <a href="https://linkedin.com" target="_blank" class="contact-btn">🔗 Linkedin</a>
                         </div>
                     </div>
@@ -2004,6 +2082,27 @@
                     }, 400);
                 });
             });
+
+            // --- COPY EMAIL FUNCTIONALITY ---
+            const copyEmailBtn = document.getElementById('copy-email-btn');
+            if (copyEmailBtn) {
+                copyEmailBtn.addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    const email = copyEmailBtn.getAttribute('data-email');
+
+                    try {
+                        await navigator.clipboard.writeText(email);
+                        copyEmailBtn.classList.add('copied');
+
+                        // Reset after 2 seconds
+                        setTimeout(() => {
+                            copyEmailBtn.classList.remove('copied');
+                        }, 2000);
+                    } catch (err) {
+                        console.error('Failed to copy email:', err);
+                    }
+                });
+            }
 
         </script>
 </body>
