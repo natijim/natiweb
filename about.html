@@ -56,7 +56,6 @@
             pointer-events: none;
             z-index: 9999;
             transform: translate(-50%, -50%);
-            mix-blend-mode: exclusion;
         }
 
         /* --- HEADER --- */
@@ -73,16 +72,41 @@
             background: var(--bg-color);
         }
 
-        .header-left a {
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--text-color);
-            text-decoration: none;
-            transition: opacity 0.2s;
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 0;
         }
 
-        .header-left a:hover {
-            opacity: 0.6;
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .breadcrumb-link {
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 6px 10px;
+            border-radius: 6px;
+            transition: background-color 0.2s;
+        }
+
+        .breadcrumb-link:hover {
+            background-color: rgba(0, 0, 0, 0.06);
+        }
+
+        .breadcrumb-separator {
+            color: #999;
+            margin: 0 2px;
+            font-weight: 400;
+        }
+
+        .breadcrumb-current {
+            color: var(--text-color);
+            padding: 6px 10px;
         }
 
         .header-right {
@@ -463,7 +487,11 @@
     <!-- HEADER -->
     <header class="site-header">
         <div class="header-left">
-            <a href="index.html">Natalia Buendia</a>
+            <nav class="breadcrumb">
+                <a href="index.html" class="breadcrumb-link">Natalia Buendía</a>
+                <span class="breadcrumb-separator">/</span>
+                <span class="breadcrumb-current">About</span>
+            </nav>
         </div>
         <div class="header-right">
             <div class="email-wrapper">
@@ -500,8 +528,8 @@
             <div class="content-side">
                 <!-- TOGGLE -->
                 <div class="toggle-container fade-in">
-                    <button class="toggle-btn active" id="toggle-work" data-target="work">Work me</button>
-                    <button class="toggle-btn" id="toggle-personal" data-target="personal">Actual me</button>
+                    <button class="toggle-btn active" id="toggle-work" data-target="work">Linkedin me</button>
+                    <button class="toggle-btn" id="toggle-personal" data-target="personal">Real me</button>
                 </div>
 
                 <!-- WORK CONTENT -->
@@ -615,34 +643,58 @@
             const fadeElements = document.querySelectorAll('.fade-in');
             const dynamicBar = document.getElementById('dynamic-bar');
 
-            gsap.set(header, { opacity: 0, y: -20 });
-            gsap.set(fadeElements, { opacity: 0, y: 40 });
-            gsap.set(dynamicBar, { opacity: 0, y: 20, filter: "blur(5px)" });
+            // Check if header animation has already played in this session
+            const headerAnimated = sessionStorage.getItem('headerAnimated');
 
-            const entryTl = gsap.timeline({ delay: 0.1 });
+            if (headerAnimated) {
+                // Skip header animation, show immediately
+                gsap.set(header, { opacity: 1, y: 0 });
+                gsap.set(dynamicBar, { opacity: 1, y: 0, filter: "blur(0px)" });
+                gsap.set(fadeElements, { opacity: 0, y: 40 });
 
-            entryTl.to(header, {
-                opacity: 1,
-                y: 0,
-                duration: 0.5,
-                ease: "power3.out"
-            });
+                // Only animate content
+                gsap.to(fadeElements, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.7,
+                    ease: "power3.out",
+                    stagger: 0.1,
+                    delay: 0.1
+                });
+            } else {
+                // First visit - animate everything
+                gsap.set(header, { opacity: 0, y: -20 });
+                gsap.set(fadeElements, { opacity: 0, y: 40 });
+                gsap.set(dynamicBar, { opacity: 0, y: 20, filter: "blur(5px)" });
 
-            entryTl.to(dynamicBar, {
-                opacity: 1,
-                y: 0,
-                filter: "blur(0px)",
-                duration: 0.6,
-                ease: "power3.out"
-            }, "-=0.3");
+                const entryTl = gsap.timeline({ delay: 0.1 });
 
-            entryTl.to(fadeElements, {
-                opacity: 1,
-                y: 0,
-                duration: 0.7,
-                ease: "power3.out",
-                stagger: 0.1
-            }, "-=0.4");
+                entryTl.to(header, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.5,
+                    ease: "power3.out"
+                });
+
+                entryTl.to(dynamicBar, {
+                    opacity: 1,
+                    y: 0,
+                    filter: "blur(0px)",
+                    duration: 0.6,
+                    ease: "power3.out"
+                }, "-=0.3");
+
+                entryTl.to(fadeElements, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.7,
+                    ease: "power3.out",
+                    stagger: 0.1
+                }, "-=0.4");
+
+                // Mark header as animated for this session
+                sessionStorage.setItem('headerAnimated', 'true');
+            }
 
             // --- TOGGLE FUNCTIONALITY ---
             const toggleWork = document.getElementById('toggle-work');

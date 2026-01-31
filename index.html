@@ -1368,6 +1368,9 @@
         <script>
             gsap.registerPlugin(ScrollTrigger);
 
+            // Mark header as animated for session persistence across pages
+            sessionStorage.setItem('headerAnimated', 'true');
+
             // --- 1. CUSTOM CURSOR & SPOTLIGHT RING LOGIC ---
             const cursor = document.querySelector('.cursor');
             const cursorText = document.querySelector('.cursor-text');
