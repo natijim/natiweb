@@ -12,13 +12,13 @@
     <style>
         /* --- FONT SETUP --- */
         @font-face {
-            font-family: 'Acid Grotesk';
-            src: url('./fonts/FFF-AcidGrotesk-Book.otf') format('opentype');
-            font-weight: 400;
+            font-family: 'Lausanne';
+            src: url('./fonts/6489c1c644ac7b501ff707bc_TWK\ 350.ttf');
+            letter-spacing: -1.6px;
         }
 
         :root {
-            --font-main: 'Acid Grotesk', 'Inter', Helvetica, Arial, sans-serif;
+            --font-main: 'Lausanne', 'Inter', Helvetica, Arial, sans-serif;
             --bg-color: #FAFAFA;
             --text-color: #1a1a1a;
             --text-secondary: #666666;
@@ -107,6 +107,12 @@
         .breadcrumb-current {
             color: var(--text-color);
             padding: 6px 10px;
+            border-radius: 6px;
+            transition: background-color 0.2s;
+        }
+
+        .breadcrumb-current:hover {
+            background-color: rgba(0, 0, 0, 0.06);
         }
 
         .header-right {

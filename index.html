@@ -72,14 +72,12 @@
         body {
             background-color: var(--bg-outer);
             margin: 0;
-            padding: 20px;
-            /* Restored Frame Padding */
+            padding: 0;
             overflow: hidden;
             font-family: var(--font-main);
             height: 100vh;
             width: 100vw;
             cursor: none;
-            /* Hide default cursor */
         }
 
         /* --- SELECTION & DRAG --- */
@@ -1247,34 +1245,7 @@
                     <!-- REMOVED OLD SCROLL TEXT TARGET -->
                 </div>
 
-                <!-- MOMENT 2: Samphire -->
-                <div class="moment" id="moment-2">
-                    <div class="project-layout">
-                        <!-- REMOVED PROJECT PILL -->
-                        <div class="project-screens" style="position: relative; z-index: 10;">
-                            <div class="phone-mockup" data-cursor="Coming soon">
-                                <img src="/img/Modal.png" alt="Screen 1" draggable="false">
-                            </div>
-                            <div class="phone-mockup" data-cursor="Coming soon">
-                                <img src="/img/As Needed.png" alt="Screen 2" draggable="false">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- MOMENT 3: Minimum -->
-                <div class="moment" id="moment-3">
-                    <div class="project-layout">
-                        <!-- REMOVED PROJECT PILL -->
-                        <div class="project-screens" style="position: relative; z-index: 10;">
-                            <div class="phone-mockup" data-cursor="Coming soon">
-                                <img src="/img/kotieHome.png" alt="Large Screen" draggable="false">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- MOMENT 4: CONTACT (Replaces Creative Coding) -->
+                <!-- CONTACT SECTION -->
                 <div class="moment" id="moment-4">
                     <div class="contact-layout">
                         <h2 class="contact-text">
@@ -1586,7 +1557,7 @@
             // --- 4. ZOOM SCROLL (LINEAR FIX) ---
             // Remove explicit visibility set, let autoAlpha handle it
             gsap.set("#moment-1", { autoAlpha: 1, scale: 1, filter: "blur(0px)" });
-            gsap.set(["#moment-2", "#moment-3", "#moment-4"], { autoAlpha: 0, scale: 0.5, filter: "blur(10px)" });
+            gsap.set("#moment-4", { autoAlpha: 0, scale: 0.5, filter: "blur(10px)" });
 
             let zoomTl; // Store timeline reference
             let a11yThemeTl; // Store a11y theme timeline
@@ -1615,53 +1586,42 @@
 
                 // Reset properties for GSAP control
                 gsap.set("#moment-1", { autoAlpha: 1, scale: 1, filter: "blur(0px)" });
-                gsap.set(["#moment-2", "#moment-3", "#moment-4"], { autoAlpha: 0, scale: 0.5, filter: "blur(10px)" });
+                gsap.set("#moment-4", { autoAlpha: 0, scale: 0.5, filter: "blur(10px)" });
 
                 zoomTl = gsap.timeline({
                     scrollTrigger: {
                         trigger: ".sticky-wrapper",
                         scroller: ".app-frame",
                         start: "top top",
-                        end: "+=5000",
-                        scrub: true, // Link directly to Lenis (no lag)
+                        end: "+=2500",
+                        scrub: true,
                         pin: true,
-                        anticipatePin: 0 // Disable anticipation to reduce jitter
+                        anticipatePin: 0
                     }
                 });
 
-                // LINEAR SCROLL (ease: "none")
+                // Simplified scroll: Hero -> Contact with dark theme
                 zoomTl
-                    // --- Moment 1 -> Moment 2 ---
-                    .to({}, { duration: 0.2 })
+                    .to({}, { duration: 0.5 })
                     .to("#moment-1", { scale: 2, autoAlpha: 0, filter: "blur(20px)", duration: 2, ease: "none" })
-                    .to("#moment-2", { scale: 1, autoAlpha: 1, filter: "blur(0px)", duration: 2, ease: "none" }, "-=1.5")
-
-                    // --- Moment 2 -> Moment 3 ---
-                    .to({}, { duration: 0.5 })
-                    .to("#moment-2", { scale: 2, autoAlpha: 0, filter: "blur(20px)", duration: 2, ease: "none" })
-                    .to("#moment-3", { scale: 1, autoAlpha: 1, filter: "blur(0px)", duration: 2, ease: "none" }, "-=1.5")
-
-                    // --- Moment 3 -> Moment 4 (WITH DARK THEME TRANSITION) ---
-                    .to({}, { duration: 0.5 })
-                    .to("#moment-3", { scale: 2, autoAlpha: 0, filter: "blur(20px)", duration: 2, ease: "none" })
                     .to("#moment-4", { scale: 1, autoAlpha: 1, filter: "blur(0px)", duration: 2, ease: "none" }, "-=1.5")
                     // Animate CSS variables to Dark Theme
                     .to("html", {
-                        "--bg-outer": "#FFFFFF", // Keep Frame White
-                        "--bg-frame": "#000000", // Inner Content Black
-                        "--text-color": "#ffffff", // Text White
-                        "--cursor-color": "#ffffff", // Cursor White
-                        "--nav-text-color": "#ffffff", // Nav Text White
-                        "--nav-bg": "#383838", // Nav Pill Dark Gray
-                        "--toggle-bg": "#333333", // Toggle Dark Gray
-                        "--bar-bg": "#333333", // Bar Dark Gray
-                        "--ui-text": "#ffffff", // Button Text White
-                        "--badge-bg": "#1a1a1a", // Badge Dark
-                        "--badge-text": "#ffffff", // Badge Text White
-                        "--selection-bg": "#ffffff", // Selection White
-                        "--selection-text": "#000000", // Selection Text Black
-                        "--cursor-hover-bg": "rgba(255, 255, 255, 0.2)", // Visible in Dark Mode
-                        "--coming-soon-text": "#fff", // White in Dark Mode
+                        "--bg-outer": "#000000",
+                        "--bg-frame": "#000000",
+                        "--text-color": "#ffffff",
+                        "--cursor-color": "#ffffff",
+                        "--nav-text-color": "#ffffff",
+                        "--nav-bg": "#383838",
+                        "--toggle-bg": "#333333",
+                        "--bar-bg": "#333333",
+                        "--ui-text": "#ffffff",
+                        "--badge-bg": "#1a1a1a",
+                        "--badge-text": "#ffffff",
+                        "--selection-bg": "#ffffff",
+                        "--selection-text": "#000000",
+                        "--cursor-hover-bg": "rgba(255, 255, 255, 0.2)",
+                        "--coming-soon-text": "#fff",
                         duration: 2,
                         ease: "none"
                     }, "<")
@@ -1962,8 +1922,8 @@
                         }
                     });
 
-                    // Fade out other content
-                    const otherContent = document.querySelectorAll('.intro-text, .nav-pill, .dynamic-bar, .scroll-hint, .a11y-toggle, .site-header');
+                    // Fade out other content (header stays visible)
+                    const otherContent = document.querySelectorAll('.intro-text, .nav-pill, .dynamic-bar, .scroll-hint, .a11y-toggle');
                     otherContent.forEach(el => el.classList.add('fade-out-content'));
 
                     // Target position for project-logo (in project page content area)
