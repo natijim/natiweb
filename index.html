@@ -20,11 +20,16 @@
             src: url('./fonts/FFF-AcidGrotesk-Book.otf') format('opentype');
             font-weight: 400;
         }
+        @font-face {
+            font-family: 'Lausanne';
+            src: url('./fonts/6489c1c644ac7b501ff707bc_TWK\ 350.ttf');
+            letter-spacing: -1.6px;
+        }
 
         :root {
-            --font-main: 'Acid Grotesk', 'Inter', Helvetica, Arial, sans-serif;
+            --font-main: 'Lausanne', 'Inter', Helvetica, Arial, sans-serif;
             --bg-frame: #F5F4F5;
-            --bg-outer: #FFFFFF;
+            --bg-outer: #F5F4F5;
             --text-color: #1a1a1a;
             --pill-bg: #e7e9ef;
             --pill-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
@@ -107,7 +112,7 @@
             pointer-events: none;
             z-index: 9999;
             transform: translate(-50%, -50%);
-            mix-blend-mode: exclusion;
+            background-blend-mode: difference;
         }
 
         /* Hide cursor text - no longer used */
@@ -968,12 +973,13 @@
             height: 14px;
             stroke: var(--text-color);
             fill: none;
-            stroke-width: 1.5;
+            stroke-width: 2.4;
         }
 
         .copy-btn .check-icon {
             display: none;
-            stroke: #22c55e;
+            stroke: #000000;
+            stroke-width: 3.5px;
         }
 
         .copy-btn.copied .copy-icon {
@@ -1197,7 +1203,7 @@
                     <nav class="nav-menu">
                         <a href="/" class="nav-link mobile-home-link">Home</a>
                         <button class="nav-link" id="btn-projects" data-cursor="Coming Soon">Projects</button>
-                        <button class="nav-link" id="btn-about">About</button>
+                        <a href="about.html" class="nav-link" id="btn-about">About</a>
                         <a href="mailto:hi@nataliabuendia.com" class="nav-link" id="btn-contact"
                             style="text-decoration: none;">Contact</a>
                     </nav>
@@ -1772,18 +1778,7 @@
             const overlay = document.getElementById('about-overlay');
 
             const btnProjects = document.getElementById('btn-projects');
-            const btnAbout = document.getElementById('btn-about');
             const btnContact = document.getElementById('btn-contact');
-
-            function openModal() {
-                overlay.classList.add('active');
-                const modalTexts = document.querySelectorAll('.modal-card .animate-text');
-                gsap.set(modalTexts, { opacity: 0, y: 20, filter: "blur(5px)" });
-                gsap.to(modalTexts, {
-                    opacity: 1, y: 0, filter: "blur(0px)",
-                    duration: 1, ease: "power2.out", stagger: 0.05, delay: 0.2
-                });
-            }
 
             function scrollToSection(selector) {
                 const target = document.querySelector(selector);
@@ -1798,9 +1793,7 @@
                 }
             }
 
-            // aboutBtn.addEventListener('click', openModal); // Removed
-
-            if (btnAbout) btnAbout.addEventListener('click', openModal);
+            // About button is now a link to about.html (no click handler needed)
             // DISABLED PROJECTS LINK
             // if (btnProjects) btnProjects.addEventListener('click', () => scrollToSection('#moment-2'));
 

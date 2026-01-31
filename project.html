@@ -17,9 +17,14 @@
             src: url('./fonts/FFF-AcidGrotesk-Book.otf') format('opentype');
             font-weight: 400;
         }
+        @font-face {
+            font-family: 'Lausanne';
+            src: url('./fonts/6489c1c644ac7b501ff707bc_TWK\ 350.ttf');
+            letter-spacing: -1.6px;
+        }
 
         :root {
-            --font-main: 'Acid Grotesk', 'Inter', Helvetica, Arial, sans-serif;
+            --font-main: 'Lausanne', 'Inter', Helvetica, Arial, sans-serif;
             --bg-color: #FAFAFA;
             --text-color: #1a1a1a;
             --text-secondary: #666666;
@@ -62,7 +67,6 @@
             pointer-events: none;
             z-index: 9999;
             transform: translate(-50%, -50%);
-            mix-blend-mode: exclusion;
         }
 
         /* --- HEADER --- */
@@ -137,13 +141,15 @@
             height: 14px;
             stroke: var(--text-color);
             fill: none;
-            stroke-width: 1.5;
+            stroke-width: 2.4;
         }
 
         .copy-btn .check-icon {
             display: none;
-            stroke: #22c55e;
+            stroke: #000000;
+            stroke-width: 3.5px;
         }
+
 
         .copy-btn.copied .copy-icon {
             display: none;
@@ -225,6 +231,7 @@
             line-height: 1.2;
             margin-bottom: 24px;
             color: var(--text-color);
+            letter-spacing: -1.6px;
         }
 
         .project-description {
@@ -267,6 +274,7 @@
             font-size: 15px;
             color: var(--text-color);
             line-height: 1.5;
+            letter-spacing: -0.2px;
         }
 
         /* --- HERO IMAGE --- */
@@ -538,7 +546,7 @@
         <div class="bar-content-wrapper">
             <nav class="nav-menu">
                 <a href="index.html#projects" class="nav-link">Projects</a>
-                <button class="nav-link" id="btn-about">About</button>
+                <a href="about.html" class="nav-link">About</a>
                 <span class="bar-divider"></span>
                 <a href="index.html" class="nav-link">← Back Home</a>
             </nav>
