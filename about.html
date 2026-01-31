@@ -213,6 +213,15 @@
             height: 100%;
             transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
             transform-style: preserve-3d;
+            cursor: none;
+        }
+
+        .image-flipper:hover {
+            transform: scale(1.02);
+        }
+
+        .image-flipper.flipped:hover {
+            transform: rotateY(180deg) scale(1.02);
         }
 
         .image-flipper.flipped {
@@ -258,7 +267,7 @@
         }
 
         .toggle-btn {
-            padding: 12px 24px;
+            padding: 12px 16px;
             border: none;
             background: transparent;
             border-radius: 50px;
@@ -271,8 +280,8 @@
         }
 
         .toggle-btn.active {
-            background: #000;
-            color: #fff;
+            background: #ffffff;
+            color: #000000;
         }
 
         /* --- CONTENT SECTIONS --- */
@@ -728,6 +737,15 @@
             toggleWork.addEventListener('click', switchToWork);
             togglePersonal.addEventListener('click', switchToPersonal);
 
+            // Click on photo to toggle
+            imageFlipper.addEventListener('click', () => {
+                if (imageFlipper.classList.contains('flipped')) {
+                    switchToWork();
+                } else {
+                    switchToPersonal();
+                }
+            });
+
             // --- SMOOTH SCROLL WITH LENIS ---
             const lenis = new Lenis({
                 duration: 1.2,
@@ -742,6 +760,33 @@
             });
 
             gsap.ticker.lagSmoothing(0);
+
+            // --- DYNAMIC BAR SCROLL BEHAVIOR ---
+            let lastScrollY = 0;
+            let barVisible = true;
+
+            lenis.on('scroll', ({ scroll, direction }) => {
+                // direction: 1 = scrolling down, -1 = scrolling up
+                if (direction === 1 && barVisible && scroll > 100) {
+                    // Scrolling down - hide bar
+                    barVisible = false;
+                    gsap.to(dynamicBar, {
+                        y: 100,
+                        opacity: 0,
+                        duration: 0.3,
+                        ease: "power2.out"
+                    });
+                } else if (direction === -1 && !barVisible) {
+                    // Scrolling up - show bar
+                    barVisible = true;
+                    gsap.to(dynamicBar, {
+                        y: 0,
+                        opacity: 1,
+                        duration: 0.3,
+                        ease: "power2.out"
+                    });
+                }
+            });
 
             // --- COPY EMAIL FUNCTIONALITY ---
             const copyEmailBtn = document.getElementById('copy-email-btn');

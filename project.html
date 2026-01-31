@@ -696,6 +696,32 @@
 
             gsap.ticker.lagSmoothing(0);
 
+            // --- DYNAMIC BAR SCROLL BEHAVIOR ---
+            let barVisible = true;
+
+            lenis.on('scroll', ({ scroll, direction }) => {
+                // direction: 1 = scrolling down, -1 = scrolling up
+                if (direction === 1 && barVisible && scroll > 100) {
+                    // Scrolling down - hide bar
+                    barVisible = false;
+                    gsap.to(dynamicBar, {
+                        y: 100,
+                        opacity: 0,
+                        duration: 0.3,
+                        ease: "power2.out"
+                    });
+                } else if (direction === -1 && !barVisible) {
+                    // Scrolling up - show bar
+                    barVisible = true;
+                    gsap.to(dynamicBar, {
+                        y: 0,
+                        opacity: 1,
+                        duration: 0.3,
+                        ease: "power2.out"
+                    });
+                }
+            });
+
             // --- COPY EMAIL FUNCTIONALITY ---
             const copyEmailBtn = document.getElementById('copy-email-btn');
             if (copyEmailBtn) {

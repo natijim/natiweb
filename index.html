@@ -28,8 +28,8 @@
 
         :root {
             --font-main: 'Lausanne', 'Inter', Helvetica, Arial, sans-serif;
-            --bg-frame: #F5F4F5;
-            --bg-outer: #F5F4F5;
+            --bg-frame: #FFFFFF;
+            --bg-outer: #FFFFFF;
             --text-color: #1a1a1a;
             --pill-bg: #e7e9ef;
             --pill-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
@@ -913,16 +913,23 @@
             background: transparent;
         }
 
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
         .header-left a {
             font-size: 14px;
             font-weight: 500;
             color: var(--text-color);
             text-decoration: none;
-            transition: opacity 0.2s;
+            padding: 6px 10px;
+            border-radius: 6px;
+            transition: background-color 0.2s;
         }
 
         .header-left a:hover {
-            opacity: 0.6;
+            background-color: rgba(0, 0, 0, 0.06);
         }
 
         .header-right {
@@ -1030,6 +1037,7 @@
             border-radius: 20px;
             font-size: .75rem;
             font-weight: 500;
+            text-decoration: none;
             color: var(--nav-text-color);
             /* Use variable */
 
@@ -1568,7 +1576,7 @@
                 // RESET THEME TO LIGHT
                 gsap.set("html", {
                     "--bg-outer": "#FFFFFF",
-                    "--bg-frame": "#F5F4F5",
+                    "--bg-frame": "#FFFFFF",
                     "--text-color": "#1a1a1a",
                     "--nav-bg": "#FFFFFF",
                     "--toggle-bg": "#e7e9ef",
@@ -1668,7 +1676,7 @@
                     // RESET THEME TO LIGHT (Start fresh)
                     gsap.set("html", {
                         "--bg-outer": "#FFFFFF",
-                        "--bg-frame": "#F5F4F5",
+                        "--bg-frame": "#FFFFFF",
                         "--text-color": "#1a1a1a",
                         "--cursor-color": "#000000",
                         "--nav-text-color": "#1a1a1a",
@@ -1838,7 +1846,7 @@
                     left: 0;
                     width: 100vw;
                     height: 100vh;
-                    background: #FAFAFA;
+                    background: #FFFFFF;
                     z-index: 99998;
                     opacity: 0;
                     transition: opacity 0.3s ease;
