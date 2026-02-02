@@ -24,6 +24,7 @@
             font-family: 'Lausanne';
             src: url('./fonts/6489c1c644ac7b501ff707bc_TWK\ 350.ttf');
             letter-spacing: -1.6px;
+            font-weight: 350;
         }
 
         :root {
@@ -110,12 +111,32 @@
             pointer-events: none;
             z-index: 9999;
             transform: translate(-50%, -50%);
-            background-blend-mode: difference;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                        height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                        background-color 0.3s ease;
         }
 
-        /* Hide cursor text - no longer used */
         .cursor-text {
-            display: none;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 500;
+            opacity: 0;
+            white-space: nowrap;
+            transition: opacity 0.2s ease;
+            font-family: var(--font-main);
+        }
+
+        .cursor.expanded {
+            width: 70px;
+            height: 70px;
+            background-color: rgba(0, 0, 0, 0.85);
+        }
+
+        .cursor.expanded .cursor-text {
+            opacity: 1;
         }
 
         /* --- SOCIAL DROPDOWN --- */
@@ -154,7 +175,7 @@
             text-decoration: none;
             color: #333;
             font-size: 12px;
-            font-weight: 500;
+            font-weight: 300;
             transition: background 0.2s;
         }
 
@@ -184,7 +205,7 @@
             z-index: 20;
             /* Increased to be above images */
             text-align: center;
-            font-weight: 500;
+            font-weight: 300;
 
             /* Static Style */
             color: rgba(153, 153, 153, 0.6);
@@ -209,7 +230,7 @@
             /* Rounded Corners */
             font-size: 14px;
             /* Font Size */
-            font-weight: 500;
+            font-weight: 300;
             opacity: 0;
             transition: opacity 0.2s;
             transform: translate(15px, 15px);
@@ -254,7 +275,7 @@
             /* box-shadow: var(--pill-shadow); */
             /* Removed shadow for cleaner look */
             font-size: 14px;
-            font-weight: 500;
+            font-weight: 300;
             color: var(--nav-text-color);
             /* Use variable */
             display: flex;
@@ -290,7 +311,7 @@
             border-radius: 50px;
             /* box-shadow: var(--pill-shadow); */
             font-size: 12.5px;
-            font-weight: 500;
+            font-weight: 300;
             color: #1a1a1a;
             cursor: none;
             transition: transform 0.2s;
@@ -344,7 +365,7 @@
             gap: 10px;
             font-size: 12px;
             color: #6e6e6e;
-            font-weight: 500;
+            font-weight: 300;
         }
 
         .scroll-icon {
@@ -391,7 +412,7 @@
         }
 
         .bar-project-title {
-            font-weight: 600;
+            font-weight: 300;
             font-size: 14px;
             color: #1a1a1a;
         }
@@ -459,14 +480,14 @@
 
         .intro-text h1 {
             font-size: 18px;
-            font-weight: 400;
+            font-weight: 300;
             line-height: 1.5;
             color: #656565;
         }
 
         .highlight {
             color: #5842D8;
-            font-weight: 500;
+            font-weight: 300;
         }
 
         .cluster-container {
@@ -602,7 +623,7 @@
 
         .project-info h3 {
             font-size: 16px;
-            font-weight: 500;
+            font-weight: 300;
             color: #1a1a1a;
             margin-bottom: 2px;
         }
@@ -610,7 +631,7 @@
         .project-info p {
             font-size: 13px;
             color: #666;
-            font-weight: 400;
+            font-weight: 300;
         }
 
         .project-screens {
@@ -653,7 +674,7 @@
 
         .contact-text {
             font-size: 24px;
-            font-weight: 400;
+            font-weight: 300;
             color: var(--text-color);
             line-height: 1.4;
         }
@@ -677,7 +698,7 @@
             text-decoration: none;
             color: #c9c9c9;
             font-size: 14px;
-            font-weight: 500;
+            font-weight: 300;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
             transition: transform 0.2s;
             cursor: none;
@@ -853,7 +874,7 @@
 
         .section-label {
             font-size: 11px;
-            font-weight: 600;
+            font-weight: 300;
             text-transform: uppercase;
             letter-spacing: 1px;
             color: #999;
@@ -888,7 +909,7 @@
 
         .exp-item h4 {
             font-size: 15px;
-            font-weight: 500;
+            font-weight: 300;
             margin-bottom: 4px;
             color: #111;
         }
@@ -920,7 +941,7 @@
 
         .header-left a {
             font-size: 14px;
-            font-weight: 500;
+            font-weight: 300;
             color: var(--text-color);
             text-decoration: none;
             padding: 6px 10px;
@@ -1036,7 +1057,7 @@
             padding: 12px 16px;
             border-radius: 20px;
             font-size: .75rem;
-            font-weight: 500;
+            font-weight: 300;
             text-decoration: none;
             color: var(--nav-text-color);
             /* Use variable */
@@ -1223,21 +1244,20 @@
                 <div class="moment" id="moment-1">
                     <div class="hero-layout">
                         <div class="intro-text">
-                            <h1 class="animate-text">Hola! I'm Natalia Buendia, a</h1>
-                            <h1 class="animate-text">curiosity-driven product designer.</h1>
-                            <h1 class="animate-text">Currently <span class="highlight">@revolut</span>, prev <span
-                                    class="highlight">@samphireneuro</span></h1>
+                            <h1 class="animate-text">Hey! I’m Natalia, a product designer</h1>
+                            <h1 class="animate-text">focused on people, ideas, and meaningful </h1>
+                            <h1 class="animate-text">design. Currently at <span class="highlight">@revolut</span></h1>
                         </div>
                         <div class="cluster-container" id="hero-cluster">
-                            <div class="hero-img pos-1" data-tooltip="I love hiking 💕"><img src="/img/landscape.png"
+                            <div class="hero-img pos-1" data-tooltip="Open"><img src="/img/landscape.png"
                                     alt="I love hiking💕 " draggable="false"></div>
-                            <div class="hero-img pos-2" data-tooltip="Coming soon ⏳"><img src="/img/UI.png"
+                            <div class="hero-img pos-2" data-tooltip="View"><img src="/img/UI.png"
                                     alt="Timecapsule" draggable="false"></div>
-                            <div class="hero-img pos-3" data-tooltip="My last project"><img src="/img/Mockup.png"
+                            <div class="hero-img pos-3" data-tooltip="View"><img src="/img/Mockup.png"
                                     alt="Orange" draggable="false"></div>
                             <div class="hero-img pos-4" data-tooltip="Coming soon ⏳"><img src="/img/kotie.png"
                                     alt="Yellow" draggable="false"></div>
-                            <div class="hero-img pos-5" data-tooltip="I do illustration"><img src="/img/focusmood.png"
+                            <div class="hero-img pos-5" data-tooltip="Viewn"><img src="/img/focusmood.png"
                                     alt="Yellow" draggable="false"></div>
                             <div class="hero-img pos-6" data-tooltip="Coming soon ⏳"><img src="/img/Dosage.png"
                                     alt="Yellow" draggable="false"></div>
@@ -1437,11 +1457,9 @@
                     // Bring to front
                     img.style.zIndex = "100";
 
-                    // Show Tooltip
-                    if (img.hasAttribute('data-tooltip')) {
-                        tooltip.innerText = img.getAttribute('data-tooltip');
-                        tooltip.style.opacity = 1;
-                    }
+                    // Expand cursor with "Open" text
+                    cursor.classList.add('expanded');
+                    cursorText.innerText = 'Open';
                 });
 
                 img.addEventListener('mouseleave', () => {
@@ -1461,8 +1479,9 @@
                         img.style.zIndex = "";
                     }, 500);
 
-                    // Reset Tooltip
-                    tooltip.style.opacity = 0;
+                    // Reset cursor
+                    cursor.classList.remove('expanded');
+                    cursorText.innerText = '';
                 });
             });
 
