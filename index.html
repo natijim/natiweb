@@ -1249,22 +1249,22 @@
                             <h1 class="animate-text">design. Currently at <span class="highlight">@revolut</span></h1>
                         </div>
                         <div class="cluster-container" id="hero-cluster">
-                            <div class="hero-img pos-1" data-tooltip="Open"><img src="/img/landscape.png"
-                                    alt="I love hiking💕 " draggable="false"></div>
-                            <div class="hero-img pos-2" data-tooltip="View"><img src="/img/UI.png"
-                                    alt="Timecapsule" draggable="false"></div>
-                            <div class="hero-img pos-3" data-tooltip="View"><img src="/img/Mockup.png"
-                                    alt="Orange" draggable="false"></div>
-                            <div class="hero-img pos-4" data-tooltip="Coming soon ⏳"><img src="/img/kotie.png"
-                                    alt="Yellow" draggable="false"></div>
-                            <div class="hero-img pos-5" data-tooltip="Viewn"><img src="/img/focusmood.png"
-                                    alt="Yellow" draggable="false"></div>
-                            <div class="hero-img pos-6" data-tooltip="Coming soon ⏳"><img src="/img/Dosage.png"
-                                    alt="Yellow" draggable="false"></div>
-                            <div class="hero-img pos-7" data-tooltip="I love talking about design"><img
-                                    src="/img/Presentation.png" alt="BW" draggable="false"></div>
-                            <div class="hero-img pos-8" data-tooltip="Website coded with ❤️"><img src="/img/Code.png"
-                                    alt="BW" draggable="false"></div>
+                            <div class="hero-img pos-1" data-project="samphire"><img src="/img/Highlight1.png"
+                                    alt="Samphire" draggable="false"></div>
+                            <div class="hero-img pos-2" data-project="kotie"><img src="/img/kotie.png"
+                                    alt="Kotie" draggable="false"></div>
+                            <div class="hero-img pos-3" data-project="minimum"><img src="/img/UI.png"
+                                    alt="Minimum" draggable="false"></div>
+                            <div class="hero-img pos-4" data-project="coming-soon"><img src="/img/Mockup.png"
+                                    alt="Coming Soon" draggable="false"></div>
+                            <div class="hero-img pos-5" data-project="timeless"><img src="/img/timelessbiotech.png"
+                                    alt="Timeless" draggable="false"></div>
+                            <div class="hero-img pos-6" data-project="coming-soon"><img src="/img/Web3.png"
+                                    alt="Coming Soon" draggable="false"></div>
+                            <div class="hero-img pos-7" data-project="talk-womens-health"><img
+                                    src="/img/Presentation.png" alt="Talk" draggable="false"></div>
+                            <div class="hero-img pos-8" data-project="portfolio"><img src="/img/focusmood.png"
+                                    alt="Portfolio" draggable="false"></div>
 
                             <!-- SCROLL HINT -->
                             <div class="scroll-hint">scroll to see more</div>
@@ -1910,12 +1910,19 @@
             // Event Listeners for Hero Images
             document.querySelectorAll('.hero-img').forEach(heroImg => {
                 heroImg.addEventListener('click', (e) => {
-                    // Store data in localStorage for project page
+                    // Get project ID
+                    const projectId = heroImg.getAttribute('data-project');
+
+                    // Don't navigate for "coming-soon" projects
+                    if (projectId === 'coming-soon') {
+                        return;
+                    }
+
+                    // Store project ID in localStorage for project page
+                    localStorage.setItem('projectId', projectId);
+
                     const innerImg = heroImg.querySelector('img');
                     const imgSrc = innerImg.src;
-                    const tooltip = heroImg.getAttribute('data-tooltip') || '';
-                    localStorage.setItem('clickedImageSrc', imgSrc);
-                    localStorage.setItem('clickedTooltip', tooltip);
 
                     // Get the clicked image's current position
                     const imgRect = heroImg.getBoundingClientRect();

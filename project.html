@@ -350,18 +350,28 @@
             margin-bottom: 16px;
         }
 
-        .section-image {
+        .section-image,
+        .content-image {
             width: 100%;
             border-radius: 16px;
             overflow: hidden;
-            margin: 32px 0;
+            margin: 32px 0 80px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.08);
         }
 
-        .section-image img {
+        .section-image img,
+        .content-image img {
             width: 100%;
             height: auto;
             display: block;
+        }
+
+        .image-caption {
+            text-align: center;
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-top: 12px;
+            font-style: italic;
         }
 
         /* --- BACK LINK --- */
@@ -555,24 +565,8 @@
             <img src="" alt="Project Hero" id="hero-image">
         </div>
 
-        <!-- CONTENT SECTIONS -->
-        <div class="content-section fade-in">
-            <h2 class="section-title">Overview</h2>
-            <p class="section-text" id="overview-text">
-                Project overview content goes here. This section describes the context and background of the project.
-            </p>
-
-            <h3 class="section-subtitle">Goals</h3>
-            <p class="section-text" id="goals-text">
-                The goals of this project were to create a scalable foundation and improve the user experience.
-            </p>
-        </div>
-
-        <!-- BACK LINK (hidden, replaced by dynamic bar) -->
-        <a href="index.html" class="back-link fade-in" style="display: none;">
-            <span>&larr;</span>
-            <span>Back to Home</span>
-        </a>
+        <!-- DYNAMIC CONTENT SECTIONS -->
+        <div id="project-content"></div>
 
     </main>
 
@@ -599,23 +593,183 @@
             yTo(e.clientY);
         });
 
-        // Get project data from URL or localStorage
+        // ============================================
+        // PROJECTS DATA - Edit this to add/modify projects
+        // ============================================
+        const projectsData = {
+            "samphire": {
+                name: "Samphire",
+                category: "Product Design",
+                title: "Designing a neurostimulation device for women's health",
+                description: "Led the end-to-end design of Samphire's flagship medical device, creating an intuitive experience for a complex neurostimulation treatment.",
+                role: "Founding Designer",
+                team: "CEO, CTO, Hardware Engineers",
+                duration: "2024 - 2025",
+                logo: "/img/Highlight1.png",
+                heroImage: "/img/Highlight1.png",
+                content: [
+                    {
+                        type: "text",
+                        title: "Overview",
+                        text: "Samphire Neuroscience is developing a groundbreaking neurostimulation device for treating chronic conditions. As the founding designer, I was responsible for the entire user experience."
+                    },
+                    {
+                        type: "image",
+                        src: "/img/Highlight1.png",
+                        caption: "Product interface design"
+                    },
+                    {
+                        type: "text",
+                        title: "My Role",
+                        text: "I led the design from concept to implementation, working closely with engineers and medical professionals to ensure the device was both effective and user-friendly."
+                    }
+                ]
+            },
+            "kotie": {
+                name: "Kotie",
+                category: "Mobile App Design",
+                title: "A smart shopping list app that learns your habits",
+                description: "Designed a mobile application that helps users manage their shopping lists intelligently, learning from their habits and preferences.",
+                role: "Product Designer",
+                team: "Product Manager, iOS Developer, Backend Engineer",
+                duration: "2024",
+                logo: "/img/kotie.png",
+                heroImage: "/img/kotie.png",
+                content: [
+                    {
+                        type: "text",
+                        title: "Overview",
+                        text: "Kotie is a smart shopping list application that uses machine learning to predict what users need to buy based on their shopping history."
+                    },
+                    {
+                        type: "image",
+                        src: "/img/kotie.png",
+                        caption: "App interface"
+                    }
+                ]
+            },
+            "minimum": {
+                name: "Minimum",
+                category: "Visual Design",
+                title: "Design system and brand identity for a tech startup",
+                description: "Created a comprehensive design system and visual identity for Minimum.run, establishing their brand presence in the market.",
+                role: "Visual Product Designer",
+                team: "Founders, Marketing Team",
+                duration: "2024",
+                logo: "/img/UI.png",
+                heroImage: "/img/UI.png",
+                content: [
+                    {
+                        type: "text",
+                        title: "Overview",
+                        text: "Minimum needed a cohesive design system and brand identity to scale their product. I developed a comprehensive design language."
+                    }
+                ]
+            },
+            "timeless": {
+                name: "Timeless Biotech",
+                category: "Product Design",
+                title: "Healthcare platform for biotech research",
+                description: "Designed an intuitive platform for managing biotech research data and collaboration.",
+                role: "Product Designer",
+                team: "Research Team, Developers",
+                duration: "2023 - 2024",
+                logo: "/img/timelessbiotech.png",
+                heroImage: "/img/timelessbiotech.png",
+                content: [
+                    {
+                        type: "text",
+                        title: "Overview",
+                        text: "Timeless Biotech required a platform to streamline their research workflows and data management."
+                    }
+                ]
+            },
+            "talk-womens-health": {
+                name: "Design in Women's Health",
+                category: "Talk / Presentation",
+                title: "Speaking about design's impact on women's health technology",
+                description: "A talk exploring how thoughtful design can improve healthcare experiences for women.",
+                role: "Speaker",
+                team: "PD Ladies London",
+                duration: "2024",
+                logo: "/img/Presentation.png",
+                heroImage: "/img/Presentation.png",
+                content: [
+                    {
+                        type: "text",
+                        title: "About the Talk",
+                        text: "I shared insights about designing for women's health, discussing the unique challenges and opportunities in this space."
+                    }
+                ]
+            },
+            "portfolio": {
+                name: "Portfolio Website",
+                category: "Web Development",
+                title: "This website you're looking at right now",
+                description: "Designed and built my personal portfolio website with custom animations and interactions.",
+                role: "Designer & Developer",
+                team: "Solo project",
+                duration: "2025",
+                logo: "/img/focusmood.png",
+                heroImage: "/img/focusmood.png",
+                content: [
+                    {
+                        type: "text",
+                        title: "Overview",
+                        text: "Built with vanilla HTML, CSS, and JavaScript, featuring GSAP animations, Lenis smooth scrolling, and custom interactions."
+                    }
+                ]
+            }
+        };
+
+        // ============================================
+        // LOAD PROJECT DATA
+        // ============================================
         document.addEventListener('DOMContentLoaded', () => {
-            // Try to get clicked image from localStorage (set by index.html)
-            const clickedImageSrc = localStorage.getItem('clickedImageSrc');
-            const clickedTooltip = localStorage.getItem('clickedTooltip');
+            // Get project ID from localStorage
+            const projectId = localStorage.getItem('projectId');
+            const project = projectsData[projectId];
 
-            if (clickedImageSrc) {
-                // Set the images
-                document.getElementById('hero-image').src = clickedImageSrc;
-                document.getElementById('project-logo').src = clickedImageSrc;
+            if (project) {
+                // Populate basic info
+                document.getElementById('project-logo').src = project.logo;
+                document.getElementById('project-name').textContent = project.name;
+                document.getElementById('project-category').textContent = project.category;
+                document.getElementById('project-title').textContent = project.title;
+                document.getElementById('project-description').textContent = project.description;
+                document.getElementById('project-role').textContent = project.role;
+                document.getElementById('project-team').textContent = project.team;
+                document.getElementById('project-duration').textContent = project.duration;
+                document.getElementById('hero-image').src = project.heroImage;
+                document.getElementById('breadcrumb-project').textContent = project.name;
 
-                // Set project name from tooltip if available
-                if (clickedTooltip) {
-                    document.getElementById('project-name').textContent = clickedTooltip;
-                    // Update breadcrumb with project name
-                    document.getElementById('breadcrumb-project').textContent = clickedTooltip;
+                // Generate dynamic content sections
+                const contentContainer = document.getElementById('project-content');
+                if (project.content && project.content.length > 0) {
+                    project.content.forEach(section => {
+                        if (section.type === 'text') {
+                            const div = document.createElement('div');
+                            div.className = 'content-section fade-in';
+                            div.innerHTML = `
+                                <h2 class="section-title">${section.title}</h2>
+                                <p class="section-text">${section.text}</p>
+                            `;
+                            contentContainer.appendChild(div);
+                        } else if (section.type === 'image') {
+                            const div = document.createElement('div');
+                            div.className = 'content-image fade-in';
+                            div.innerHTML = `
+                                <img src="${section.src}" alt="${section.caption || ''}">
+                                ${section.caption ? `<p class="image-caption">${section.caption}</p>` : ''}
+                            `;
+                            contentContainer.appendChild(div);
+                        }
+                    });
                 }
+            } else {
+                // Fallback for direct URL access without projectId
+                document.getElementById('project-title').textContent = 'Project Not Found';
+                document.getElementById('project-description').textContent = 'Please select a project from the homepage.';
             }
 
             // Register GSAP
