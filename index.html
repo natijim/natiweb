@@ -329,8 +329,7 @@
             position: fixed;
             bottom: 40px;
             left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
+            z-index: 100000;
             background: rgb(243 243 243 / 95%);
             backdrop-filter: blur(10px);
             padding: 6px;
@@ -924,7 +923,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            z-index: 1000;
+            z-index: 100000;
             background: var(--bg-frame);
         }
 
@@ -1912,13 +1911,8 @@
                 }
                 .fade-out-content {
                     opacity: 0 !important;
-                    transition: all 0.35s ease-out !important;
-                }
-                .fade-out-content:not(.dynamic-bar) {
                     transform: translateY(-15px) !important;
-                }
-                .dynamic-bar.fade-out-content {
-                    transform: translateX(-50%) translateY(-15px) !important;
+                    transition: all 0.35s ease-out !important;
                 }
             `;
             document.head.appendChild(transitionStyles);
@@ -1972,8 +1966,8 @@
                         }
                     });
 
-                    // Fade out other content (header stays visible)
-                    const otherContent = document.querySelectorAll('.intro-text, .nav-pill, .dynamic-bar, .scroll-hint, .a11y-toggle');
+                    // Fade out other content (header and navbar stay visible)
+                    const otherContent = document.querySelectorAll('.intro-text, .nav-pill, .scroll-hint, .a11y-toggle');
                     otherContent.forEach(el => el.classList.add('fade-out-content'));
 
                     // Target position for project-logo (in project page content area)
