@@ -480,6 +480,54 @@
             background: rgba(0, 0, 0, 0.05);
         }
 
+        /* --- CHAPTER SIDEBAR --- */
+        .chapter-sidebar {
+            position: fixed;
+            left: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+            max-width: 160px;
+            opacity: 0;
+        }
+
+        .chapter-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .chapter-link {
+            font-family: var(--font-main);
+            font-size: 11px;
+            font-weight: 300;
+            color: var(--text-muted);
+            text-decoration: none;
+            cursor: none;
+            transition: color 0.3s ease, font-weight 0.3s ease;
+            display: block;
+            line-height: 1.4;
+            letter-spacing: 0.02em;
+        }
+
+        .chapter-link:hover {
+            color: var(--text-color);
+        }
+
+        .chapter-link.active {
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        @media (max-width: 1200px) {
+            .chapter-sidebar {
+                display: none;
+            }
+        }
+
         /* --- ANIMATIONS --- */
         .fade-in {
             opacity: 0;
@@ -517,6 +565,13 @@
             </div>
         </div>
     </header>
+
+    <!-- CHAPTER SIDEBAR -->
+    <nav class="chapter-sidebar" id="chapter-sidebar">
+        <ul class="chapter-list" id="chapter-list">
+            <!-- Populated dynamically by JS -->
+        </ul>
+    </nav>
 
     <!-- MAIN CONTENT -->
     <main data-barba="container" data-barba-namespace="project">
@@ -729,6 +784,11 @@
             const projectId = localStorage.getItem('projectId');
             const project = projectsData[projectId];
 
+            // Track text sections for sidebar (declared at DOMContentLoaded scope)
+            let textSections = [];
+            const chapterList = document.getElementById('chapter-list');
+            const chapterSidebar = document.getElementById('chapter-sidebar');
+
             if (project) {
                 // Populate basic info
                 document.getElementById('project-logo').src = project.logo;
@@ -744,16 +804,21 @@
 
                 // Generate dynamic content sections
                 const contentContainer = document.getElementById('project-content');
+                let sectionIndex = 0;
+
                 if (project.content && project.content.length > 0) {
                     project.content.forEach(section => {
                         if (section.type === 'text') {
                             const div = document.createElement('div');
                             div.className = 'content-section fade-in';
+                            div.id = `section-${sectionIndex}`;
                             div.innerHTML = `
                                 <h2 class="section-title">${section.title}</h2>
                                 <p class="section-text">${section.text}</p>
                             `;
                             contentContainer.appendChild(div);
+                            textSections.push({ index: sectionIndex, title: section.title, el: div });
+                            sectionIndex++;
                         } else if (section.type === 'image') {
                             const div = document.createElement('div');
                             div.className = 'content-image fade-in';
@@ -764,6 +829,24 @@
                             contentContainer.appendChild(div);
                         }
                     });
+                }
+
+                // --- CHAPTER SIDEBAR ---
+                if (textSections.length > 1) {
+                    // Build sidebar links from text section titles
+                    textSections.forEach((section, i) => {
+                        const li = document.createElement('li');
+                        const a = document.createElement('a');
+                        a.href = `#section-${section.index}`;
+                        a.className = 'chapter-link' + (i === 0 ? ' active' : '');
+                        a.textContent = section.title;
+                        a.dataset.sectionIndex = section.index;
+                        li.appendChild(a);
+                        chapterList.appendChild(li);
+                    });
+                } else {
+                    // Hide sidebar if only 0 or 1 text section
+                    chapterSidebar.style.display = 'none';
                 }
             } else {
                 // Fallback for direct URL access without projectId
@@ -875,6 +958,48 @@
                     });
                 }
             });
+
+            // --- CHAPTER SIDEBAR: SCROLL TRACKING & CLICK HANDLERS ---
+            if (textSections.length > 1) {
+                const chapterLinks = document.querySelectorAll('.chapter-link');
+
+                // ScrollTrigger for each text section to highlight active sidebar link
+                textSections.forEach((section) => {
+                    ScrollTrigger.create({
+                        trigger: section.el,
+                        start: 'top center',
+                        end: 'bottom center',
+                        onEnter: () => setActiveLink(section.index),
+                        onEnterBack: () => setActiveLink(section.index),
+                    });
+                });
+
+                function setActiveLink(index) {
+                    chapterLinks.forEach(link => link.classList.remove('active'));
+                    const activeLink = document.querySelector(`.chapter-link[data-section-index="${index}"]`);
+                    if (activeLink) activeLink.classList.add('active');
+                }
+
+                // Click handlers — smooth scroll with Lenis
+                chapterLinks.forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const targetId = link.getAttribute('href');
+                        const targetEl = document.querySelector(targetId);
+                        if (targetEl) {
+                            lenis.scrollTo(targetEl, { offset: -100, duration: 1.2 });
+                        }
+                    });
+                });
+
+                // Fade-in animation for sidebar (after content is loaded)
+                gsap.to(chapterSidebar, {
+                    opacity: 1,
+                    duration: 0.6,
+                    ease: 'power3.out',
+                    delay: 0.8
+                });
+            }
 
             // --- COPY EMAIL FUNCTIONALITY ---
             const copyEmailBtn = document.getElementById('copy-email-btn');
