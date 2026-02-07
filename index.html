@@ -1367,9 +1367,6 @@
         <script>
             gsap.registerPlugin(ScrollTrigger);
 
-            // Mark header as animated for session persistence across pages
-            sessionStorage.setItem('headerAnimated', 'true');
-
             // --- 1. CUSTOM CURSOR & SPOTLIGHT RING LOGIC ---
             const cursor = document.querySelector('.cursor');
             const cursorText = document.querySelector('.cursor-text');
@@ -1557,19 +1554,36 @@
 
 
             // --- 3. HERO ANIMATIONS ---
+            const headerAnimated = sessionStorage.getItem('headerAnimated');
             const introTl = gsap.timeline({ delay: 0.2, onComplete: () => { isIntroDone = true; } });
 
-            // Initial set for navbar elements
-            gsap.set([".nav-pill", ".a11y-toggle", ".dynamic-bar"], {
-                opacity: 0,
-                y: 20,
-                filter: "blur(5px)"
-            });
+            if (headerAnimated) {
+                // Returning visit - show navbar immediately, only animate content
+                gsap.set([".nav-pill", ".a11y-toggle", ".dynamic-bar"], {
+                    opacity: 1,
+                    y: 0,
+                    filter: "blur(0px)"
+                });
 
-            introTl.to([".animate-text", ".nav-pill", ".a11y-toggle", ".dynamic-bar"], {
-                opacity: 1, y: 0, filter: "blur(0px)",
-                duration: 1.2, ease: "power3.out", stagger: 0.1
-            });
+                introTl.to(".animate-text", {
+                    opacity: 1, y: 0, filter: "blur(0px)",
+                    duration: 1.2, ease: "power3.out", stagger: 0.1
+                });
+            } else {
+                // First visit - animate everything including navbar
+                gsap.set([".nav-pill", ".a11y-toggle", ".dynamic-bar"], {
+                    opacity: 0,
+                    y: 20,
+                    filter: "blur(5px)"
+                });
+
+                introTl.to([".animate-text", ".nav-pill", ".a11y-toggle", ".dynamic-bar"], {
+                    opacity: 1, y: 0, filter: "blur(0px)",
+                    duration: 1.2, ease: "power3.out", stagger: 0.1
+                });
+
+                sessionStorage.setItem('headerAnimated', 'true');
+            }
 
             const images = [".pos-1", ".pos-2", ".pos-3", ".pos-4", ".pos-5", ".pos-6", ".pos-7", ".pos-8"];
             gsap.set(images, { scale: 0.9, opacity: 0, filter: "blur(10px)", y: 30 });
