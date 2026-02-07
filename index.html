@@ -110,14 +110,20 @@
             background-color: #000;
             border-radius: 50%;
             pointer-events: none;
-            z-index: 9999;
+            z-index: 999999;
             transform: translate(-50%, -50%);
             display: flex;
             align-items: center;
             justify-content: center;
+            opacity: 0;
             transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
                         height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-                        background-color 0.3s ease;
+                        background-color 0.3s ease,
+                        opacity 0.15s ease;
+        }
+
+        .cursor.visible {
+            opacity: 1;
         }
 
         .cursor-text {
@@ -1223,7 +1229,7 @@
                 <div class="bar-content-wrapper" id="bar-content">
                     <nav class="nav-menu">
                         <a href="/" class="nav-link mobile-home-link">Home</a>
-                        <button class="nav-link" id="btn-projects" data-cursor="Coming Soon">Archive</button>
+                        <a href="/" class="nav-link" id="btn-projects" style="text-decoration: none;">Archive</a>
                         <a href="about.html" class="nav-link" id="btn-about">About me</a>
                         <a href="mailto:hi@nataliabuendia.com" class="nav-link" id="btn-contact"
                             style="text-decoration: none;">Contact</a>
@@ -1384,6 +1390,10 @@
             });
 
             window.addEventListener("mousemove", (e) => {
+                if (!cursor.classList.contains('visible')) {
+                    gsap.set(cursor, { x: e.clientX, y: e.clientY });
+                    cursor.classList.add('visible');
+                }
                 xTo(e.clientX); yTo(e.clientY);
                 tX(e.clientX); tY(e.clientY); // Update tooltip position
 
@@ -1604,10 +1614,10 @@
 
                 // RESET THEME TO LIGHT
                 gsap.set("html", {
-                    "--bg-outer": "#FFFFFF",
-                    "--bg-frame": "#FFFFFF",
+                    "--bg-outer": "#FAFAFA",
+                    "--bg-frame": "#FAFAFA",
                     "--text-color": "#1a1a1a",
-                    "--nav-bg": "#FFFFFF",
+                    "--nav-bg": "#FAFAFA",
                     "--toggle-bg": "#e7e9ef",
                     "--bar-bg": "rgba(255, 255, 255, 0.95)",
                     "--cursor-color": "#000000",
@@ -1704,8 +1714,8 @@
 
                     // RESET THEME TO LIGHT (Start fresh)
                     gsap.set("html", {
-                        "--bg-outer": "#FFFFFF",
-                        "--bg-frame": "#FFFFFF",
+                        "--bg-outer": "#FAFAFA",
+                        "--bg-frame": "#FAFAFA",
                         "--text-color": "#1a1a1a",
                         "--cursor-color": "#000000",
                         "--nav-text-color": "#1a1a1a",
@@ -1731,7 +1741,7 @@
                             end: "top 20%",
                             scrub: true
                         },
-                        "--bg-outer": "#FFFFFF", // Keep Frame White
+                        "--bg-outer": "#FAFAFA", // Keep Frame White
                         "--bg-frame": "#000000",
                         "--text-color": "#ffffff",
                         "--cursor-color": "#ffffff",
@@ -1807,7 +1817,7 @@
 
                         // Apply Dark Mode Variables Manually
                         gsap.to("html", {
-                            "--bg-outer": "#FFFFFF",
+                            "--bg-outer": "#FAFAFA",
                             "--bg-frame": "#000000",
                             "--text-color": "#ffffff",
                             "--cursor-color": "#ffffff",
@@ -1875,7 +1885,7 @@
                     left: 0;
                     width: 100vw;
                     height: 100vh;
-                    background: #FFFFFF;
+                    background: #FAFAFA;
                     z-index: 99998;
                     opacity: 0;
                     transition: opacity 0.3s ease;

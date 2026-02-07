@@ -54,8 +54,14 @@
             background-color: #000;
             border-radius: 50%;
             pointer-events: none;
-            z-index: 9999;
+            z-index: 999999;
             transform: translate(-50%, -50%);
+            opacity: 0;
+            transition: opacity 0.15s ease;
+        }
+
+        .cursor.visible {
+            opacity: 1;
         }
 
         /* --- HEADER --- */
@@ -622,7 +628,7 @@
     <div class="dynamic-bar" id="dynamic-bar">
         <div class="bar-content-wrapper">
             <nav class="nav-menu">
-                <button class="nav-link" data-cursor="Coming Soon">Archive</button>
+                <a href="index.html" class="nav-link" style="text-decoration: none;">Archive</a>
                 <a href="about.html" class="nav-link">About me</a>
                 <a href="mailto:hi@nataliabuendia.com" class="nav-link" style="text-decoration: none;">Contact</a>
             </nav>
@@ -636,6 +642,10 @@
         const yTo = gsap.quickTo(cursor, "y", { duration: 0.1, ease: "power3" });
 
         window.addEventListener("mousemove", (e) => {
+            if (!cursor.classList.contains('visible')) {
+                gsap.set(cursor, { x: e.clientX, y: e.clientY });
+                cursor.classList.add('visible');
+            }
             xTo(e.clientX);
             yTo(e.clientY);
         });
