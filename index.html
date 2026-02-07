@@ -28,8 +28,8 @@
 
         :root {
             --font-main: 'Lausanne', 'Inter', Helvetica, Arial, sans-serif;
-            --bg-frame: #FFFFFF;
-            --bg-outer: #FFFFFF;
+            --bg-frame: #FAFAFA;
+            --bg-outer: #FAFAFA;
             --text-color: #1a1a1a;
             --pill-bg: #e7e9ef;
             --pill-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
@@ -78,6 +78,8 @@
             height: 100vh;
             width: 100vw;
             cursor: none;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
         }
 
         /* --- SELECTION & DRAG --- */
@@ -330,25 +332,18 @@
             transform: translateX(-50%);
             z-index: 1000;
             background: rgb(243 243 243 / 95%);
-            /* Use variable */
             backdrop-filter: blur(10px);
-            padding: 6px 6px 6px 6px;
+            padding: 6px;
             border-radius: 10px;
-            /* box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); */
             display: flex;
             justify-content: center;
             align-items: center;
-            /* min-width: 200px; */
-            /* Start small */
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .bar-content-wrapper {
-            position: relative;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
         }
 
         .bar-inner {
@@ -1559,10 +1554,11 @@
 
             if (headerAnimated) {
                 // Returning visit - show navbar immediately, only animate content
-                gsap.set([".nav-pill", ".a11y-toggle", ".dynamic-bar"], {
-                    opacity: 1,
-                    y: 0,
-                    filter: "blur(0px)"
+                gsap.set([".nav-pill", ".a11y-toggle"], {
+                    opacity: 1, y: 0, filter: "blur(0px)"
+                });
+                gsap.set(".dynamic-bar", {
+                    opacity: 1, y: 0, xPercent: -50, filter: "blur(0px)"
                 });
 
                 introTl.to(".animate-text", {
@@ -1571,10 +1567,11 @@
                 });
             } else {
                 // First visit - animate everything including navbar
-                gsap.set([".nav-pill", ".a11y-toggle", ".dynamic-bar"], {
-                    opacity: 0,
-                    y: 20,
-                    filter: "blur(5px)"
+                gsap.set([".nav-pill", ".a11y-toggle"], {
+                    opacity: 0, y: 20, filter: "blur(5px)"
+                });
+                gsap.set(".dynamic-bar", {
+                    opacity: 0, y: 20, xPercent: -50, filter: "blur(5px)"
                 });
 
                 introTl.to([".animate-text", ".nav-pill", ".a11y-toggle", ".dynamic-bar"], {
@@ -1915,8 +1912,13 @@
                 }
                 .fade-out-content {
                     opacity: 0 !important;
-                    transform: translateY(-15px) !important;
                     transition: all 0.35s ease-out !important;
+                }
+                .fade-out-content:not(.dynamic-bar) {
+                    transform: translateY(-15px) !important;
+                }
+                .dynamic-bar.fade-out-content {
+                    transform: translateX(-50%) translateY(-15px) !important;
                 }
             `;
             document.head.appendChild(transitionStyles);
