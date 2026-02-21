@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About - Natalia Buendia</title>
+    <title>Natalia Buendia - About</title>
     <link rel="icon" type="image/png" href="/img/favicon.png">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
@@ -24,6 +24,8 @@
             --text-secondary: #666666;
             --text-muted: #999999;
             --card-bg: #F3F3F3;
+            --nav-text-color: #767676;
+
         }
 
         * {
@@ -202,20 +204,24 @@
         .about-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 60px;
+            gap: 40px;
             align-items: start;
         }
 
         /* --- IMAGE FLIP CONTAINER --- */
         .image-container {
-            position: relative;
-            width: 100%;
+            position: sticky;
+            top: 160px;
+            width: 72%;
             aspect-ratio: 4/5;
             perspective: 1000px;
+            margin-left: 32px;
+            margin-right: 32px;
         }
 
         .image-flipper {
             position: relative;
+            
             width: 100%;
             height: 100%;
             transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
@@ -238,6 +244,7 @@
         .image-front,
         .image-back {
             position: absolute;
+            background-color: var(--bg-color); 
             top: 0;
             left: 0;
             width: 100%;
@@ -245,7 +252,7 @@
             backface-visibility: hidden;
             border-radius: 24px;
             overflow: hidden;
-            background: var(--card-bg);
+            /* background: var(--card-bg); */
         }
 
         .image-back {
@@ -291,6 +298,18 @@
             color: #000000;
         }
 
+        .toggle-btn svg.toggle-icon {
+            width: 15px;
+            height: 15px;
+            margin-right: 6px;
+            vertical-align: -2px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
         /* --- CONTENT SECTIONS --- */
         .content-panel {
             display: none;
@@ -314,15 +333,15 @@
         }
 
         .about-title {
-            font-size: 32px;
+            font-size: 16px;
             font-weight: 500;
             margin-bottom: 24px;
-            line-height: 1.2;
+            line-height: 1.5;
         }
 
         .about-text {
             font-size: 16px;
-            line-height: 1.7;
+            line-height: 1.5;
             color: var(--text-secondary);
             margin-bottom: 16px;
         }
@@ -351,6 +370,13 @@
             background: var(--card-bg);
             padding: 16px 20px;
             border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+        }
+        .resume-row {
+            padding: 14px 4px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -402,7 +428,7 @@
             bottom: 40px;
             left: 50%;
             z-index: 1000;
-            background: rgb(243 243 243 / 95%);
+            background: rgba(238, 238, 238, 0.95);
             backdrop-filter: blur(10px);
             padding: 6px;
             border-radius: 10px;
@@ -432,7 +458,7 @@
             font-size: .75rem;
             font-weight: 300;
             text-decoration: none;
-            color: var(--text-color);
+            color: var(--nav-text-color);
             transition: background 0.2s, color 0.2s;
             font-family: var(--font-main);
             cursor: none;
@@ -450,6 +476,8 @@
             }
 
             .image-container {
+                position: relative;
+                top: auto;
                 max-width: 400px;
                 margin: 0 auto;
             }
@@ -466,6 +494,7 @@
 
             .about-title {
                 font-size: 26px;
+            
             }
 
             .hobby-grid {
@@ -528,10 +557,10 @@
             <div class="image-container fade-in">
                 <div class="image-flipper" id="image-flipper">
                     <div class="image-front">
-                        <img src="/img/profilepic.png" alt="Natalia - Work">
+                        <img src="/img/linkedinme.png" alt="Natalia - Work">
                     </div>
                     <div class="image-back">
-                        <img src="/img/landscape.png" alt="Natalia - Personal">
+                        <img src="/img/REALME.png" alt="Natalia - Personal">
                     </div>
                 </div>
             </div>
@@ -540,22 +569,21 @@
             <div class="content-side">
                 <!-- TOGGLE -->
                 <div class="toggle-container fade-in">
-                    <button class="toggle-btn active" id="toggle-work" data-target="work">Linkedin me</button>
-                    <button class="toggle-btn" id="toggle-personal" data-target="personal">Real me</button>
+                    <button class="toggle-btn active" id="toggle-work" data-target="work"><svg class="toggle-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>Linkedin me</button>
+                    <button class="toggle-btn" id="toggle-personal" data-target="personal"><svg class="toggle-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>Real me</button>
                 </div>
 
                 <!-- WORK CONTENT -->
                 <div class="content-panel active" id="content-work">
-                    <h1 class="about-title">Hey, I'm Natalia</h1>
-                    <p class="about-text">
-                        I'm a digital Product Designer currently based in Barcelona. With a curiosity-driven approach, I love crafting experiences that connect with people.
-                    </p>
+                    <h1 class="about-title">Hey, I'm Natalia, a digital Product Designer currently based in Barcelona. With a curiosity-driven approach, I think design can create value and impact in people and companies.
+                    </h1>
+                  
                     <p class="about-text">
                         100% of my friends say I am an empathetic, proactive and curious person. I believe great design comes from collaboration and attention to detail.
                     </p>
 
                     <div class="resume-section">
-                        <div class="section-label">Experience</div>
+                        <div class="section-label">My way</div>
                         <div class="resume-list">
                             <div class="resume-item">
                                 <span class="resume-item-left">Revolut · Product Designer</span>
@@ -569,17 +597,51 @@
                                 <span class="resume-item-left">Minimum.run · Visual Product Designer</span>
                                 <span class="resume-item-right">Madrid, 2024</span>
                             </div>
+                            <div class="resume-item">
+                                <span class="resume-item-left">Spontaneus Generation · Visual Designer</span>
+                                <span class="resume-item-right">2022 / 2023</span>
+                            </div>
                         </div>
                     </div>
 
                     <div class="resume-section">
-                        <div class="section-label">Recognitions</div>
+                        <div class="section-label">Studies</div>
                         <div class="resume-list">
                             <div class="resume-item">
+                                <span class="resume-item-left">Bachellor Design and Creative Technologies</span>
+                                <span class="resume-item-right">UPV</span>
+                            </div>
+                            <div class="resume-item">
+                                <span class="resume-item-left">Master in interaction Design</span>
+                                <span class="resume-item-right">ESD Madrid</span>
+                            </div>
+                            <div class="resume-item">
+                                <span class="resume-item-left">Design Thinking Course</span>
+                                <span class="resume-item-right">IST Lisbon</span>
+                            </div>
+                            <div class="resume-item">
+                                <span class="resume-item-left">Creative entrepreneurship</span>
+                                <span class="resume-item-right">EFC Oslo</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="resume-section">
+                        <div class="section-label">Awards and Talks</div>
+                        <div class="resume-list">
+                            <div class="resume-row">
                                 <span class="resume-item-left">ADG Laus Digital Design</span>
                                 <span class="resume-item-right">Bronze Award</span>
                             </div>
-                            <div class="resume-item">
+                            <div class="resume-row">
+                                <span class="resume-item-left">Designing for Women´s Health</span>
+                                <span class="resume-item-right">PD Ladies London</span>
+                            </div>
+                            <div class="resume-row">
+                                <span class="resume-item-left">Designing the User Persona</span>
+                                <span class="resume-item-right">E ESE DAYS Madrid</span>
+                            </div>
+                            <div class="resume-row">
                                 <span class="resume-item-left">EFC Oslo Creative Futures</span>
                                 <span class="resume-item-right">Best researched project</span>
                             </div>
@@ -589,12 +651,10 @@
 
                 <!-- PERSONAL CONTENT -->
                 <div class="content-panel" id="content-personal">
-                    <h1 class="about-title">Beyond the pixels</h1>
+                    <h1 class="about-title">In my downtime, you'll find me playing music or finding a new overpriced coffee in my area (my guilty pleasure). </h1>
+
                     <p class="about-text">
-                        When I'm not designing, you'll find me exploring new places, hiking in nature, or getting lost in a good book. I love the simple things in life.
-                    </p>
-                    <p class="about-text">
-                        I'm passionate about illustration, photography, and capturing moments that tell stories. Coffee shops are my second office.
+                        I like making meaningful connections, sharing ideas or building something new.
                     </p>
 
                     <div class="hobby-grid">
@@ -610,13 +670,13 @@
                         </div>
                         <div class="hobby-card">
                             <div class="hobby-icon">📷</div>
-                            <div class="hobby-title">Photography</div>
-                            <div class="hobby-desc">Capturing moments and memories</div>
+                            <div class="hobby-title">Music</div>
+                            <div class="hobby-desc">Play the violin since 8</div>
                         </div>
                         <div class="hobby-card">
                             <div class="hobby-icon">✈️</div>
-                            <div class="hobby-title">Traveling</div>
-                            <div class="hobby-desc">Exploring new cultures and places</div>
+                            <div class="hobby-title">Currently reading</div>
+                            <div class="hobby-desc">Hamnet</div>
                         </div>
                     </div>
                 </div>
@@ -630,7 +690,7 @@
             <nav class="nav-menu">
                 <a href="index.html" class="nav-link" style="text-decoration: none;">Archive</a>
                 <a href="about.html" class="nav-link">About me</a>
-                <a href="mailto:hi@nataliabuendia.com" class="nav-link" style="text-decoration: none;">Contact</a>
+                <a href="index.html#contact" class="nav-link" style="text-decoration: none;">Contact</a>
             </nav>
         </div>
     </div>
