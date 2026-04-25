@@ -4,8 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Detail - Natalia Buendia</title>
+    <title>Natalia Buendia - project</title>
     <link rel="icon" type="image/png" href="/img/favicon.png">
+    <!-- Prevent flash: hide body instantly if arriving from peek transition -->
+    <script>
+        if (sessionStorage.getItem('fromPeek')) {
+            document.documentElement.classList.add('peek-arriving');
+        }
+    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://unpkg.com/lenis@1.0.45/dist/lenis.min.js"></script>
@@ -26,6 +32,10 @@
         :root {
             --font-main: 'Lausanne', 'Inter', Helvetica, Arial, sans-serif;
             --bg-color: #FAFAFA;
+             /* same color as RGB (for gradients) */
+            --bg-color-rgb: 250, 250, 250;  
+             --nav-text-color: #767676;
+         
             --text-color: #1a1a1a;
             --text-secondary: #666666;
             --text-muted: #999999;
@@ -48,7 +58,7 @@
             margin: 0;
             padding: 0;
             font-family: var(--font-main);
-            background-color: var(--bg-color);
+            background-color: #fafafa41;
             color: var(--text-color);
             cursor: none;
             line-height: 1.6;
@@ -75,6 +85,31 @@
             opacity: 1;
         }
 
+        .cursor-text {
+            color: #fff;
+            font-size: 11px;
+            font-weight: 500;
+            opacity: 0;
+            text-align: center;
+            line-height: 1.3;
+            transition: opacity 0.2s ease;
+            font-family: var(--font-main);
+        }
+
+        .cursor.expanded {
+            width: 80px;
+            height: 80px;
+            background-color: rgba(0, 0, 0, 0.357);
+            backdrop-filter: blur(15px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cursor.expanded .cursor-text {
+            opacity: 1;
+        }
+
         /* --- HEADER --- */
         .site-header {
             position: fixed;
@@ -82,17 +117,38 @@
             left: 0;
             right: 0;
             padding: 20px 40px;
+            padding-bottom: 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             z-index: 1000;
-            background: var(--bg-color);
+            background: transparent;
+        }
+
+        .site-header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            -webkit-mask-image: linear-gradient(
+                to bottom,
+                black 0%,
+                transparent 100%
+            );
+            mask-image: linear-gradient(
+                to bottom,
+                black 0%,
+                transparent 100%
+            );
         }
 
         .header-left {
             display: flex;
             align-items: center;
             gap: 0;
+            position: relative;
+            z-index: 1;
         }
 
         .breadcrumb {
@@ -136,6 +192,8 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            position: relative;
+            z-index: 1;
         }
 
         .email-wrapper {
@@ -215,7 +273,7 @@
         main {
             max-width: 900px;
             margin: 0 auto;
-            padding: 120px 40px 80px;
+            padding: 120px 40px 0px;
         }
 
         /* --- PROJECT HEADER --- */
@@ -263,7 +321,7 @@
 
         /* --- TITLE & DESCRIPTION --- */
         .project-title {
-            font-size: clamp(32px, 5vw, 48px);
+            font-size: clamp(35px, 2vw, 48px);
             font-weight: 500;
             line-height: 1.2;
             margin-bottom: 24px;
@@ -319,8 +377,8 @@
             width: 100%;
             border-radius: 24px;
             overflow: hidden;
-            margin-bottom: 80px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            margin-bottom: 60px;
+            /* box-shadow: 0 20px 60px rgba(0,0,0,0.1); */
         }
 
         .project-hero-image img {
@@ -337,7 +395,7 @@
         .section-title {
             font-size: 28px;
             font-weight: 500;
-            margin-bottom: 24px;
+            margin-bottom: 16px;
             color: var(--text-color);
         }
 
@@ -362,7 +420,8 @@
             border-radius: 16px;
             overflow: hidden;
             margin: 32px 0 80px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            /* box-shadow: 0 10px 40px rgba(0,0,0,0.08); */
+
         }
 
         .section-image img,
@@ -370,6 +429,7 @@
             width: 100%;
             height: auto;
             display: block;
+            border-radius: 16px;
         }
 
         .image-caption {
@@ -396,14 +456,156 @@
             color: var(--text-color);
         }
 
+        /* --- NEXT PROJECT PEEK --- */
+        .next-project-peek {
+            margin-top: 120px;
+            padding-top: 40px;
+            padding-bottom: 0px;
+            border-top: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .peek-label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        .peek-clip {
+            overflow: hidden;
+            max-height: 280px;
+            position: relative;
+        }
+
+        .peek-inner {
+            transform: translateY(20px);
+            transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .next-project-peek:hover .peek-inner {
+            transform: translateY(0);
+        }
+
+        .next-project-peek:active {
+            opacity: 0.4;
+            transition: opacity 0.15s ease;
+        }
+
+        .peek-link {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 1;
+            cursor: none;
+            text-decoration: none;
+        }
+
+        .peek-header {
+            margin-bottom: 40px;
+        }
+
+        .peek-badge {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .peek-logo {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: var(--card-bg);
+            flex-shrink: 0;
+        }
+
+        .peek-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .peek-meta {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .peek-name {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .peek-category {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .peek-title {
+            font-size: clamp(35px, 2vw, 48px);
+            font-weight: 500;
+            line-height: 1.2;
+            margin-bottom: 24px;
+            color: var(--text-color);
+            letter-spacing: -1.6px;
+        }
+
+        .peek-image-container {
+            width: 100%;
+            border-radius: 24px;
+            overflow: hidden;
+        }
+
+        .peek-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .peek-transition-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: var(--bg-color);
+            z-index: 900;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* During transition the peek section flies above the overlay */
+        .next-project-peek.is-transitioning {
+            z-index: 950;
+        }
+
+        html.peek-scroll-locked {
+            position: fixed;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        /* Prevent flash when arriving from peek transition —
+           body is hidden until GSAP sets positions, then class is removed */
+        html.peek-arriving body {
+            opacity: 0;
+        }
+
         /* --- RESPONSIVE --- */
         @media (max-width: 768px) {
             .site-header {
                 padding: 16px 20px;
+                padding-bottom: 32px;
             }
 
             main {
-                padding: 100px 20px 60px;
+                padding: 100px 20px 0px;
             }
 
             .project-title {
@@ -421,6 +623,18 @@
             .project-hero-image {
                 border-radius: 16px;
             }
+
+            .next-project-peek {
+                margin-top: 80px;
+            }
+
+            .peek-clip {
+                max-height: 220px;
+            }
+
+            .peek-image-container {
+                border-radius: 16px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -432,6 +646,15 @@
                 width: 40px;
                 height: 40px;
             }
+
+            .peek-clip {
+                max-height: 180px;
+            }
+
+            .peek-logo {
+                width: 40px;
+                height: 40px;
+            }
         }
 
         /* --- DYNAMIC BOTTOM BAR --- */
@@ -440,7 +663,7 @@
             bottom: 40px;
             left: 50%;
             z-index: 1000;
-            background: rgb(243 243 243 / 95%);
+            background:rgba(238, 238, 238, 0.95);
             backdrop-filter: blur(10px);
             padding: 6px;
             border-radius: 10px;
@@ -470,7 +693,7 @@
             font-size: .75rem;
             font-weight: 300;
             text-decoration: none;
-            color: var(--text-color);
+            color: var(--nav-text-color);
             transition: background 0.2s, color 0.2s;
             font-family: var(--font-main);
             cursor: none;
@@ -502,7 +725,7 @@
 
         .chapter-link {
             font-family: var(--font-main);
-            font-size: 11px;
+            font-size: 13px;
             font-weight: 300;
             color: var(--text-muted);
             text-decoration: none;
@@ -510,16 +733,26 @@
             transition: color 0.3s ease, font-weight 0.3s ease;
             display: block;
             line-height: 1.4;
+            padding: 10px;
             letter-spacing: 0.02em;
+            backdrop-filter: blur(10px);
+            padding: 10px;
+            border-radius: 999px;
+            display: flex;
+            align-items: center;
         }
 
         .chapter-link:hover {
             color: var(--text-color);
+            background: rgba(234, 233, 233, 0.4);
         }
 
         .chapter-link.active {
             color: var(--text-color);
             font-weight: 500;
+            background: rgba(217, 217, 217, 0.3);
+
+
         }
 
         @media (max-width: 1200px) {
@@ -539,7 +772,7 @@
 <body data-barba="wrapper">
 
     <!-- CUSTOM CURSOR -->
-    <div class="cursor"></div>
+    <div class="cursor"><span class="cursor-text"></span></div>
 
     <!-- HEADER -->
     <header class="site-header">
@@ -590,12 +823,18 @@
 
             <h1 class="project-title fade-in" id="project-title">Project Title Goes Here</h1>
 
-            <p class="project-description fade-in" id="project-description">
+            <!-- <p class="project-description fade-in" id="project-description">
                 This is a detailed description of the project. It explains the work done, the challenges faced, and the outcomes achieved.
-            </p>
+            </p> -->
+        </div>
+        <div class="project-hero-image fade-in">
+            <img src="" alt="Project Hero" id="hero-image">
         </div>
 
         <!-- INFO CARDS -->
+            <p class="project-description fade-in" id="project-description">
+                This is a detailed description of the project. It explains the work done, the challenges faced, and the outcomes achieved.
+            </p>
         <div class="info-cards">
             <div class="info-card fade-in">
                 <div class="info-label">Role</div>
@@ -606,18 +845,41 @@
                 <div class="info-value" id="project-team">Design Lead, Product Manager, Engineers</div>
             </div>
             <div class="info-card fade-in">
-                <div class="info-label">Duration</div>
+                <div class="info-label">When</div>
                 <div class="info-value" id="project-duration">2024 - 2025</div>
             </div>
         </div>
 
         <!-- HERO IMAGE -->
-        <div class="project-hero-image fade-in">
-            <img src="" alt="Project Hero" id="hero-image">
-        </div>
+
 
         <!-- DYNAMIC CONTENT SECTIONS -->
         <div id="project-content"></div>
+
+        <!-- NEXT PROJECT PEEK -->
+        <section class="next-project-peek" id="next-project-peek">
+            <div class="peek-label">Next Project</div>
+            <div class="peek-clip" id="peek-clip">
+                <div class="peek-inner" id="peek-inner">
+                    <div class="peek-header">
+                        <div class="peek-badge">
+                            <div class="peek-logo">
+                                <img src="" alt="" id="peek-logo">
+                            </div>
+                            <div class="peek-meta">
+                                <span class="peek-name" id="peek-name"></span>
+                                <span class="peek-category" id="peek-category"></span>
+                            </div>
+                        </div>
+                        <h2 class="peek-title" id="peek-title"></h2>
+                    </div>
+                    <div class="peek-image-container">
+                        <img src="" alt="" id="peek-hero-image">
+                    </div>
+                </div>
+            </div>
+            <a href="#" class="peek-link" id="peek-link" aria-label="View next project"></a>
+        </section>
 
     </main>
 
@@ -627,7 +889,7 @@
             <nav class="nav-menu">
                 <a href="index.html" class="nav-link" style="text-decoration: none;">Archive</a>
                 <a href="about.html" class="nav-link">About me</a>
-                <a href="mailto:hi@nataliabuendia.com" class="nav-link" style="text-decoration: none;">Contact</a>
+                <a href="index.html#contact" class="nav-link" style="text-decoration: none;">Contact</a>
             </nav>
         </div>
     </div>
@@ -635,6 +897,7 @@
     <script>
         // --- CUSTOM CURSOR ---
         const cursor = document.querySelector('.cursor');
+        const cursorText = document.querySelector('.cursor-text');
         const xTo = gsap.quickTo(cursor, "x", { duration: 0.1, ease: "power3" });
         const yTo = gsap.quickTo(cursor, "y", { duration: 0.1, ease: "power3" });
 
@@ -654,28 +917,46 @@
             "samphire": {
                 name: "Samphire",
                 category: "Product Design",
-                title: "Designing a neurostimulation device for women's health",
-                description: "Led the end-to-end design of Samphire's flagship medical device, creating an intuitive experience for a complex neurostimulation treatment.",
-                role: "Founding Designer",
-                team: "CEO, CTO, Hardware Engineers",
-                duration: "2024 - 2025",
-                logo: "/img/Highlight1.png",
-                heroImage: "/img/Highlight1.png",
+                title: "Medication logging by Samphire",
+                description: "Design of an experience for a logging and scheduling treatments, and medications for Samphir Neuroscience",
+                role: "Designer",
+                team: "Natalia Buendía - Design, Liberty Colebourne - Engineering",
+                duration: "2025",
+                logo: "/img/samphirelogo.png",
+                heroImage: "/img/medicationdetail.png",
                 content: [
                     {
                         type: "text",
-                        title: "Overview",
-                        text: "Samphire Neuroscience is developing a groundbreaking neurostimulation device for treating chronic conditions. As the founding designer, I was responsible for the entire user experience."
+                        title: "1. Overview",
+                        text: "Samphire Neuroscience is developing Nettle, a neurostimulation device designed to help people manage menstrual pain and mood-related symptoms. While the product was originally conceived as a standalone therapy, internal research revealed a more complex reality: most users don’t rely on just one treatment. Instead, they combine Nettle sessions with painkillers, hormonal treatments, supplements, or other prescribed medications as part of a broader care routine. The initial idea behind this feature was simple: help users understand whether using Nettle could reduce their reliance on pain medication, such as ibuprofen, over time. However, once we started talking to users and conducting qualitative research, the problem space expanded significantly."
+                    },
+ 
+                    {
+                        type: "text",
+                        title: "2. Research",
+                       text: "We ran research sessions with PMDD support groups in London and spoke to women undergoing HRT and other hormone-related treatments. A recurring pattern quickly emerged: many of them are instructed by doctors to synchronise their medication with their menstrual cycle, adjusting dosages or timing depending on the phase of the cycle. Despite this being medically important, most participants were still tracking this information on paper, in notebooks, or in ad-hoc notes on their phones. The process was fragmented, easy to forget, and difficult to maintain over time."
+
+                    },
+                    {
+                        type: "text",
+                        title: "3. User persona",
+                        text: "Another critical insight was that a large portion of women with PMDD also have ADHD. This made consistency, memory, and routine-building even more challenging. Forgetting to take medication, losing track of where they were in their cycle, or missing changes in dosage wasn’t a matter of motivation—it was a structural problem with the tools available to them."
+                    },
+                    
+                    {
+                        type: "text",
+                        title: "4. Benchmark",
+                        text: "When we audited existing medication tracking apps on the market, we found that none of them meaningfully supported cycle-based scheduling. Most tools assumed static daily routines, fixed times, or simple reminders, but didn’t adapt to the cyclical nature of hormonal treatments. This revealed a clear gap: users were being asked to manage complex, cycle-dependent treatment plans with tools that simply weren’t designed for that reality."
+                    },
+                    {
+                        type: "text",
+                        title: "5. Design",
+                        text: "From this research, the scope of the feature evolved. Instead of just tracking painkiller reduction, we designed a medication logging and scheduling experience that allows users to: <br> Combine Nettle therapy with other treatments in one place <br> Sync medications and routines to the start and phases of their menstrual cycle <br> Reduce cognitive load for users who struggle with memory and consistency <br>Track patterns over time, including changes in painkiller usage <br>Build a clearer picture of how different treatments interact and impact their symptoms<br>The result is a feature that doesn’t just log pills—it supports real, messy, multi-treatment lives. It turns a fragmented, paper-based process into a structured, cycle-aware system that helps users stay consistent, feel more in control of their care, and understand the real impact of their treatments over time."
                     },
                     {
                         type: "image",
                         src: "/img/Highlight1.png",
                         caption: "Product interface design"
-                    },
-                    {
-                        type: "text",
-                        title: "My Role",
-                        text: "I led the design from concept to implementation, working closely with engineers and medical professionals to ensure the device was both effective and user-friendly."
                     }
                 ]
             },
@@ -722,19 +1003,24 @@
             },
             "timeless": {
                 name: "Timeless Biotech",
-                category: "Product Design",
-                title: "Healthcare platform for biotech research",
+                category: "Visual Design",
+                title: "Healthcare brand for women´s health biotech company",
                 description: "Designed an intuitive platform for managing biotech research data and collaboration.",
-                role: "Product Designer",
-                team: "Research Team, Developers",
+                role: "Visual Designer",
+                team: "Designer",
                 duration: "2023 - 2024",
-                logo: "/img/timelessbiotech.png",
-                heroImage: "/img/timelessbiotech.png",
+                logo: "/img/timelesslogo.png",
+                heroImage: "/img/Timelessbiotechbrand.png",
                 content: [
                     {
                         type: "text",
                         title: "Overview",
                         text: "Timeless Biotech required a platform to streamline their research workflows and data management."
+                    }
+                  ,{
+                        type: "image",
+                        src: "/img/Logopresentation.png",
+                        caption: "App interface"
                     }
                 ]
             },
@@ -757,21 +1043,41 @@
                 ]
             },
             "portfolio": {
-                name: "Portfolio Website",
-                category: "Web Development",
-                title: "This website you're looking at right now",
+                name: "FocusMood",
+                category: "App design",
+                title: "Study app for people with Brainfog",
                 description: "Designed and built my personal portfolio website with custom animations and interactions.",
                 role: "Designer & Developer",
-                team: "Solo project",
+                team: "Uni solo project",
                 duration: "2025",
-                logo: "/img/focusmood.png",
-                heroImage: "/img/focusmood.png",
+                logo: "/img/FOCUSMOOD.png",
+                heroImage: "/img/FOCUSMOOD2.png",
                 content: [
                     {
                         type: "text",
-                        title: "Overview",
-                        text: "Built with vanilla HTML, CSS, and JavaScript, featuring GSAP animations, Lenis smooth scrolling, and custom interactions."
+                        title: "1. Overview",
+                        text: "Focus Mood is a desktop and mobile platform designed to help people living with brain fog regain clarity, structure, and confidence in their daily tasks. Rather than positioning itself as a productivity tool for “high performers” or a rigid task manager, the project explores a softer, more human approach to focus—one that recognises that some days, thinking clearly is the real challenge. <br> The project started from a simple observation: for people experiencing brain fog, the problem is rarely just “too many tasks.” It’s more often about not knowing where to start, feeling mentally lost, struggling to concentrate, and having difficulty understanding when during the day their mind actually works best. Traditional productivity tools tend to focus on optimisation, speed, and efficiency, but they often ignore emotional state, mental energy, and cognitive fluctuation—exactly the things that define the brain fog experience. <br> Focus Mood was designed to sit at the intersection of three needs: light task organisation, mood and focus tracking, and gentle guidance to help users find their way back into a productive state. The platform allows users to organise tasks, but also to log how they feel, notice patterns in their concentration levels, and discover their best focus moments throughout the day. Over time, this creates a more compassionate and realistic picture of productivity—one that adapts to the user instead of forcing the user to adapt to the tool."
+                    },
+                                      {
+                        type: "text",
+                        title: "2. Concept and narrative",
+                        text: "A key part of the concept is the narrative and visual metaphor. The interface is built around a small, minimal character surrounded by clouds, using a telescope to search for direction. This storytelling reflects the lived experience of brain fog: feeling mentally lost, moving through uncertainty, and slowly trying to find clarity again. Instead of using dashboards filled with numbers and charts, Focus Mood uses atmosphere, motion, and visual cues to guide the user and reduce cognitive overload. <br> Beyond tracking and organisation, the platform also offers simple tips and short exercises designed to help users regain focus in the moment. These are not framed as productivity hacks, but as supportive interventions—small, accessible actions that help users reset, refocus, and continue without pressure or guilt."
                     }
+                ,{
+                        type: "image",
+                        src: "/img/focusflows.png",
+                        caption: "Initial Flows"
+                    },
+                    {
+                        type: "text",
+                        title: "3. Design",
+                        text: "From a design perspective, the project focused heavily on crafting calm, intuitive flows and a coherent visual identity that could work across both desktop and mobile. Animation plays a central role in the experience, not as decoration, but as a way to communicate state, progress, and emotional tone. Transitions, micro-interactions, and character movement are used to make the product feel alive, supportive, and easy to navigate even when the user’s cognitive energy is low. <br> Technically, I implemented a simple task-saving system as part of the project, but the core of the work was centered on experience design: defining the product vision, designing the interaction flows, creating the visual language, and animating the key moments of the interface. The goal was not to build a feature-heavy productivity app, but to explore how design, storytelling, and motion can reduce friction, lower cognitive load, and make digital tools feel more humane for people struggling with focus and mental clarity. <br> Focus Mood ultimately became an exploration of what “productivity” can look like when it is designed for vulnerability rather than performance—helping users not just to do more, but to find their way back to focus, one small step at a time. "
+                    }
+                ,{
+                        type: "image",
+                        src: "/img/FOCUSMOOD1.png",
+                        caption: "App interface"
+                 }
                 ]
             }
         };
@@ -786,6 +1092,8 @@
 
             // Track text sections for sidebar (declared at DOMContentLoaded scope)
             let textSections = [];
+            let nextProjectId = null;
+            let nextProject = null;
             const chapterList = document.getElementById('chapter-list');
             const chapterSidebar = document.getElementById('chapter-sidebar');
 
@@ -831,8 +1139,25 @@
                     });
                 }
 
+                // --- NEXT PROJECT PEEK: Populate ---
+                const projectKeys = Object.keys(projectsData);
+                const currentIndex = projectKeys.indexOf(projectId);
+                const nextIndex = (currentIndex + 1) % projectKeys.length;
+                nextProjectId = projectKeys[nextIndex];
+                nextProject = projectsData[nextProjectId];
+
+                if (nextProject) {
+                    document.getElementById('peek-logo').src = nextProject.logo;
+                    document.getElementById('peek-name').textContent = nextProject.name;
+                    document.getElementById('peek-category').textContent = nextProject.category;
+                    document.getElementById('peek-title').textContent = nextProject.title;
+                    document.getElementById('peek-hero-image').src = nextProject.heroImage;
+                } else {
+                    document.getElementById('next-project-peek').style.display = 'none';
+                }
+
                 // --- CHAPTER SIDEBAR ---
-                if (textSections.length > 1) {
+                if (textSections.length > 0) {
                     // Build sidebar links from text section titles
                     textSections.forEach((section, i) => {
                         const li = document.createElement('li');
@@ -845,13 +1170,14 @@
                         chapterList.appendChild(li);
                     });
                 } else {
-                    // Hide sidebar if only 0 or 1 text section
+                    // Hide sidebar if no text sections
                     chapterSidebar.style.display = 'none';
                 }
             } else {
                 // Fallback for direct URL access without projectId
                 document.getElementById('project-title').textContent = 'Project Not Found';
                 document.getElementById('project-description').textContent = 'Please select a project from the homepage.';
+                document.getElementById('next-project-peek').style.display = 'none';
             }
 
             // Register GSAP
@@ -863,10 +1189,18 @@
             const fadeElements = document.querySelectorAll('.fade-in');
             const dynamicBar = document.getElementById('dynamic-bar');
 
-            // Check if header animation has already played in this session
+            // Check if arriving from peek transition (skip all entry animation)
+            const fromPeek = sessionStorage.getItem('fromPeek');
             const headerAnimated = sessionStorage.getItem('headerAnimated');
 
-            if (headerAnimated) {
+            if (fromPeek) {
+                sessionStorage.removeItem('fromPeek');
+                gsap.set(header, { opacity: 1, y: 0 });
+                gsap.set(dynamicBar, { opacity: 1, y: 0, xPercent: -50, filter: "blur(0px)" });
+                gsap.set(fadeElements, { opacity: 1, y: 0 });
+                // Reveal the page now that GSAP has positioned everything
+                document.documentElement.classList.remove('peek-arriving');
+            } else if (headerAnimated) {
                 // Skip header animation, show immediately
                 gsap.set(header, { opacity: 1, y: 0 });
                 gsap.set(dynamicBar, { opacity: 1, y: 0, xPercent: -50, filter: "blur(0px)" });
@@ -960,7 +1294,7 @@
             });
 
             // --- CHAPTER SIDEBAR: SCROLL TRACKING & CLICK HANDLERS ---
-            if (textSections.length > 1) {
+            if (textSections.length > 0) {
                 const chapterLinks = document.querySelectorAll('.chapter-link');
 
                 // ScrollTrigger for each text section to highlight active sidebar link
@@ -998,6 +1332,108 @@
                     duration: 0.6,
                     ease: 'power3.out',
                     delay: 0.8
+                });
+            }
+
+            // --- NEXT PROJECT PEEK: Click Transition ---
+            const peekLink = document.getElementById('peek-link');
+            const peekClip = document.getElementById('peek-clip');
+            const peekInner = document.getElementById('peek-inner');
+            const peekSection = document.getElementById('next-project-peek');
+            let peekTransitioning = false;
+
+            if (peekLink && nextProject) {
+                // Expanded cursor on peek hover
+                peekSection.addEventListener('mouseenter', () => {
+                    cursor.classList.add('expanded');
+                    cursorText.innerHTML = 'Open<br>project';
+                });
+
+                peekSection.addEventListener('mouseleave', () => {
+                    cursor.classList.remove('expanded');
+                    cursorText.textContent = '';
+                });
+
+                peekLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (peekTransitioning) return;
+                    peekTransitioning = true;
+
+                    // Step 1: Lock scroll — freeze the page in place
+                    const scrollY = window.scrollY || document.documentElement.scrollTop;
+                    lenis.stop();
+                    document.documentElement.classList.add('peek-scroll-locked');
+                    document.documentElement.style.top = `-${scrollY}px`;
+
+                    // Step 2: Remove overflow clip so content can fly upward freely
+                    peekClip.style.overflow = 'visible';
+                    peekClip.style.maxHeight = 'none';
+                    peekSection.classList.add('is-transitioning');
+
+                    // Step 3: Create white overlay — sits BEHIND the peek but covers page content
+                    const transitionOverlay = document.createElement('div');
+                    transitionOverlay.className = 'peek-transition-overlay';
+                    document.body.appendChild(transitionOverlay);
+
+                    // Step 4: Gather elements & measure positions
+                    const peekBadgeEl = peekInner.querySelector('.peek-badge');
+                    const currentBadgeRect = peekBadgeEl.getBoundingClientRect();
+
+                    // Current project content to fade out (NOT the site-header — it stays)
+                    const currentContent = document.querySelectorAll(
+                        '.project-header, .project-hero-image, .info-cards, .project-description, #project-content, .chapter-sidebar, .dynamic-bar'
+                    );
+
+                    // Where the badge sits on a fresh project page
+                    const viewportWidth = window.innerWidth;
+                    const isTablet = viewportWidth <= 768;
+                    const targetTopPadding = isTablet ? 100 : 120;
+                    const deltaY = targetTopPadding - currentBadgeRect.top;
+
+                    // Step 5: GSAP animation timeline
+                    const peekTl = gsap.timeline();
+
+                    // Phase 1 (0s): Fade out current project content + label + border
+                    peekTl.to(currentContent, {
+                        opacity: 0,
+                        duration: 0.5,
+                        ease: "power2.out",
+                        stagger: 0.02
+                    }, 0);
+
+                    peekTl.to('.peek-label', {
+                        opacity: 0,
+                        duration: 0.3,
+                        ease: "power2.out"
+                    }, 0);
+
+                    // Hide the border-top during transition
+                    peekTl.to(peekSection, {
+                        borderColor: 'transparent',
+                        duration: 0.3,
+                        ease: "power2.out"
+                    }, 0);
+
+                    // Phase 1 (0s): White overlay fades in — covering faded content
+                    peekTl.to(transitionOverlay, {
+                        opacity: 1,
+                        duration: 0.6,
+                        ease: "power2.inOut"
+                    }, 0);
+
+                    // Phase 2 (0.4s): Entire peek inner (header + image) flies up together
+                    peekTl.to(peekInner, {
+                        y: deltaY,
+                        duration: 1.0,
+                        ease: "power4.inOut"
+                    }, 0.4);
+
+                    // Phase 3 (1.4s): Navigate to next project
+                    peekTl.call(() => {
+                        localStorage.setItem('projectId', nextProjectId);
+                        sessionStorage.setItem('fromPeek', 'true');
+                        window.location.href = 'project.html';
+                    }, null, 1.4);
                 });
             }
 
