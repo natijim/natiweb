@@ -31,7 +31,7 @@
 
         :root {
             --font-main: 'Lausanne', 'Inter', Helvetica, Arial, sans-serif;
-            --bg-color: #FAFAFA;
+            --bg-color: #FDFDFD;
              /* same color as RGB (for gradients) */
             --bg-color-rgb: 250, 250, 250;  
              --nav-text-color: #767676;
@@ -50,9 +50,7 @@
             cursor: none;
         }
 
-        html {
-            /* Removed scroll-behavior: smooth - Lenis handles smooth scrolling */
-        }
+
 
         body {
             margin: 0;
@@ -600,9 +598,14 @@
         /* --- RESPONSIVE --- */
         @media (max-width: 768px) {
             .site-header {
-                padding: 16px 20px;
-                padding-bottom: 32px;
+                padding: 20px 12px !important;
+                background: var(--bg-color) !important;
             }
+            .site-header::before { display: none; }
+            .breadcrumb-separator, .breadcrumb-current { display: none; }
+            .breadcrumb-link { font-size: 0; }
+            .breadcrumb-link::after { content: "Natalia B."; font-size: 14px; font-weight: 500; }
+            .email-link { font-size: 13px; }
 
             main {
                 padding: 100px 20px 0px;
@@ -629,7 +632,11 @@
             }
 
             .peek-clip {
-                max-height: 220px;
+                max-height: 320px;
+            }
+
+            .peek-title {
+                font-size: 28px;
             }
 
             .peek-image-container {
@@ -648,13 +655,18 @@
             }
 
             .peek-clip {
-                max-height: 180px;
+                max-height: 280px;
+            }
+
+            .peek-badge {
+                margin-bottom: 24px;
             }
 
             .peek-logo {
                 width: 40px;
                 height: 40px;
             }
+            .dynamic-bar { min-width: 290px; }
         }
 
         /* --- DYNAMIC BOTTOM BAR --- */
@@ -737,7 +749,7 @@
             letter-spacing: 0.02em;
             backdrop-filter: blur(10px);
             padding: 10px;
-            border-radius: 999px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
         }
@@ -785,8 +797,8 @@
         </div>
         <div class="header-right">
             <div class="email-wrapper">
-                <a href="mailto:hi@nataliabuendia.com" class="email-link">hi@nataliabuendia.com</a>
-                <button class="copy-btn" id="copy-email-btn" data-email="hi@nataliabuendia.com" aria-label="Copy email to clipboard">
+                <a href="mailto:nataliabuendiadesign@gmail.com" class="email-link">nataliabuendiadesign@gmail.com</a>
+                <button class="copy-btn" id="copy-email-btn" data-email="nataliabuendiadesign@gmail.com" aria-label="Copy email to clipboard">
                     <svg class="copy-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                         <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
@@ -917,8 +929,8 @@
             "samphire": {
                 name: "Samphire",
                 category: "Product Design",
-                title: "Medication logging by Samphire",
-                description: "Design of an experience for a logging and scheduling treatments, and medications for Samphir Neuroscience",
+                title: "Medication logging synced to the cycle",
+                description: "Design of an experience for a logging and scheduling treatments, and medications for Samphire Neuroscience",
                 role: "Designer",
                 team: "Natalia Buendía - Design, Liberty Colebourne - Engineering",
                 duration: "2025",
@@ -928,15 +940,26 @@
                     {
                         type: "text",
                         title: "1. Overview",
-                        text: "Samphire Neuroscience is developing Nettle, a neurostimulation device designed to help people manage menstrual pain and mood-related symptoms. While the product was originally conceived as a standalone therapy, internal research revealed a more complex reality: most users don’t rely on just one treatment. Instead, they combine Nettle sessions with painkillers, hormonal treatments, supplements, or other prescribed medications as part of a broader care routine. The initial idea behind this feature was simple: help users understand whether using Nettle could reduce their reliance on pain medication, such as ibuprofen, over time. However, once we started talking to users and conducting qualitative research, the problem space expanded significantly."
+                        text: "Samphire Neuroscience has developed Nettle, a neurostimulation device designed to help people manage menstrual pain and mood-related symptoms. While the product was originally conceived as a standalone therapy, internal research revealed a more complex reality: most users don’t rely on just one treatment. Instead, they combine Nettle sessions with painkillers, hormonal treatments, supplements, or other prescribed medications as part of a broader care routine. The initial idea behind this feature was simple: help users understand whether using Nettle could reduce their reliance on pain medication, such as ibuprofen, over time. However, once we started talking to users and conducting qualitative research, the problem space expanded significantly."
+                    },
+                    {
+                        type: "image",
+                        src: "/img/samphirecover.png",
+                        caption: "The brand"
                     },
  
                     {
                         type: "text",
                         title: "2. Research",
-                       text: "We ran research sessions with PMDD support groups in London and spoke to women undergoing HRT and other hormone-related treatments. A recurring pattern quickly emerged: many of them are instructed by doctors to synchronise their medication with their menstrual cycle, adjusting dosages or timing depending on the phase of the cycle. Despite this being medically important, most participants were still tracking this information on paper, in notebooks, or in ad-hoc notes on their phones. The process was fragmented, easy to forget, and difficult to maintain over time."
+                       text: "We did a guerrilla research with a PMDD support community in London and spoke to women undergoing HRT and other hormone-related treatments. A recurring pattern quickly emerged: many of them are instructed by doctors to synchronise their medication with their menstrual cycle, adjusting dosages or timing depending on the phase of the cycle. Despite this being medically important, most participants were still tracking this information on paper, in notebooks, or in ad-hoc notes on their phones. The process was fragmented, easy to forget, and difficult to maintain over time."
 
                     },
+                     {
+                        type: "image",
+                        src: "/img/samphireassets.png",
+                        caption: "Brand Book"
+                    },
+ 
                     {
                         type: "text",
                         title: "3. User persona",
@@ -951,95 +974,182 @@
                     {
                         type: "text",
                         title: "5. Design",
-                        text: "From this research, the scope of the feature evolved. Instead of just tracking painkiller reduction, we designed a medication logging and scheduling experience that allows users to: <br> Combine Nettle therapy with other treatments in one place <br> Sync medications and routines to the start and phases of their menstrual cycle <br> Reduce cognitive load for users who struggle with memory and consistency <br>Track patterns over time, including changes in painkiller usage <br>Build a clearer picture of how different treatments interact and impact their symptoms<br>The result is a feature that doesn’t just log pills—it supports real, messy, multi-treatment lives. It turns a fragmented, paper-based process into a structured, cycle-aware system that helps users stay consistent, feel more in control of their care, and understand the real impact of their treatments over time."
+                        text: "From this research, the scope of the feature evolved. Instead of just tracking painkiller reduction, we designed a medication logging and scheduling experience that allows users to:<br> <br> 1.   Combine Nettle therapy with other treatments in one place <br> 2.   Sync medications and routines to the start and phases of their menstrual cycle <br> 3.   Reduce cognitive load for users who struggle with memory and consistency <br>4.   Track patterns over time, including changes in painkiller usage <br>5.   Build a clearer picture of how different treatments interact and impact their symptoms<br><br>The result is a feature that doesn’t just log pills—it supports real, messy, multi-treatment lives. It turns a fragmented, paper-based process into a structured, cycle-aware system that helps users stay consistent, feel more in control of their care, and understand the real impact of their treatments over time."
                     },
                     {
                         type: "image",
-                        src: "/img/Highlight1.png",
+                        src: "/img/samphiremedicationapp.png",
                         caption: "Product interface design"
                     }
                 ]
             },
-            "kotie": {
-                name: "Kotie",
-                category: "Mobile App Design",
-                title: "A smart shopping list app that learns your habits",
-                description: "Designed a mobile application that helps users manage their shopping lists intelligently, learning from their habits and preferences.",
-                role: "Product Designer",
-                team: "Product Manager, iOS Developer, Backend Engineer",
-                duration: "2024",
-                logo: "/img/kotie.png",
-                heroImage: "/img/kotie.png",
-                content: [
-                    {
-                        type: "text",
-                        title: "Overview",
-                        text: "Kotie is a smart shopping list application that uses machine learning to predict what users need to buy based on their shopping history."
-                    },
-                    {
-                        type: "image",
-                        src: "/img/kotie.png",
-                        caption: "App interface"
-                    }
-                ]
-            },
-            "minimum": {
-                name: "Minimum",
-                category: "Visual Design",
-                title: "Design system and brand identity for a tech startup",
-                description: "Created a comprehensive design system and visual identity for Minimum.run, establishing their brand presence in the market.",
-                role: "Visual Product Designer",
-                team: "Founders, Marketing Team",
-                duration: "2024",
-                logo: "/img/UI.png",
-                heroImage: "/img/UI.png",
-                content: [
-                    {
-                        type: "text",
-                        title: "Overview",
-                        text: "Minimum needed a cohesive design system and brand identity to scale their product. I developed a comprehensive design language."
-                    }
-                ]
-            },
+            // "kotie": {
+            //     name: "Kotie",
+            //     category: "Mobile App Design",
+            //     title: "A smart shopping list app that learns your habits",
+            //     description: "Designed a mobile application that helps users manage their shopping lists intelligently, learning from their habits and preferences.",
+            //     role: "Product Designer",
+            //     team: "Product Manager, iOS Developer, Backend Engineer",
+            //     duration: "2024",
+            //     logo: "/img/kotie.png",
+            //     heroImage: "/img/kotie.png",
+            //     content: [
+            //         {
+            //             type: "text",
+            //             title: "Overview",
+            //             text: "Kotie is a smart shopping list application that uses machine learning to predict what users need to buy based on their shopping history."
+            //         },
+            //         {
+            //             type: "image",
+            //             src: "/img/kotie.png",
+            //             caption: "App interface"
+            //         }
+            //     ]
+            // },
+            // "minimum": {
+            //     name: "Minimum",
+            //     category: "Visual Design",
+            //     title: "Design system and brand identity for a tech startup",
+            //     description: "Created a comprehensive design system and visual identity for Minimum.run, establishing their brand presence in the market.",
+            //     role: "Visual Product Designer",
+            //     team: "Founders, Marketing Team",
+            //     duration: "2024",
+            //     logo: "/img/UI.png",
+            //     heroImage: "/img/UI.png",
+            //     content: [
+            //         {
+            //             type: "text",
+            //             title: "Overview",
+            //             text: "Minimum needed a cohesive design system and brand identity to scale their product. I developed a comprehensive design language."
+            //         }
+            //     ]
+            // },
+            // "web3": {
+            //     name: "Minimum",
+            //     category: "Visual Design",
+            //     title: "Design system and brand identity for a tech startup",
+            //     description: "Created a comprehensive design system and visual identity for Minimum.run, establishing their brand presence in the market.",
+            //     role: "Visual Product Designer",
+            //     team: "Founders, Marketing Team",
+            //     duration: "2024",
+            //     logo: "/img/UI.png",
+            //     heroImage: "/img/UI.png",
+            //     content: [
+            //         {
+            //             type: "text",
+            //             title: "Overview",
+            //             text: "Minimum needed a cohesive design system and brand identity to scale their product. I developed a comprehensive design language."
+            //         }
+            //     ]
+            // },
+            // "moresamphire": {
+            //     name: "Minimum",
+            //     category: "Visual Design",
+            //     title: "Design system and brand identity for a tech startup",
+            //     description: "Created a comprehensive design system and visual identity for Minimum.run, establishing their brand presence in the market.",
+            //     role: "Visual Product Designer",
+            //     team: "Founders, Marketing Team",
+            //     duration: "2024",
+            //     logo: "/img/UI.png",
+            //     heroImage: "/img/UI.png",
+            //     content: [
+            //         {
+            //             type: "text",
+            //             title: "Overview",
+            //             text: "Minimum needed a cohesive design system and brand identity to scale their product. I developed a comprehensive design language."
+            //         }
+            //     ]
+            // },
             "timeless": {
                 name: "Timeless Biotech",
                 category: "Visual Design",
-                title: "Healthcare brand for women´s health biotech company",
-                description: "Designed an intuitive platform for managing biotech research data and collaboration.",
+                title: "Brand and web for women's health biotech company",
                 role: "Visual Designer",
-                team: "Designer",
-                duration: "2023 - 2024",
+                team: "Ana Sánchez Gómez & Natalia Jimenez Zamora",
+                duration: "2025",
                 logo: "/img/timelesslogo.png",
                 heroImage: "/img/Timelessbiotechbrand.png",
                 content: [
                     {
                         type: "text",
                         title: "Overview",
-                        text: "Timeless Biotech required a platform to streamline their research workflows and data management."
+                        text: "Brand refresh and web redesign for Timeless Biotech, a biotechnology company. The project covered visual identity, web design and its implementation in WordPress. Timeless Biotech is a biotech company focused on women's health, developing science-backed solutions that address the biological and hormonal changes across different stages of a woman's life. Their work sits at the intersection of cutting-edge research and a deeply human understanding of how women experience their bodies over time."
                     }
                   ,{
                         type: "image",
-                        src: "/img/Logopresentation.png",
-                        caption: "App interface"
+                        src: "/img/brandmissiontimeless.png",
+                        caption: "Brand Book"
                     }
+                ,{
+                        type: "text",
+                        title: "Brand Identity",
+                        text: "Visual language, color system, typography and brand guidelines. The goal was to position Timeless Biotech as a serious, investor-ready company — elevating the brand to reflect the scientific rigor and ambition behind their work, helping them stand out in a competitive biotech landscape.",
+                        text: "Scientific meets organic. We combined the precision of scientific language with the organic fluidity of women's lives and cycles creating a visual identity that feels both credible and deeply human."
+
+                    }
+                ,{
+                        type: "image",
+                        src: "/img/Logopresentation.png",
+                        caption: "Brand Book"
+                    }
+                
+                 ,{
+                        type: "text",
+                        title: "Web Design",
+                        text: "Full UI design for all key pages, responsive layout. Design translating the new brand identity into a cohesive, responsive experience across all key pages."
+                 }
+                 ,{
+                        type: "image",
+                        src: "/img/timelessbiotechweb.png",
+                        caption: "Brand Book"
+                    }
+
+                                  ,{
+                        type: "text",
+                        title: "WordPress implementation",
+                        text: "Design translated and built directly in WordPress. Rather than a custom build, we implemented the design as a template: giving the client full autonomy to manage and update their site independently going forward."
+                 }
                 ]
             },
             "talk-womens-health": {
                 name: "Design in Women's Health",
                 category: "Talk / Presentation",
                 title: "Speaking about design's impact on women's health technology",
-                description: "A talk exploring how thoughtful design can improve healthcare experiences for women.",
+                description: "A talk exploring how thoughtful design can improve healthcare experiences for women",
                 role: "Speaker",
                 team: "PD Ladies London",
-                duration: "2024",
+                duration: "2025",
                 logo: "/img/Presentation.png",
-                heroImage: "/img/Presentation.png",
+                heroImage: "/img/brainstation.jpg",
                 content: [
                     {
                         type: "text",
                         title: "About the Talk",
-                        text: "I shared insights about designing for women's health, discussing the unique challenges and opportunities in this space."
+                        text: "I shared insights about designing for women's health as a founding designer in Samphire Neuroscience. We discussed the unique challenges, the gaps and opportunities in this space. The talk was organized by Product Design Ladies, a unique community exclusively for women in product design and ux research. ‍"
                     }
+                     ,{
+                        type: "image",
+                        src: "/img/Presentation.png",
+                    },
+                                        {
+                        type: "text",
+                        title: "Women's Brains",
+                        text: "I explored how women's brains differ from men's, and what emerging research: particularly studies that separate male and female cohorts is revealing about sleep, mood, and cognitive patterns across the hormonal cycle. The key tension: most digital experiences are still built on health data that doesn't account for any of this."
+                    }
+                    ,
+                                        {
+                        type: "text",
+                        title: "Final thoughts",
+                        text: "Being part of a community that gives visibility to these conversations matters. One of the most grounding takeaways was realising that the patterns we experience individually are widely shared and they're not in our heads. They're in our brains."
+
+                    }
+                    ,{
+                        type: "image",
+                        src: "/img/speakers.jpg",
+                        caption: "Speakers"
+
+                    }
+                     ,
                 ]
             },
             "portfolio": {
@@ -1056,7 +1166,7 @@
                     {
                         type: "text",
                         title: "1. Overview",
-                        text: "Focus Mood is a desktop and mobile platform designed to help people living with brain fog regain clarity, structure, and confidence in their daily tasks. Rather than positioning itself as a productivity tool for “high performers” or a rigid task manager, the project explores a softer, more human approach to focus—one that recognises that some days, thinking clearly is the real challenge. <br> The project started from a simple observation: for people experiencing brain fog, the problem is rarely just “too many tasks.” It’s more often about not knowing where to start, feeling mentally lost, struggling to concentrate, and having difficulty understanding when during the day their mind actually works best. Traditional productivity tools tend to focus on optimisation, speed, and efficiency, but they often ignore emotional state, mental energy, and cognitive fluctuation—exactly the things that define the brain fog experience. <br> Focus Mood was designed to sit at the intersection of three needs: light task organisation, mood and focus tracking, and gentle guidance to help users find their way back into a productive state. The platform allows users to organise tasks, but also to log how they feel, notice patterns in their concentration levels, and discover their best focus moments throughout the day. Over time, this creates a more compassionate and realistic picture of productivity—one that adapts to the user instead of forcing the user to adapt to the tool."
+                        text: "Focus Mood is a desktop and mobile platform designed to help people living with brain fog regain clarity, structure, and confidence in their daily tasks. Rather than positioning itself as a productivity tool for “high performers” or a rigid task manager, the project explores a softer, more human approach to focus—one that recognises that some days, thinking clearly is the real challenge. <br> The project started from a simple observation: for people experiencing brain fog, the problem is rarely just “too many tasks.” It’s more often about not knowing where to start, feeling mentally lost, struggling to concentrate, and having difficulty understanding when during the day their mind actually works best. Traditional productivity tools tend to focus on optimisation, speed, and efficiency, but they often ignore emotional state, mental energy, and cognitive fluctuation: exactly the things that define the brain fog experience. <br> Focus Mood was designed to sit at the intersection of three needs: light task organisation, mood and focus tracking, and gentle guidance to help users find their way back into a productive state. The platform allows users to organise tasks, but also to log how they feel, notice patterns in their concentration levels, and discover their best focus moments throughout the day. Over time, this creates a more compassionate and realistic picture of productivity: one that adapts to the user instead of forcing the user to adapt to the tool."
                     },
                                       {
                         type: "text",
@@ -1346,7 +1456,7 @@
                 // Expanded cursor on peek hover
                 peekSection.addEventListener('mouseenter', () => {
                     cursor.classList.add('expanded');
-                    cursorText.innerHTML = 'Open<br>project';
+                    cursorText.innerHTML = 'Open<br>next';
                 });
 
                 peekSection.addEventListener('mouseleave', () => {

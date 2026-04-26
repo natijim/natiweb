@@ -6,1293 +6,414 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Natalia Buendia - Portfolio</title>
     <link rel="icon" type="image/png" href="/img/favicon.png">
-    <!-- GSAP + ScrollTrigger -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-
-    <!-- Lenis for Smooth Scrolling -->
     <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
 
     <style>
-        /* --- FONT SETUP --- */
-        @font-face {
-            font-family: 'Acid Grotesk';
-            src: url('./fonts/FFF-AcidGrotesk-Book.otf') format('opentype');
-            font-weight: 400;
-        }
-        @font-face {
-            font-family: 'Lausanne';
-            src: url('./fonts/6489c1c644ac7b501ff707bc_TWK\ 350.ttf');
-            letter-spacing: -1.6px;
-        }
+        @font-face { font-family: 'Acid Grotesk'; src: url('./fonts/FFF-AcidGrotesk-Book.otf') format('opentype'); font-weight: 400; }
+        @font-face { font-family: 'Lausanne'; src: url('./fonts/6489c1c644ac7b501ff707bc_TWK\ 350.ttf'); letter-spacing: -1.6px; }
 
         :root {
             --font-main: 'Lausanne', 'Inter', Helvetica, Arial, sans-serif;
-            --bg-frame: #FAFAFA;
-            --bg-outer: #FAFAFA;
+            --bg-frame: #FDFDFD;
+            --bg-outer: #FDFDFD;
             --text-color: #1a1a1a;
             --pill-bg: #e7e9ef;
             --pill-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-
-            /* New Variables for Dark Theme Transition */
             --cursor-color: #000000;
             --nav-text-color: #767676;
-
-            /* Initial States */
             --nav-bg: rgba(255, 255, 255, 0);
-            /* Transparent for Nav Pill */
             --toggle-bg: #e7e9ef;
-            /* Light Gray for Toggle */
             --bar-bg: rgba(238, 238, 238, 0.95);
-            /* Dynamic Bar Background */
-
             --badge-bg: rgb(212, 212, 223);
             --badge-text: #5f5f5f;
-
             --selection-bg: #000;
             --selection-text: #fff;
-
             --ui-text: #4a4a4a;
-
-            /* New Variables */
             --cursor-hover-bg: rgba(26, 26, 26, 0.1);
-            /* Light Mode Hover */
             --coming-soon-text: #333;
-            /* Light Mode Text (Dark) */
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            cursor: none;
-            /* HIDE DEFAULT MOUSE */
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
 
         body {
             background-color: var(--bg-outer);
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
             overflow: hidden;
             font-family: var(--font-main);
-            height: 100vh;
-            width: 100vw;
+            height: 100vh; width: 100vw;
             cursor: none;
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
         }
 
-        /* --- SELECTION & DRAG --- */
-        ::selection {
-            background: var(--selection-bg);
-            color: var(--selection-text);
-        }
+        ::selection { background: var(--selection-bg); color: var(--selection-text); }
+        ::-moz-selection { background: var(--selection-bg); color: var(--selection-text); }
+        img { user-select: none; -webkit-user-drag: none; -webkit-user-select: none; pointer-events: auto; }
 
-        ::-moz-selection {
-            background: var(--selection-bg);
-            color: var(--selection-text);
-        }
-
-        img {
-            user-select: none;
-            -webkit-user-drag: none;
-            -webkit-user-select: none;
-            pointer-events: auto;
-        }
-
-        /* --- CUSTOM CURSOR --- */
+        /* CURSOR */
         .cursor {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 14px;
-            height: 14px;
+            position: fixed; top: 0; left: 0;
+            width: 14px; height: 14px;
             background-color: #000;
             border-radius: 50%;
             pointer-events: none;
             z-index: 999999;
             transform: translate(-50%, -50%);
-            display: flex;
-            /* border-width: 0.5px;
-            border-color: white; */
-            align-items: center;
-            justify-content: center;
+            display: flex; align-items: center; justify-content: center;
             opacity: 0;
-            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-                        height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-                        background-color 0.3s ease,
-                        opacity 0.15s ease;
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), height 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease, opacity 0.15s ease;
         }
+        .cursor.visible { opacity: 1; }
+        .cursor-text { color: #fff; font-size: 12px; font-weight: 500; opacity: 0; white-space: nowrap; transition: opacity 0.2s ease; font-family: var(--font-main); line-height: 120%; text-align: center; }
+        .cursor.expanded { width: 70px; height: 70px; background-color: rgba(0, 0, 0, 0.357); backdrop-filter: blur(15px); }
+        .cursor.expanded .cursor-text { opacity: 1; }
 
-        .cursor.visible {
-            opacity: 1;
-        }
+        .social-dropdown { position: absolute; top: 50px; left: 0; background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); padding: 10px; border-radius: 12px; display: flex; flex-direction: column; gap: 8px; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.1); z-index: 1001; }
+        .social-dropdown.active { opacity: 1; visibility: visible; transform: translateY(0); }
+        .social-item { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 8px; text-decoration: none; color: #333; font-size: 12px; font-weight: 300; transition: background 0.2s; }
+        .social-item:hover { background: rgba(0,0,0,0.05); }
+        .nav-icon-circle { cursor: pointer; pointer-events: auto; display: flex; align-items: center; justify-content: center; }
 
-        .cursor-text {
-            color: #fff;
-            font-size: 12px;
-            font-weight: 500;
-            opacity: 0;
-            white-space: nowrap;
-            transition: opacity 0.2s ease;
-            font-family: var(--font-main);
-        }
+        .scroll-hint { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 10px; text-transform: uppercase; letter-spacing: 1px; pointer-events: none; z-index: 20; text-align: center; font-weight: 300; color: rgba(153,153,153,0.6); opacity: 0; display: flex; align-items: center; gap: 10px; }
 
-        .cursor.expanded {
-            width: 70px;
-            height: 70px;
-            background-color: rgba(0, 0, 0, 0.357);
-            backdrop-filter: blur(15px);
+        .tooltip { position: fixed; pointer-events: none; z-index: 10000; background: rgba(0,0,0,0.8); color: white; padding: 8px 16px; border-radius: 8px; font-size: 14px; font-weight: 300; opacity: 0; transition: opacity 0.2s; transform: translate(15px, 15px); }
 
-        }
+        main { width: 100%; height: 100%; }
 
-        .cursor.expanded .cursor-text {
-            opacity: 1;
-        }
+        .app-frame { background-color: var(--bg-frame); width: 100%; height: 100%; border-radius: 40px; position: relative; overflow-y: auto; overflow-x: hidden; -ms-overflow-style: none; scrollbar-width: none; will-change: scroll-position; }
+        .app-frame::-webkit-scrollbar { display: none; }
 
-        /* --- SOCIAL DROPDOWN --- */
-        .social-dropdown {
-            position: absolute;
-            top: 50px;
-            /* Below the nav pill */
-            left: 0;
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-            padding: 10px;
-            border-radius: 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-10px);
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            z-index: 1001;
-        }
+        .nav-pill { position: fixed; top: 40px; left: 50px; z-index: 1000; backdrop-filter: blur(10px); padding: 8px 16px 8px 8px; border-radius: 50px; font-size: 14px; font-weight: 300; color: var(--nav-text-color); display: flex; align-items: center; gap: 10px; transition: background 0.3s, color 0.3s; }
+        .nav-icon-circle { width: 32px; height: 32px; background: var(--nav-bg); border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .paperclip-icon { color: #5842D8; font-size: 18px; }
+        .nav-right { position: fixed; top: 40px; right: 50px; z-index: 1000; background: var(--pill-bg); padding: 10px 20px; border-radius: 50px; font-size: 12.5px; font-weight: 300; color: #1a1a1a; cursor: none; transition: transform 0.2s; border: none; font-family: inherit; }
+        .nav-right:hover { transform: scale(1.05); }
 
-        .social-dropdown.active {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
+        .dynamic-bar { position: fixed; bottom: 40px; left: 50%; z-index: 100000; background: var(--bar-bg); backdrop-filter: blur(10px); padding: 6px; border-radius: 10px; display: flex; justify-content: center; align-items: center; }
+        .bar-content-wrapper { display: flex; justify-content: center; align-items: center; }
+        .bar-inner { display: flex; align-items: center; gap: 15px; white-space: nowrap; }
+        .scroll-icon { width: 24px; height: 24px; background: black; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; }
+        .bar-project-info { display: flex; align-items: center; gap: 15px; }
+        .bar-project-icon { width: 36px; height: 36px; border-radius: 10px; overflow: hidden; display: flex; justify-content: center; align-items: center; background: #f0f0f0; flex-shrink: 0; }
+        .bar-project-icon img { width: 100%; height: 100%; object-fit: cover; }
+        .bar-project-text { display: flex; flex-direction: column; line-height: 1.2; text-align: left; }
+        .bar-project-title { font-weight: 300; font-size: 14px; color: #1a1a1a; }
+        .bar-project-desc { font-size: 12px; color: #666; }
 
-        .social-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 6px 10px;
-            border-radius: 8px;
-            text-decoration: none;
-            color: #333;
-            font-size: 12px;
-            font-weight: 300;
-            transition: background 0.2s;
-        }
+        .animate-text { opacity: 0; transform: translateY(20px); filter: blur(5px); will-change: transform, opacity, filter; }
 
-        .social-item:hover {
-            background: rgba(0, 0, 0, 0.05);
-        }
+        .sticky-wrapper { height: 100vh; width: 100%; position: relative; overflow: hidden; perspective: 1000px; display: flex; justify-content: center; align-items: center; }
+        .moment { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; visibility: hidden; will-change: transform, opacity, filter; }
+        #moment-1 { z-index: 10; }
 
-        .nav-icon-circle {
-            cursor: pointer;
-            pointer-events: auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+        .hero-layout { display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: -50px; }
+        .intro-text { text-align: center; z-index: 20; margin-bottom: 60px; }
+        .intro-text h1 { font-size: 18px; font-weight: 300; line-height: 1.5; color: #656565; }
+        .highlight { color: #5842D8; font-weight: 300; }
 
-        /* --- SCROLL HINT --- */
-        .scroll-hint {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #999;
-            pointer-events: none;
-            z-index: 20;
-            /* Increased to be above images */
-            text-align: center;
-            font-weight: 300;
+        .cluster-container { position: relative; width: 600px; height: 450px; }
+        .hero-img { position: absolute; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.028); overflow: hidden; background: #eee; object-fit: cover; }
+        .hero-img img { width: 100%; height: 100%; object-fit: cover; }
 
-            /* Static Style */
-            color: rgba(153, 153, 153, 0.6);
-            /* #999 with opacity */
-            opacity: 0;
-            /* Hidden initially for GSAP */
-        }
+        .pos-1 { width: 130px; height: 130px; top: 0; left: 50%; margin-left: -70px; z-index: 100 !important; }
+        .pos-2 { width: 130px; height: 130px; top: 50px; right: 110px; z-index: 2; background: white; }
+        .pos-3 { width: 130px; height: 130px; top: 130px; right: 60px; z-index: 3; }
+        .pos-4 { width: 130px; height: 130px; bottom: 40px; right: 110px; z-index: 2; }
+        .pos-5 { width: 130px; height: 130px; bottom: 0; left: 50%; margin-left: -70px; z-index: 3; background: white; }
+        .pos-6 { width: 130px; height: 130px; bottom: 40px; left: 110px; z-index: 2; background: black; }
+        .pos-7 { width: 130px; height: 130px; top: 130px; left: 60px; z-index: 3; background: #4385F5; }
+        .pos-8 { width: 130px; height: 130px; top: 50px; left: 110px; z-index: 1; }
 
-        /* --- TOOLTIP (EDIT HERE) --- */
-        /* Change background, color, font-size, padding, etc. to customize */
-        .tooltip {
-            position: fixed;
-            pointer-events: none;
-            z-index: 10000;
-            background: rgba(0, 0, 0, 0.8);
-            /* Background Color */
-            color: white;
-            /* Text Color */
-            padding: 8px 16px;
-            /* Spacing */
-            border-radius: 8px;
-            /* Rounded Corners */
-            font-size: 14px;
-            /* Font Size */
-            font-weight: 300;
-            opacity: 0;
-            transition: opacity 0.2s;
-            transform: translate(15px, 15px);
-            /* Offset from mouse */
-        }
+        .project-layout { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 40px; width: 100%; }
+        .project-icon { width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0; overflow: hidden; display: flex; justify-content: center; align-items: center; background: #f0f0f0; }
+        .project-icon img { width: 100%; height: 100%; object-fit: cover; }
+        .project-info { flex-direction: column; text-align: left; }
+        .project-info h3 { font-size: 16px; font-weight: 300; color: #1a1a1a; margin-bottom: 2px; }
+        .project-info p { font-size: 13px; color: #666; font-weight: 300; }
+        .project-screens { display: flex; gap: 30px; justify-content: center; align-items: center; }
+        .phone-mockup { width: 230px; height: 520px; background: #ddd; border-radius: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.15); overflow: hidden; position: relative; }
+        .phone-mockup img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .large-screen { width: 320px; height: 580px; }
 
-        main {
-            width: 100%;
-            height: 100%;
-        }
+        /* --- CONTACT --- */
+        .contact-layout { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 36px; }
+        .contact-text { font-size: 28px; font-weight: 300; color: var(--text-color); line-height: 1.4; position: relative; z-index: 3; }
+        .contact-highlight { color: #7582f1; text-decoration: none; cursor: none; }
 
-        /* --- MAIN LAYOUT --- */
-        .app-frame {
-            background-color: var(--bg-frame);
-            width: 100%;
-            height: 100%;
-            border-radius: 40px;
+        /* =============================================
+           ENVELOPE
+        ============================================= */
+        .envelope-wrapper {
             position: relative;
-            overflow-y: auto;
-            overflow-x: hidden;
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-            will-change: scroll-position;
-        }
-
-        .app-frame::-webkit-scrollbar {
-            display: none;
-        }
-
-        /* --- NAVIGATION --- */
-        .nav-pill {
-            position: fixed;
-            top: 40px;
-            left: 50px;
-            z-index: 1000;
-            /* background: var(--nav-bg); */
-            /* Use specific variable */
-            backdrop-filter: blur(10px);
-            padding: 8px 16px 8px 8px;
-            /* Adjusted padding */
-            border-radius: 50px;
-            /* box-shadow: var(--pill-shadow); */
-            /* Removed shadow for cleaner look */
-            font-size: 14px;
-            font-weight: 300;
-            color: var(--nav-text-color);
-            /* Use variable */
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: background 0.3s, color 0.3s;
-        }
-
-        .nav-icon-circle {
-            width: 32px;
-            height: 32px;
-            background: var(--nav-bg);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-        }
-
-        .paperclip-icon {
-            color: #5842D8;
-            /* transform: rotate(45deg); */
-            font-size: 18px;
-        }
-
-        .nav-right {
-            position: fixed;
-            top: 40px;
-            right: 50px;
-            z-index: 1000;
-            background: var(--pill-bg);
-            padding: 10px 20px;
-            border-radius: 50px;
-            /* box-shadow: var(--pill-shadow); */
-            font-size: 12.5px;
-            font-weight: 300;
-            color: #1a1a1a;
-            cursor: none;
-            transition: transform 0.2s;
-            border: none;
-            font-family: inherit;
-        }
-
-        .nav-right:hover {
-            transform: scale(1.05);
-        }
-
-        /* --- DYNAMIC BOTTOM BAR --- */
-        .dynamic-bar {
-            position: fixed;
-            bottom: 40px;
-            left: 50%;
-            z-index: 100000;
-            background: var(--bar-bg);
-            backdrop-filter: blur(10px);
-            padding: 6px;
-            border-radius: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .bar-content-wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .bar-inner {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            white-space: nowrap;
-        }
-
-        .scroll-hint {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 12px;
-            color: #6e6e6e;
-            font-weight: 300;
-        }
-
-        .scroll-icon {
-            width: 24px;
-            height: 24px;
-            background: black;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-        }
-
-        /* Project Info in Bar */
-        .bar-project-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .bar-project-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: #f0f0f0;
-            flex-shrink: 0;
-        }
-
-        .bar-project-icon img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .bar-project-text {
+            width: 360px;
+            max-width: 100%;
             display: flex;
             flex-direction: column;
-            line-height: 1.2;
-            text-align: left;
-        }
-
-        .bar-project-title {
-            font-weight: 300;
-            font-size: 14px;
-            color: #1a1a1a;
-        }
-
-        .bar-project-desc {
-            font-size: 12px;
-            color: #666;
-        }
-
-
-        /* --- ANIMATION TEXT CLASS --- */
-        .animate-text {
-            opacity: 0;
-            transform: translateY(20px);
-            filter: blur(5px);
-            will-change: transform, opacity, filter;
-        }
-
-        /* --- WRAPPER --- */
-        .sticky-wrapper {
-            height: 100vh;
-            /* Force height to viewport */
-            width: 100%;
-            position: relative;
-            overflow: hidden;
-            perspective: 1000px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .moment {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            visibility: hidden;
-            will-change: transform, opacity, filter;
-        }
-
-        /* --- MOMENT 1: HERO --- */
-        #moment-1 {
-            z-index: 10;
-        }
-
-        .hero-layout {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            margin-top: -50px;
-        }
-
-        .intro-text {
-            text-align: center;
-            z-index: 20;
-            margin-bottom: 60px;
-        }
-
-        .intro-text h1 {
-            font-size: 18px;
-            font-weight: 300;
-            line-height: 1.5;
-            color: #656565;
-        }
-
-        .highlight {
-            color: #5842D8;
-            font-weight: 300;
-        }
-
-        .cluster-container {
-            position: relative;
-            width: 600px;
-            height: 450px;
-        }
-
-        .hero-img {
-            position: absolute;
-            border-radius: 8px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.028);
-            overflow: hidden;
-            background: #eee;
-            object-fit: cover;
-        }
-
-        .hero-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        /* Hero Positions */
-        /* Added z-index: 100 to pos-1 to ensure hover works */
-        .pos-1 {
-            width: 130px;
-            height: 130px;
-            top: 0;
-            left: 50%;
-            margin-left: -70px;
-            z-index: 100 !important;
-        }
-
-        .pos-2 {
-            width: 130px;
-            height: 130px;
-            top: 50px;
-            right: 110px;
-            z-index: 2;
-            background: white;
-        }
-
-        .pos-3 {
-            width: 130px;
-            height: 130px;
-            top: 130px;
-            right: 60px;
-            z-index: 3;
-        }
-
-        .pos-4 {
-            width: 130px;
-            height: 130px;
-            bottom: 40px;
-            right: 110px;
-            z-index: 2;
-        }
-
-        .pos-5 {
-            width: 130px;
-            height: 130px;
-            bottom: 0;
-            left: 50%;
-            margin-left: -70px;
-            z-index: 3;
-            background: white;
-        }
-
-        .pos-6 {
-            width: 130px;
-            height: 130px;
-            bottom: 40px;
-            left: 110px;
-            z-index: 2;
-            background: black;
-        }
-
-        .pos-7 {
-            width: 130px;
-            height: 130px;
-            top: 130px;
-            left: 60px;
-            z-index: 3;
-            background: #4385F5;
-        }
-
-        .pos-8 {
-            width: 130px;
-            height: 130px;
-            top: 50px;
-            left: 110px;
-            z-index: 1;
-        }
-
-
-        /* --- PROJECTS STYLES --- */
-        .project-layout {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 40px;
-            width: 100%;
-        }
-
-        /* Removed .project-pill styles as it's now dynamic bottom bar */
-        /* Updated Project Icon: Rounded Square + Image Support */
-        .project-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            /* Rounded Square */
-            flex-shrink: 0;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: #f0f0f0;
-            /* Fallback */
-        }
-
-        .project-icon img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .project-info {
-            flex-direction: column;
-            text-align: left;
-        }
-
-        .project-info h3 {
-            font-size: 16px;
-            font-weight: 300;
-            color: #1a1a1a;
-            margin-bottom: 2px;
-        }
-
-        .project-info p {
-            font-size: 13px;
-            color: #666;
-            font-weight: 300;
-        }
-
-        .project-screens {
-            display: flex;
-            gap: 30px;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .phone-mockup {
-            width: 230px;
-            height: 520px;
-            background: #ddd;
-            border-radius: 24px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-            overflow: hidden;
-            position: relative;
-        }
-
-        .phone-mockup img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .large-screen {
-            width: 320px;
-            height: 580px;
-        }
-
-        /* --- CONTACT / FINAL MOMENT STYLES --- */
-        .contact-layout {
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 36px;
-        }
-
-        .contact-text {
-            font-size: 24px;
-            font-weight: 300;
-            color: var(--text-color);
-            line-height: 1.4;
-        }
-
-        .contact-highlight {
-            color: #7582f1;
-            text-decoration: none;
-            cursor: none;
-        }
-
-        /* Message card */
-        .contact-card {
-            background: #ffffff;
-            border-radius: 20px;
-            padding: 24px 28px;
-            max-width: 420px;
-            width: 100%;
-            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.15);
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .card-date {
-            font-size: 13px;
-            font-weight: 500;
-            color: #7582f1;
-            text-align: center;
-            letter-spacing: 0.5px;
-            font-variant-numeric: tabular-nums;
-        }
-
-        .card-input {
-            background: rgba(200, 200, 240, 0.15);
-            border: none;
-            border-radius: 12px;
-            padding: 16px;
-            font-family: var(--font-main);
-            font-size: 14px;
-            font-weight: 400;
-            color: #333;
-            line-height: 1.5;
-            min-height: 120px;
-            resize: none;
-            outline: none;
-            cursor: none;
-        }
-
-        .card-input::placeholder {
-            color: #999;
-        }
-
-        .card-actions {
-            display: flex;
             align-items: center;
             gap: 12px;
         }
 
-        .card-delete {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            border: none;
-            background: #f0f0f0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: none;
-            flex-shrink: 0;
-            transition: background 0.2s;
-        }
-
-        .card-delete:hover {
-            background: #e0e0e0;
-        }
-
-        .card-delete svg {
-            width: 18px;
-            height: 18px;
-            stroke: #888;
-            fill: none;
-            stroke-width: 1.5;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
-        .card-send {
-            flex: 1;
-            height: 44px;
-            background: #1a1a1a;
-            color: #fff;
-            border: none;
-            border-radius: 50px;
-            font-family: var(--font-main);
+        .envelope-sent-msg {
+            position: absolute;
+            top: -32px;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            color: var(--text-color);
             font-size: 15px;
-            font-weight: 500;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 20;
+        }
+        .envelope-sent-msg.visible { opacity: 1; }
+
+        /* Container — sized to envelope body height */
+        #envelope-form {
+            width: 100%;
+            height: 240px;
+            position: relative;
             cursor: none;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.2s;
         }
 
-        .card-send:hover {
-            background: #333;
+        /* Envelope body rectangle */
+        .env-shell {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: #ffffff;
+            border-radius: 0 0 24px 24px;
         }
+
+        /* Rotated square with border-radius → triangular open-flap shape */
+        .env-shell:before {
+            content: "";
+            position: absolute;
+            width: 255px;
+            height: 255px;
+            background: #ffffff;
+            transform: rotate(45deg);
+            top: -128px;
+            left: 53px;
+            border-radius: 64px 0 0 0;
+            box-shadow: -3px -3px 60px rgba(0,0,0,0.03);
+
+        }
+
+        /* Letter card — sits inside envelope, slides up on open */
+        .env-card {
+            position: absolute;
+            background: #fff;
+            width: calc(100% - 36px);
+            height: 220px;
+            top: 6px;
+            left: 18px;
+            box-shadow: -3px -3px 60px rgba(0,0,0,0.1);
+            border-radius: 24px;
+            z-index: 5;
+            padding: 1.2rem 1.4rem;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: top 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        /* Front overlay — right triangle (right side of W-shape) */
+        .env-front {
+            position: absolute;
+            border-right: 216px solid #f1f1f5;
+            border-top: 114px solid transparent;
+            border-bottom: 120px solid transparent;
+            left: 144px;
+            top: 6px;
+            width: 0;
+            height: 0;
+            z-index: 10;
+            pointer-events: none;
+            border-radius: 0  0 20px 20px;
+
+
+        }
+
+        /* Left triangle (left side of W-shape) */
+        .env-front:before {
+            position: absolute;
+            content: "";
+            border-left: 360px solid #f3f3f7;
+            border-top: 234px solid transparent;
+            left: -144px;
+            top: -114px;
+            width: 0;
+            height: 0;
+            box-shadow: -3px 30px 30px rgba(0,0,0,0.1);
+            border-radius: 0px  0px 20px 20px;
+
+
+
+        }
+
+        /* Open: card slides above the envelope */
+        #envelope-form:hover .env-card,
+        #envelope-form.is-open .env-card {
+            top: -108px;
+        }
+
+        /* Sent: card slides back inside */
+        #envelope-form.sent .env-card {
+            top: 6px !important;
+            transition: top 0.38s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        }
+
+        /* Fly away */
+        .env-fly { animation: envFlyAway 0.55s ease-in forwards; }
+        @keyframes envFlyAway {
+            0%   { transform: translate(0,0) rotate(0deg) scale(1); opacity: 1; }
+            40%  { transform: translate(-20px,-30px) rotate(10deg) scale(0.8); opacity: 1; }
+            100% { transform: translate(800px,-60px) rotate(-18deg) scale(0.25); opacity: 0; }
+        }
+
+        /* Card typography */
+        .letter-input {
+            background: transparent; border: none;
+            font-family: var(--font-main);
+            font-size: 16px; font-weight: 350;
+            color: #6b7295; line-height: 1.5;
+            resize: none; outline: none; cursor: none;
+            flex: 1; width: 100%;
+        }
+        .letter-input::placeholder { color: #b4b6c0; }
+        .card-date { font-size: 13px; font-weight: 350; color: #9395a0; flex-shrink: 0; }
+
+        /* Actions row */
+        .card-actions {
+            display: flex; align-items: center; gap: 10px;
+            width: 100%;
+        }
+
+        .card-delete { width: 40px; height: 40px; border-radius: 50%; border: none; background: #ececec; display: flex; align-items: center; justify-content: center; cursor: none; flex-shrink: 0; transition: background 0.2s; }
+        .card-delete:hover { background: #e8e8e8; }
+        .card-delete svg { width: 20px; height: 20px; stroke: #555; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+        .card-send { flex: 1; height: 40px; background: #1a1719; color: #fff; border: none; border-radius: 50px; font-family: var(--font-main); font-size: 16px; font-weight: 400; cursor: none; text-decoration: none; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+        .card-send:hover { background: #333; }
 
         /* Social icons */
-        .contact-socials {
-            display: flex;
-            gap: 16px;
-            align-items: center;
-        }
+        .contact-socials { display: flex; gap: 14px; align-items: center; }
+        .social-icon { width: 56px; height: 56px; border-radius: 14px; background: #b0b0b0; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: background 0.2s; cursor: none; }
+        .social-icon:hover { background: #999; }
+        .social-icon svg { width: 24px; height: 24px; fill: #fff; }
+        .social-icon svg[fill="none"] { fill: none; }
 
-        .social-icon {
-            width: 52px;
-            height: 52px;
-            border-radius: 50%;
-            background: #494a4f;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            transition: background 0.2s;
-            cursor: none;
-        }
-
-        .social-icon:hover {
-            background: #666;
-        }
-
-        .social-icon svg {
-            width: 22px;
-            height: 22px;
-            fill: #fff;
-        }
-
-        .social-icon svg[fill="none"] {
-            fill: none;
-        }
-
-        /* --- RESPONSIVE ADJUSTMENTS --- */
+        /* RESPONSIVE */
         @media (max-width: 768px) {
-            .cluster-container {
-                transform: scale(0.6);
-                /* Scale down for tablets/mobile */
-                transform-origin: center center;
-            }
-
-            .nav-pill {
-                left: 30px;
-                /* Reduce side margin */
-                padding: 6px 12px 6px 6px;
-                /* Smaller padding */
-            }
-
-            .nav-right {
-                right: 30px !important;
-                /* Reduce side margin */
-                padding: 10px 15px;
-            }
-
-            .intro-text h1 {
-                font-size: 16px;
-                /* Slightly smaller text */
-            }
-
-            .project-screens {
-                transform: scale(0.7);
-            }
-
-            .contact-layout {
-                padding: 0 20px;
-            }
-
-            .contact-card {
-                padding: 20px 22px;
-            }
-
-            .social-icon {
-                width: 46px;
-                height: 46px;
-            }
+            .cluster-container { transform: scale(0.8); transform-origin: center top; margin-bottom: -90px; }
+            .nav-pill { left: 30px; padding: 6px 12px 6px 6px; }
+            .nav-right { right: 30px !important; padding: 10px 15px; }
+            .intro-text { margin-bottom: 80px; }
+            .intro-text h1 { font-size: 16px; }
+            .hero-layout { margin-top: -30px; }
+            .project-screens { transform: scale(0.7); }
+            .contact-layout { padding: 0 20px; }
+            .envelope-wrapper { width: 300px; }
+            #envelope-form { height: 200px; }
+            .env-shell:before { width: 212px; height: 212px; top: -106px; left: 44px; border-radius: 30px 0 0 0; }
+            .env-card { height: 170px; width: calc(100% - 30px); left: 15px; top: 5px; }
+            .env-front { border-right: 180px solid #f5f5f5; border-top: 95px solid transparent; border-bottom: 100px solid transparent; left: 120px; top: 5px; }
+            .env-front:before { border-left: 300px solid #f2f1f1; border-top: 195px solid transparent; left: -120px; top: -95px; }
+            #envelope-form:hover .env-card, #envelope-form.is-open .env-card { top: -90px; }
+            .social-icon { width: 48px; height: 48px; border-radius: 12px; }
+            .site-header { padding: 20px 12px !important; background: var(--bg-frame) !important; }
+            .site-header::before { display: none; }
+            .header-link { font-size: 0 !important; }
+            .header-link::after { content: "Natalia B."; font-size: 14px; font-weight: 500; }
+            .email-link { font-size: 13px!important; }
         }
 
         @media (max-width: 480px) {
-            .cluster-container {
-                transform: scale(0.45);
-            }
-
-            .nav-pill {
-                top: 30px;
-                left: 30px;
-                font-size: 12px;
-            }
-
-            .nav-right {
-                top: 30px;
-                right: 35px !important;
-                font-size: 12px;
-                padding: 8px 16px;
-            }
-
-            .dynamic-bar {
-                bottom: 30px;
-                min-width: 160px;
-                padding: 8px 16px;
-            }
-
-            .project-screens {
-                transform: scale(0.5);
-            }
+            .cluster-container { transform: scale(0.6); transform-origin: center top; margin-bottom: -180px; }
+            .hero-layout { margin-top: 0; }
+            .intro-text { margin-bottom: 80px; }
+            .nav-pill { top: 30px; left: 30px; font-size: 12px; }
+            .nav-right { top: 30px; right: 35px !important; font-size: 12px; padding: 8px 16px; }
+            .dynamic-bar { bottom: 30px; min-width: 290px; padding: 6px; }
+            .project-screens { transform: scale(0.5); }
+            .envelope-wrapper { width: 260px; }
+            #envelope-form { height: 180px; }
+            .env-shell:before { width: 184px; height: 184px; top: -92px; left: 38px; border-radius: 26px 0 0 0; }
+            .env-card { height: 148px; width: calc(100% - 26px); left: 13px; top: 4px; }
+            .env-front { border-right: 156px solid #f5f5f5; border-top: 82px solid transparent; border-bottom: 87px solid transparent; left: 104px; top: 4px; }
+            .env-front:before { border-left: 260px solid #f2f1f1; border-top: 169px solid transparent; left: -104px; top: -82px; }
+            #envelope-form:hover .env-card, #envelope-form.is-open .env-card { top: -78px; }
+            .card-delete { width: 44px; height: 44px; }
+            .card-send { height: 44px; font-size: 14px; }
+            .social-icon { width: 44px; height: 44px; border-radius: 11px; }
+            .contact-text { font-size: 24px; }
         }
 
-        /* --- MODAL --- */
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.15);
-            backdrop-filter: blur(8px);
-            z-index: 2000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-        }
+        /* MODAL */
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.15); backdrop-filter: blur(8px); z-index: 2000; display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 0.3s ease, visibility 0.3s ease; }
+        .overlay.active { opacity: 1; visibility: visible; pointer-events: auto; }
+        .close-btn { position: absolute; top: 40px; right: 40px; width: 40px; height: 40px; border-radius: 50%; background: rgba(0,0,0,0.5); color: white; border: none; cursor: none; font-size: 18px; z-index: 1001; transition: background 0.3s; }
+        .close-btn:hover { background: rgba(0,0,0,0.8); }
+        .modal-card { width: 90%; max-width: 800px; height: 85vh; background: #fff; border-radius: 40px; padding: 60px; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.1); transform: translateY(50px); transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); -ms-overflow-style: none; scrollbar-width: none; cursor: auto; }
+        .modal-card::-webkit-scrollbar { display: none; }
+        .overlay.active .modal-card { transform: translateY(0); }
+        .modal-header { display: flex; justify-content: center; margin-bottom: 50px; }
+        .profile-img { width: 180px; height: 180px; overflow: hidden; }
+        .profile-img img { width: 100%; height: 100%; object-fit: cover; }
+        .bio-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 60px; font-size: 15px; line-height: 1.6; color: #333; }
+        .resume-section { margin-bottom: 50px; display: grid; grid-template-columns: 140px 1fr; gap: 20px; }
+        .section-label { font-size: 11px; font-weight: 300; text-transform: uppercase; letter-spacing: 1px; color: #999; padding-top: 5px; }
+        .recognition-list { display: flex; flex-direction: column; gap: 10px; }
+        .rec-item { background: #F3F3F3; padding: 15px 20px; border-radius: 12px; display: flex; justify-content: space-between; font-size: 14px; color: #444; }
+        .rec-right { color: #888; }
+        .exp-list { display: flex; flex-direction: column; gap: 30px; }
+        .exp-item h4 { font-size: 15px; font-weight: 300; margin-bottom: 4px; color: #111; }
+        .exp-item p { font-size: 14px; color: #666; font-weight: 300; }
 
-        .overlay.active {
-            opacity: 1;
-            visibility: visible;
-            pointer-events: auto;
-        }
+        /* HEADER */
+        .site-header { position: fixed; top: 0; left: 0; right: 0; padding: 20px 40px 40px; display: flex; justify-content: space-between; align-items: center; z-index: 100000; background: transparent; }
+        .site-header::before { content: ''; position: absolute; inset: 0; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 100%); mask-image: linear-gradient(to bottom, black 0%, transparent 100%); }
+        .header-left { display: flex; align-items: center; gap: 0; position: relative; z-index: 1; }
+        .header-link { font-size: 14px; font-weight: 500; color: var(--text-color); text-decoration: none; padding: 6px 10px; border-radius: 6px; transition: background-color 0.2s; }
+        .header-link:hover { background-color: rgba(0,0,0,0.06); }
+        .header-right { display: flex; align-items: center; gap: 8px; position: relative; z-index: 1; }
+        .email-wrapper { display: flex; align-items: center; gap: 6px; }
+        .email-link { font-size: 14px; color: #999; text-decoration: none; transition: color 0.2s; }
+        .email-link:hover { color: var(--text-color); }
+        .copy-btn { display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; background: transparent; border: none; padding: 0; cursor: none; opacity: 0.4; transition: opacity 0.2s; }
+        .copy-btn:hover { opacity: 1; }
+        .copy-btn svg { width: 14px; height: 14px; stroke: var(--text-color); fill: none; stroke-width: 2.4; }
+        .copy-btn .check-icon { display: none; stroke: #000; stroke-width: 3.5px; }
+        .copy-btn.copied .copy-icon { display: none; }
+        .copy-btn.copied .check-icon { display: block; animation: checkPop 0.3s ease-out; }
+        @keyframes checkPop { 0% { transform: scale(0.5); opacity: 0; } 50% { transform: scale(1.2); } 100% { transform: scale(1); opacity: 1; } }
 
-        .close-btn {
-            position: absolute;
-            top: 40px;
-            right: 40px;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: rgba(0, 0, 0, 0.5);
-            color: white;
-            border: none;
-            cursor: none;
-            font-size: 18px;
-            z-index: 1001;
-            transition: background 0.3s;
-        }
+        .a11y-toggle { display: none; }
+        .a11y-badge { display: none; }
+        .nav-pill { display: none !important; }
 
-        .close-btn:hover {
-            background: rgba(0, 0, 0, 0.8);
-        }
+        .nav-menu { display: flex; gap: 5px; }
+        .nav-link { background: transparent; border: none; padding: 12px 16px; border-radius: 8px; font-size: .75rem; font-weight: 300; text-decoration: none; color: var(--nav-text-color); transition: background 0.2s, color 0.2s; font-family: var(--font-main); }
+        .nav-link:hover { background: rgba(0,0,0,0.05); }
 
-        .modal-card {
-            width: 90%;
-            max-width: 800px;
-            height: 85vh;
-            background: #fff;
-            border-radius: 40px;
-            padding: 60px;
-            overflow-y: auto;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
-            transform: translateY(50px);
-            transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-            cursor: auto;
-        }
+        body.accessibility-mode { overflow: hidden !important; }
+        body.accessibility-mode .app-frame { overflow-y: auto !important; height: 100% !important; scroll-behavior: smooth; }
+        body.accessibility-mode .sticky-wrapper { height: auto !important; display: flex !important; flex-direction: column !important; gap: 100px !important; padding-top: 120px !important; padding-bottom: 100px !important; transition: all 0.5s ease; }
+        body.accessibility-mode .moment { position: relative !important; height: auto !important; min-height: 80vh !important; opacity: 1 !important; visibility: visible !important; transform: none !important; filter: none !important; display: flex !important; transition: all 0.5s ease; }
+        body.accessibility-mode #moment-1 { margin-bottom: 50px; min-height: 90vh !important; display: flex !important; flex-direction: column !important; justify-content: center !important; align-items: center !important; }
+        body.accessibility-mode .hero-img { opacity: 1 !important; transform: none !important; filter: none !important; transition: all 0.5s ease; }
+        body.accessibility-mode .project-screens > :first-child:nth-last-child(2) { display: none; }
+        @media (max-width: 770px) { .project-screens > :first-child:nth-last-child(2) { display: none; } }
 
-        .modal-card::-webkit-scrollbar {
-            display: none;
-        }
-
-        .overlay.active .modal-card {
-            transform: translateY(0);
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 50px;
-        }
-
-        .profile-img {
-            width: 180px;
-            height: 180px;
-            overflow: hidden;
-        }
-
-        .profile-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .bio-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            margin-bottom: 60px;
-            font-size: 15px;
-            line-height: 1.6;
-            color: #333;
-        }
-
-        .resume-section {
-            margin-bottom: 50px;
-            display: grid;
-            grid-template-columns: 140px 1fr;
-            gap: 20px;
-        }
-
-        .section-label {
-            font-size: 11px;
-            font-weight: 300;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #999;
-            padding-top: 5px;
-        }
-
-        .recognition-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .rec-item {
-            background: #F3F3F3;
-            padding: 15px 20px;
-            border-radius: 12px;
-            display: flex;
-            justify-content: space-between;
-            font-size: 14px;
-            color: #444;
-        }
-
-        .rec-right {
-            color: #888;
-        }
-
-        .exp-list {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
-
-        .exp-item h4 {
-            font-size: 15px;
-            font-weight: 300;
-            margin-bottom: 4px;
-            color: #111;
-        }
-
-        .exp-item p {
-            font-size: 14px;
-            color: #666;
-            font-weight: 300;
-        }
-
-        /* --- SIMPLE HEADER --- */
-        .site-header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 100000;
-            background: var(--bg-frame);
-        }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 0;
-        }
-
-        .header-link {
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--text-color);
-            text-decoration: none;
-            padding: 6px 10px;
-            border-radius: 6px;
-            transition: background-color 0.2s;
-        }
-
-        .header-link:hover {
-            background-color: rgba(0, 0, 0, 0.06);
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .email-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .email-link {
-            font-size: 14px;
-            color: #999;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-
-        .email-link:hover {
-            color: var(--text-color);
-        }
-
-        .copy-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 20px;
-            height: 20px;
-            background: transparent;
-            border: none;
-            padding: 0;
-            cursor: none;
-            opacity: 0.4;
-            transition: opacity 0.2s;
-        }
-
-        .copy-btn:hover {
-            opacity: 1;
-        }
-
-        .copy-btn svg {
-            width: 14px;
-            height: 14px;
-            stroke: var(--text-color);
-            fill: none;
-            stroke-width: 2.4;
-        }
-
-        .copy-btn .check-icon {
-            display: none;
-            stroke: #000000;
-            stroke-width: 3.5px;
-        }
-
-        .copy-btn.copied .copy-icon {
-            display: none;
-        }
-
-        .copy-btn.copied .check-icon {
-            display: block;
-            animation: checkPop 0.3s ease-out;
-        }
-
-        @keyframes checkPop {
-            0% {
-                transform: scale(0.5);
-                opacity: 0;
-            }
-            50% {
-                transform: scale(1.2);
-            }
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-
-        /* --- ACCESSIBILITY TOGGLE (HIDDEN) --- */
-        .a11y-toggle {
-            display: none;
-        }
-
-        .a11y-badge {
-            display: none;
-        }
-
-        /* --- OLD NAV PILL (HIDDEN) --- */
-        .nav-pill {
-            display: none !important;
-        }
-
-        /* --- NAV MENU STYLES --- */
-        .nav-menu {
-            display: flex;
-            gap: 5px;
-        }
-
-        .nav-link {
-            background: transparent;
-            border: none;
-            padding: 12px 16px;
-            border-radius: 8px;
-            font-size: .75rem;
-            font-weight: 300;
-            text-decoration: none;
-            color: var(--nav-text-color);
-            /* Use variable */
-
-            transition: background 0.2s, color 0.2s;
-            font-family: var(--font-main);
-        }
-
-        .nav-link:hover {
-            background: rgba(0, 0, 0, 0.05);
-        }
-
-        /* --- ACCESSIBILITY MODE STYLES --- */
-        body.accessibility-mode {
-            /* Keep body overflow hidden to maintain the outer frame */
-            overflow: hidden !important;
-        }
-
-        body.accessibility-mode .app-frame {
-            /* Enable scroll INSIDE the frame */
-            overflow-y: auto !important;
-            height: 100% !important;
-            scroll-behavior: smooth;
-        }
-
-        body.accessibility-mode .sticky-wrapper {
-            height: auto !important;
-            display: flex !important;
-            flex-direction: column !important;
-            gap: 100px !important;
-            padding-top: 120px !important;
-            padding-bottom: 100px !important;
-            /* Transition for smooth layout change */
-            transition: all 0.5s ease;
-        }
-
-        body.accessibility-mode .moment {
-            position: relative !important;
-            height: auto !important;
-            min-height: 80vh !important;
-            opacity: 1 !important;
-            visibility: visible !important;
-            transform: none !important;
-            filter: none !important;
-            display: flex !important;
-            transition: all 0.5s ease;
-        }
-
-        body.accessibility-mode #moment-1 {
-            margin-bottom: 50px;
-            /* Vertical Centering Logic */
-            min-height: 90vh !important;
-            display: flex !important;
-            flex-direction: column !important;
-            justify-content: center !important;
-            align-items: center !important;
-        }
-
-        body.accessibility-mode .hero-img {
-            opacity: 1 !important;
-            transform: none !important;
-            filter: none !important;
-            /* Add transition for smooth toggle */
-            transition: all 0.5s ease;
-        }
-
-        /* Hide first image in accessibility mode if there are two */
-        body.accessibility-mode .project-screens> :first-child:nth-last-child(2) {
-            display: none;
-        }
-
-        /* Hide first project screen on tablets/mobile (< 770px) */
-        @media (max-width: 770px) {
-            .project-screens> :first-child:nth-last-child(2) {
-                display: none;
-            }
-        }
-
-        /* Default style for mobile home link */
-        .mobile-home-link {
-            display: none;
-            text-decoration: none;
-        }
-
+        .mobile-home-link { display: none; text-decoration: none; }
         @media (max-width: 480px) {
-            .a11y-toggle {
-                display: none !important;
-            }
-
-            #btn-projects {
-                display: none !important;
-            }
-
-            /* Hide top nav pill */
-            .nav-pill {
-                display: none !important;
-            }
-
-            /* Show mobile home link */
-            .mobile-home-link {
-                display: block !important;
-            }
-
-            /* Center Nav Pill */
-            .nav-pill {
-                left: 50% !important;
-                transform: translateX(-50%);
-                width: max-content;
-            }
+            .a11y-toggle { display: none !important; }
+            #btn-projects { display: none !important; }
+            .nav-pill { display: none !important; }
+            .mobile-home-link { display: block !important; }
+            .nav-pill { left: 50% !important; transform: translateX(-50%); width: max-content; }
         }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -1304,23 +425,17 @@
 
 <body data-barba="wrapper">
 
-    <!-- CUSTOM CURSOR -->
-    <div class="cursor">
-        <span class="cursor-text"></span>
-    </div>
-
-    <!-- TOOLTIP ELEMENT -->
+    <div class="cursor"><span class="cursor-text"></span></div>
     <div class="tooltip" id="custom-tooltip"></div>
 
-    <!-- SIMPLE HEADER -->
     <header class="site-header">
         <div class="header-left">
             <a href="/" class="header-link">Natalia Buendía</a>
         </div>
         <div class="header-right">
             <div class="email-wrapper">
-                <a href="mailto:hi@nataliabuendia.com" class="email-link">hi@nataliabuendia.com</a>
-                <button class="copy-btn" id="copy-email-btn" data-email="hi@nataliabuendia.com" aria-label="Copy email to clipboard">
+                <a href="mailto:nataliabuendiadesign@gmail.com" class="email-link">nataliabuendiadesign@gmail.com</a>
+                <button class="copy-btn" id="copy-email-btn" data-email="nataliabuendiadesign@gmail.com" aria-label="Copy email to clipboard">
                     <svg class="copy-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                         <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
@@ -1333,70 +448,52 @@
         </div>
     </header>
 
-    <!-- MAIN CONTENT CONTAINER -->
     <main data-barba="container" data-barba-namespace="home">
-
-        <!-- MAIN SCROLL FRAME -->
         <div class="app-frame" id="scroll-container">
 
-            <!-- NAV -->
             <a href="/" class="nav-pill" style="text-decoration: none; cursor: pointer;">
                 <div class="nav-icon-circle"><span class="paperclip-icon">📁</span></div>
                 <div>Natalia Buendía</div>
             </a>
-            <!-- ACCESSIBILITY TOGGLE (Moved to Top Right) -->
+
             <div class="a11y-toggle" id="a11y-toggle" data-cursor="Coming Soon">
                 <div class="a11y-badge" id="a11y-badge"><span>Off</span></div>
                 <div>Accessibility Mode</div>
             </div>
 
-            <!-- DYNAMIC BOTTOM BAR (MENU) -->
             <div class="dynamic-bar" id="dynamic-bar">
                 <div class="bar-content-wrapper" id="bar-content">
                     <nav class="nav-menu">
-                        <a href="/" class="nav-link mobile-home-link">Home</a>
+                        <a href="/" class="nav-link mobile-home-link">Archive</a>
                         <a href="/" class="nav-link" id="btn-projects" style="text-decoration: none;">Archive</a>
                         <a href="about.html" class="nav-link" id="btn-about">About me</a>
-                        <a href="#contact" class="nav-link" id="btn-contact"
-                            style="text-decoration: none;">Contact</a>
+                        <a href="#contact" class="nav-link" id="btn-contact" style="text-decoration: none;">Contact</a>
                     </nav>
                 </div>
             </div>
 
-            <!-- ZOOM WRAPPER -->
             <div class="sticky-wrapper">
 
                 <!-- MOMENT 1: HERO -->
                 <div class="moment" id="moment-1">
                     <div class="hero-layout">
                         <div class="intro-text">
-                            <h1 class="animate-text">Hey! I’m Natalia, a product designer</h1>
+                            <h1 class="animate-text">Hey! I'm Natalia, a product designer</h1>
                             <h1 class="animate-text">focused on people, ideas, and meaningful </h1>
-                            <h1 class="animate-text">design. Currently at <span class="highlight">@revolut</span></h1>
+                            <h1 class="animate-text">design. Currently  <span class="highlight">@ Revolut</span></h1>
                         </div>
                         <div class="cluster-container" id="hero-cluster">
-                            <div class="hero-img pos-1" data-project="samphire"><img src="/img/Highlight1.png"
-                                    alt="Samphire" draggable="false"></div>
-                            <div class="hero-img pos-2" data-project="kotie"><img src="/img/kotie.png"
-                                    alt="Kotie" draggable="false"></div>
-                            <div class="hero-img pos-3" data-project="minimum"><img src="/img/UI.png"
-                                    alt="Minimum" draggable="false"></div>
-                            <div class="hero-img pos-4" data-project="coming-soon"><img src="/img/Mockup.png"
-                                    alt="Coming Soon" draggable="false"></div>
-                            <div class="hero-img pos-5" data-project="timeless"><img src="/img/timelessbiotech.png"
-                                    alt="Timeless" draggable="false"></div>
-                            <div class="hero-img pos-6" data-project="coming-soon"><img src="/img/Web3.png"
-                                    alt="Coming Soon" draggable="false"></div>
-                            <div class="hero-img pos-7" data-project="talk-womens-health"><img
-                                    src="/img/Presentation.png" alt="Talk" draggable="false"></div>
-                            <div class="hero-img pos-8" data-project="portfolio"><img src="/img/focusmood.png"
-                                    alt="Portfolio" draggable="false"></div>
-
-                            <!-- SCROLL HINT -->
+                            <div class="hero-img pos-1" data-project="samphire"><img src="/img/Highlight1.png" alt="Samphire" draggable="false"></div>
+                            <div class="hero-img pos-2" data-project="kotie"><img src="/img/kotie.png" alt="Kotie" draggable="false"></div>
+                            <div class="hero-img pos-3" data-project="minimum"><img src="/img/UI.png" alt="Minimum" draggable="false"></div>
+                            <div class="hero-img pos-4" data-project="moresamphire"><img src="/img/Mockup.png" alt="Coming Soon" draggable="false"></div>
+                            <div class="hero-img pos-5" data-project="timeless"><img src="/img/timelessbiotech.png" alt="Timeless" draggable="false"></div>
+                            <div class="hero-img pos-6" data-project="web3"><img src="/img/Web3.png" alt="Coming Soon" draggable="false"></div>
+                            <div class="hero-img pos-7" data-project="talk-womens-health"><img src="/img/Presentation.png" alt="Talk" draggable="false"></div>
+                            <div class="hero-img pos-8" data-project="portfolio"><img src="/img/focusmood.png" alt="Portfolio" draggable="false"></div>
                             <div class="scroll-hint">scroll to see more</div>
                         </div>
                     </div>
-                    <!-- REMOVED OLD SCROLL TEXT TARGET -->
                 </div>
 
                 <!-- CONTACT SECTION -->
@@ -1407,11 +504,18 @@
                             might at least say hi!
                         </h2>
 
-                        <!-- Message Card -->
-                        <div class="contact-card">
-                            <div class="card-date" id="card-date"></div>
-                            <textarea class="card-input" id="card-input" placeholder="Present yourself or tell me your favourite thing"></textarea>
-                            <div class="card-actions">
+                        <div class="envelope-wrapper" id="envelope-wrapper">
+                            <p class="envelope-sent-msg" id="envelope-sent-msg">Thanks, talk soon! ✉️</p>
+
+                            <div id="envelope-form">
+                                <div class="env-shell"></div>
+                                <div class="env-front"></div>
+                                <div class="env-card">
+                                    <textarea class="letter-input" id="card-input" placeholder="Write me something :-)"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="card-actions" id="card-actions">
                                 <button class="card-delete" id="card-delete" type="button" aria-label="Clear message">
                                     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                         <polyline points="3 6 5 6 21 6"></polyline>
@@ -1420,27 +524,16 @@
                                         <line x1="14" y1="11" x2="14" y2="17"></line>
                                     </svg>
                                 </button>
-                                <a href="mailto:hi@nataliabuendia.com" class="card-send" id="card-send">Say hi!</a>
+                                <a href="mailto:nataliabuendiadesign@gmail.com" class="card-send" id="card-send">Send!</a>
                             </div>
                         </div>
 
-                        <!-- Social Icons -->
                         <div class="contact-socials">
-                            <a href="https://linkedin.com/in/nataliabuendia" target="_blank" class="social-icon" aria-label="LinkedIn">
-                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                                </svg>
+                            <a href="https://www.linkedin.com/in/natalia-buendia-zamora/" target="_blank" class="social-icon" aria-label="LinkedIn">
+                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
                             </a>
                             <a href="https://behance.net/nataliabuendia" target="_blank" class="social-icon" aria-label="Behance">
-                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M6.938 4.503c.702 0 1.34.06 1.92.188.577.13 1.07.33 1.485.61.41.28.733.65.96 1.12.225.47.34 1.05.34 1.73 0 .74-.17 1.36-.507 1.86-.338.5-.837.9-1.502 1.22.906.26 1.576.72 2.022 1.37.448.66.665 1.45.665 2.36 0 .75-.13 1.39-.41 1.93-.28.55-.67 1-1.16 1.35-.48.348-1.05.6-1.67.767-.63.16-1.3.243-2.01.243H0v-15.1h6.938zm-.71 6.23c.58 0 1.06-.16 1.43-.48.37-.32.555-.79.555-1.39 0-.34-.06-.63-.183-.85-.12-.22-.29-.39-.5-.52-.21-.13-.46-.22-.727-.27-.27-.05-.56-.08-.86-.08H3.578v3.59h2.65zm.24 6.58c.33 0 .64-.03.93-.1.29-.07.54-.18.76-.35.22-.16.39-.38.52-.65.12-.27.18-.62.18-1.04 0-.81-.22-1.39-.67-1.74-.45-.35-1.03-.53-1.76-.53H3.578v4.41h2.89zM15.94 16.08c.44.44 1.08.66 1.91.66.59 0 1.1-.14 1.53-.44.43-.29.7-.61.78-.95h2.59c-.41 1.28-1.03 2.2-1.85 2.77-.83.57-1.83.85-3.01.85-.82 0-1.55-.13-2.21-.41-.66-.27-1.22-.66-1.69-1.17-.47-.51-.83-1.12-1.09-1.83-.26-.71-.39-1.49-.39-2.34 0-.82.13-1.58.39-2.29.26-.7.63-1.32 1.1-1.83.48-.51 1.04-.92 1.69-1.21.65-.29 1.37-.44 2.16-.44.88 0 1.66.18 2.33.52.67.35 1.22.82 1.66 1.41.44.59.76 1.28.96 2.05.2.77.28 1.58.22 2.44h-7.72c.04.91.33 1.72.78 2.16zm3.34-5.24c-.35-.38-.88-.58-1.58-.58-.46 0-.85.08-1.16.24-.32.16-.57.37-.76.62-.19.25-.33.53-.41.83-.08.3-.13.58-.15.85h4.84c-.1-.82-.42-1.58-.78-1.96zm-4.47-5.29h5.71v1.43h-5.71V5.55z"/>
-                                </svg>
-                            </a>
-                            <a href="mailto:hi@nataliabuendia.com" class="social-icon" aria-label="Email">
-                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <rect x="2" y="4" width="20" height="16" rx="2"></rect>
-                                    <path d="M22 4l-10 8L2 4"></path>
-                                </svg>
+                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6.938 4.503c.702 0 1.34.06 1.92.188.577.13 1.07.33 1.485.61.41.28.733.65.96 1.12.225.47.34 1.05.34 1.73 0 .74-.17 1.36-.507 1.86-.338.5-.837.9-1.502 1.22.906.26 1.576.72 2.022 1.37.448.66.665 1.45.665 2.36 0 .75-.13 1.39-.41 1.93-.28.55-.67 1-1.16 1.35-.48.348-1.05.6-1.67.767-.63.16-1.3.243-2.01.243H0v-15.1h6.938zm-.71 6.23c.58 0 1.06-.16 1.43-.48.37-.32.555-.79.555-1.39 0-.34-.06-.63-.183-.85-.12-.22-.29-.39-.5-.52-.21-.13-.46-.22-.727-.27-.27-.05-.56-.08-.86-.08H3.578v3.59h2.65zm.24 6.58c.33 0 .64-.03.93-.1.29-.07.54-.18.76-.35.22-.16.39-.38.52-.65.12-.27.18-.62.18-1.04 0-.81-.22-1.39-.67-1.74-.45-.35-1.03-.53-1.76-.53H3.578v4.41h2.89zM15.94 16.08c.44.44 1.08.66 1.91.66.59 0 1.1-.14 1.53-.44.43-.29.7-.61.78-.95h2.59c-.41 1.28-1.03 2.2-1.85 2.77-.83.57-1.83.85-3.01.85-.82 0-1.55-.13-2.21-.41-.66-.27-1.22-.66-1.69-1.17-.47-.51-.83-1.12-1.09-1.83-.26-.71-.39-1.49-.39-2.34 0-.82.13-1.58.39-2.29.26-.7.63-1.32 1.1-1.83.48-.51 1.04-.92 1.69-1.21.65-.29 1.37-.44 2.16-.44.88 0 1.66.18 2.33.52.67.35 1.22.82 1.66 1.41.44.59.76 1.28.96 2.05.2.77.28 1.58.22 2.44h-7.72c.04.91.33 1.72.78 2.16zm3.34-5.24c-.35-.38-.88-.58-1.58-.58-.46 0-.85.08-1.16.24-.32.16-.57.37-.76.62-.19.25-.33.53-.41.83-.08.3-.13.58-.15.85h4.84c-.1-.82-.42-1.58-.78-1.96zm-4.47-5.29h5.71v1.43h-5.71V5.55z"/></svg>
                             </a>
                         </div>
                     </div>
@@ -1448,7 +541,6 @@
 
             </div>
         </div>
-
         </div>
         </div>
 
@@ -1460,799 +552,359 @@
                     <div class="profile-img"><img src="/img/profilepic.png" alt="Profile"></div>
                 </div>
                 <div class="bio-grid">
-                    <div class="animate-text">Hello! I'm Natalia Buendia. A digital Product Designer currently based in
-                        Barcelona.</div>
-                    <div class="animate-text">100% of my friends say I am an empathetic, proactive and curious person.
-                    </div>
+                    <div class="animate-text">Hello! I'm Natalia Buendia. A digital Product Designer currently based in Barcelona.</div>
+                    <div class="animate-text">100% of my friends say I am an empathetic, proactive and curious person.</div>
                 </div>
                 <div class="resume-section">
                     <div class="section-label animate-text">RECOGNITIONS</div>
                     <div class="recognition-list">
-                        <div class="rec-item animate-text"><span>ADG Laus Digital Design</span><span
-                                class="rec-right">Bronze
-                                Award</span></div>
-                        <div class="rec-item animate-text"><span>EFC Oslo Creative Futures</span><span
-                                class="rec-right">Best researched project</span></div>
+                        <div class="rec-item animate-text"><span>ADG Laus Digital Design</span><span class="rec-right">Bronze Award</span></div>
+                        <div class="rec-item animate-text"><span>EFC Oslo Creative Futures</span><span class="rec-right">Best researched project</span></div>
                     </div>
                 </div>
                 <div class="resume-section">
                     <div class="section-label animate-text">TALKS</div>
                     <div class="recognition-list">
-                        <div class="rec-item animate-text"><span>Product Design Ladies London</span><span
-                                class="rec-right">Designing for Women's Health</span></div>
+                        <div class="rec-item animate-text"><span>Product Design Ladies London</span><span class="rec-right">Designing for Women's Health</span></div>
                     </div>
                 </div>
                 <div class="resume-section">
                     <div class="section-label animate-text">EDUCATION</div>
                     <div class="recognition-list">
-                        <div class="rec-item animate-text"><span>Master's in Design for Interaction</span><span
-                                class="rec-right">ESD Madrid</span></div>
-                        <div class="rec-item animate-text"><span>Bachelor's in Design and Creative
-                                Technologies</span><span class="rec-right">UPV Valencia</span></div>
-                        <div class="rec-item animate-text"><span>European Creative Futures programme</span><span
-                                class="rec-right">NMH Oslo</span></div>
-                        <div class="rec-item animate-text"><span>Participatory Design Short course</span><span
-                                class="rec-right">IST Lisbon</span></div>
+                        <div class="rec-item animate-text"><span>Master's in Design for Interaction</span><span class="rec-right">ESD Madrid</span></div>
+                        <div class="rec-item animate-text"><span>Bachelor's in Design and Creative Technologies</span><span class="rec-right">UPV Valencia</span></div>
+                        <div class="rec-item animate-text"><span>European Creative Futures programme</span><span class="rec-right">NMH Oslo</span></div>
+                        <div class="rec-item animate-text"><span>Participatory Design Short course</span><span class="rec-right">IST Lisbon</span></div>
                     </div>
                 </div>
                 <div class="resume-section">
                     <div class="section-label animate-text">EXPERIENCE</div>
                     <div class="recognition-list">
-                        <div class="rec-item animate-text">
-                            <span>Revolut · Product Designer</span><span class="rec-right">Barcelona. 2025 -
-                                Present</span>
-                        </div>
-                        <div class="rec-item animate-text">
-                            <span>Samphire Neuroscience · Founding Designer</span><span class="rec-right">London.
-                                2024
-                                -
-                                2025</span>
-                        </div>
-                        <div class="rec-item animate-text">
-                            <span>Minimum.run · Visual Product Designer</span><span class="rec-right">Madrid.
-                                2024</span>
-                        </div>
-                        <div class="rec-item animate-text">
-                            <span>Generacion Espontanea · Visual Designer</span><span class="rec-right">Valencia.
-                                2022 - 2023</span>
-                        </div>
+                        <div class="rec-item animate-text"><span>Revolut · Product Designer</span><span class="rec-right">Barcelona. 2025 - Present</span></div>
+                        <div class="rec-item animate-text"><span>Samphire Neuroscience · Founding Designer</span><span class="rec-right">London. 2024 - 2025</span></div>
+                        <div class="rec-item animate-text"><span>Minimum.run · Visual Product Designer</span><span class="rec-right">Madrid. 2024</span></div>
+                        <div class="rec-item animate-text"><span>Generacion Espontanea · Visual Designer</span><span class="rec-right">Valencia. 2022 - 2023</span></div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- CONTACT OVERLAY REMOVED -->
-
         <script>
             gsap.registerPlugin(ScrollTrigger);
 
-            // --- 1. CUSTOM CURSOR & SPOTLIGHT RING LOGIC ---
             const cursor = document.querySelector('.cursor');
             const cursorText = document.querySelector('.cursor-text');
             const tooltip = document.getElementById('custom-tooltip');
             const xTo = gsap.quickTo(cursor, "x", { duration: 0.1, ease: "power3" });
             const yTo = gsap.quickTo(cursor, "y", { duration: 0.1, ease: "power3" });
-
-            // Tooltip quick setters
             const tX = gsap.quickTo(tooltip, "left", { duration: 0.1, ease: "power3" });
             const tY = gsap.quickTo(tooltip, "top", { duration: 0.1, ease: "power3" });
 
             let mouseX = 0, mouseY = 0, isHoveringCluster = false;
             let isIntroDone = false;
-            let hoverTimeout; // Variable to store the timeout
+            let hoverTimeout;
 
-            // Prevent image dragging globally
-            window.addEventListener('dragstart', (e) => {
-                if (e.target.tagName === 'IMG') {
-                    e.preventDefault();
-                }
-            });
+            window.addEventListener('dragstart', (e) => { if (e.target.tagName === 'IMG') e.preventDefault(); });
 
             window.addEventListener("mousemove", (e) => {
-                if (!cursor.classList.contains('visible')) {
-                    gsap.set(cursor, { x: e.clientX, y: e.clientY });
-                    cursor.classList.add('visible');
-                }
+                if (!cursor.classList.contains('visible')) { gsap.set(cursor, { x: e.clientX, y: e.clientY }); cursor.classList.add('visible'); }
                 xTo(e.clientX); yTo(e.clientY);
-                tX(e.clientX); tY(e.clientY); // Update tooltip position
-
+                tX(e.clientX); tY(e.clientY);
                 mouseX = e.clientX; mouseY = e.clientY;
-                // Only update if we are officially "hovering" (after delay)
-                if (isHoveringCluster && isIntroDone && gsap.getProperty("#moment-1", "opacity") > 0.5) {
-                    updateSpotlight();
-                }
+                if (isHoveringCluster && isIntroDone && gsap.getProperty("#moment-1", "opacity") > 0.5) updateSpotlight();
             });
 
             const clusterContainer = document.querySelector('.cluster-container');
             const heroImages = document.querySelectorAll('.hero-img');
 
-            clusterContainer.addEventListener('mouseenter', () => {
-                // Add a delay before starting the interaction
-                hoverTimeout = setTimeout(() => {
-                    isHoveringCluster = true;
-                }, 0); // 200ms delay
-            });
-
+            clusterContainer.addEventListener('mouseenter', () => { hoverTimeout = setTimeout(() => { isHoveringCluster = true; }, 0); });
             clusterContainer.addEventListener('mouseleave', () => {
-                clearTimeout(hoverTimeout); // Cancel if we leave before delay finishes
+                clearTimeout(hoverTimeout);
                 isHoveringCluster = false;
                 if (!isIntroDone) return;
-                gsap.to(heroImages, {
-                    scale: 1,
-                    opacity: 1,
-                    filter: "blur(0px)",
-                    duration: 1., // Slightly longer return for consistency
-                    ease: "power2.out"
-                });
+                gsap.to(heroImages, { scale: 1, opacity: 1, filter: "blur(0px)", duration: 1, ease: "power2.out" });
             });
 
-            // --- TOOLTIP, CURSOR & MAGNETIC EFFECT FOR HERO IMAGES ---
-            const magneticStrength = 0.15; // How much the element follows the cursor (0-1)
-
+            const magneticStrength = 0.15;
             heroImages.forEach(img => {
-                // Magnetic effect - element follows cursor
                 img.addEventListener('mousemove', (e) => {
                     if (!isIntroDone) return;
-
+                    const comingSoonProjects = ['kotie', 'minimum', 'moresamphire', 'web3'];
+                    if (comingSoonProjects.includes(img.getAttribute('data-project'))) return;
                     const rect = img.getBoundingClientRect();
-                    const centerX = rect.left + rect.width / 2;
-                    const centerY = rect.top + rect.height / 2;
-
-                    // Calculate distance from cursor to center
-                    const deltaX = e.clientX - centerX;
-                    const deltaY = e.clientY - centerY;
-
-                    // Apply magnetic pull (move element towards cursor)
-                    gsap.to(img, {
-                        x: deltaX * magneticStrength,
-                        y: deltaY * magneticStrength,
-                        duration: 0.3,
-                        ease: "power2.out",
-                        overwrite: "auto"
-                    });
+                    const deltaX = e.clientX - (rect.left + rect.width / 2);
+                    const deltaY = e.clientY - (rect.top + rect.height / 2);
+                    gsap.to(img, { x: deltaX * magneticStrength, y: deltaY * magneticStrength, duration: 0.3, ease: "power2.out", overwrite: "auto" });
                 });
 
                 img.addEventListener('mouseenter', () => {
                     if (!isIntroDone) return;
-                    // Bring to front
                     img.style.zIndex = "100";
-
-                    // Expand cursor with "Open" text
+                    const comingSoonProjects = ['kotie', 'minimum', 'moresamphire', 'web3'];
+                    const projectId = img.getAttribute('data-project');
                     cursor.classList.add('expanded');
-                    cursorText.innerText = 'Open';
+                    cursorText.innerHTML = comingSoonProjects.includes(projectId) ? 'Coming<br>soon' : 'Open';
                 });
 
                 img.addEventListener('mouseleave', () => {
                     if (!isIntroDone) return;
-
-                    // Reset magnetic position with soft, subtle animation
-                    gsap.to(img, {
-                        x: 0,
-                        y: 0,
-                        duration: 0.7,
-                        ease: "power3.out",
-                        overwrite: "auto"
-                    });
-
-                    // Reset z-index with delay for smooth transition
-                    setTimeout(() => {
-                        img.style.zIndex = "";
-                    }, 500);
-
-                    // Reset cursor
+                    gsap.to(img, { x: 0, y: 0, duration: 0.7, ease: "power3.out", overwrite: "auto" });
+                    setTimeout(() => { img.style.zIndex = ""; }, 500);
                     cursor.classList.remove('expanded');
                     cursorText.innerText = '';
                 });
             });
 
             function updateSpotlight() {
-                if (isAccessibilityMode) return; // Disable spotlight in a11y mode
-
-                // Determine the source point of the spotlight
-                let sourceX = mouseX;
-                let sourceY = mouseY;
-
-                // No longer using activeHeroImg for spotlight source, it's always mouseX/Y
-                // if (activeHeroImg) {
-                //     const rect = activeHeroImg.getBoundingClientRect();
-                //     sourceX = rect.left + rect.width / 2;
-                //     sourceY = rect.top + rect.height / 2;
-                // }
-
+                if (isAccessibilityMode) return;
                 heroImages.forEach(img => {
                     const rect = img.getBoundingClientRect();
-                    const centerX = rect.left + rect.width / 2;
-                    const centerY = rect.top + rect.height / 2;
-                    const dist = Math.hypot(sourceX - centerX, sourceY - centerY);
-                    const maxDist = 400;
-
-                    // Calculate normalized distance (0 to 1)
-                    let normDist = dist / maxDist;
-                    if (normDist > 1) normDist = 1;
-
-                    // Use power curve to reduce blur for nearby items (adjacent)
-                    // while keeping distant items blurry.
-                    // Power > 1 makes the curve "stay low" longer.
-                    const blurVal = Math.pow(normDist, 2.5) * 12;
-
-                    // Scale and Opacity can still be linear or slightly curved
-                    const intensity = 1 - normDist;
-                    const scaleVal = 1 + (intensity * 0.15);
-                    const opacityVal = 0.3 + (intensity * 0.7);
-
+                    const dist = Math.hypot(mouseX - (rect.left + rect.width/2), mouseY - (rect.top + rect.height/2));
+                    let normDist = Math.min(dist / 400, 1);
                     gsap.to(img, {
-                        scale: scaleVal,
-                        opacity: opacityVal,
-                        filter: `blur(${blurVal}px)`,
-                        duration: 0.8,
-                        ease: "power2.out",
-                        overwrite: "auto"
+                        scale: 1 + (1 - normDist) * 0.15,
+                        opacity: 0.3 + (1 - normDist) * 0.7,
+                        filter: `blur(${Math.pow(normDist, 2.5) * 12}px)`,
+                        duration: 0.8, ease: "power2.out", overwrite: "auto"
                     });
                 });
             }
 
-            // Cursor hover states removed - cursor stays constant with exclusion blend mode
-
-
-            // --- 2. LENIS + GSAP SYNC (THE FIX FOR SHAKING) ---
             const frame = document.getElementById('scroll-container');
-
-            const lenis = new Lenis({
-                wrapper: frame,
-                content: frame,
-                duration: 1.2,
-                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-                direction: 'vertical',
-                smooth: true,
-            });
-
-            // CRITICAL: Link Lenis to GSAP ticker to prevent jitter
+            const lenis = new Lenis({ wrapper: frame, content: frame, duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), direction: 'vertical', smooth: true });
             lenis.on('scroll', ScrollTrigger.update);
-
-            gsap.ticker.add((time) => {
-                lenis.raf(time * 1000);
-            });
-
+            gsap.ticker.add((time) => { lenis.raf(time * 1000); });
             gsap.ticker.lagSmoothing(0);
 
+            const isGoingToContact = window.location.hash === '#contact';
 
-            // --- 3. HERO ANIMATIONS ---
             const headerAnimated = sessionStorage.getItem('headerAnimated');
             const introTl = gsap.timeline({ delay: 0.2, onComplete: () => { isIntroDone = true; } });
 
-            if (headerAnimated) {
-                // Returning visit - show navbar immediately, only animate content
-                gsap.set([".nav-pill", ".a11y-toggle"], {
-                    opacity: 1, y: 0, filter: "blur(0px)"
-                });
-                gsap.set(".dynamic-bar", {
-                    opacity: 1, y: 0, xPercent: -50, filter: "blur(0px)"
-                });
-
-                introTl.to(".animate-text", {
-                    opacity: 1, y: 0, filter: "blur(0px)",
-                    duration: 1.2, ease: "power3.out", stagger: 0.1
-                });
+            if (isGoingToContact) {
+                // Skip intro entirely — hide moment-1 from the start, show contact after a beat
+                gsap.set([".nav-pill", ".a11y-toggle"], { opacity: 1, y: 0, filter: "blur(0px)" });
+                gsap.set(".dynamic-bar", { opacity: 1, y: 0, xPercent: -50, filter: "blur(0px)" });
+                gsap.set(".animate-text", { opacity: 0 });
+                gsap.set("#moment-1", { autoAlpha: 0, scale: 2, filter: "blur(20px)" });
+                gsap.set("#moment-4", { autoAlpha: 0, scale: 0.5, filter: "blur(10px)" });
+                isIntroDone = true;
+                sessionStorage.setItem('headerAnimated', 'true');
+            } else if (headerAnimated) {
+                gsap.set([".nav-pill", ".a11y-toggle"], { opacity: 1, y: 0, filter: "blur(0px)" });
+                gsap.set(".dynamic-bar", { opacity: 1, y: 0, xPercent: -50, filter: "blur(0px)" });
+                introTl.to(".animate-text", { opacity: 1, y: 0, filter: "blur(0px)", duration: 1.2, ease: "power3.out", stagger: 0.1 });
             } else {
-                // First visit - animate everything including navbar
-                gsap.set([".nav-pill", ".a11y-toggle"], {
-                    opacity: 0, y: 20, filter: "blur(5px)"
-                });
-                gsap.set(".dynamic-bar", {
-                    opacity: 0, y: 20, xPercent: -50, filter: "blur(5px)"
-                });
-
-                introTl.to([".animate-text", ".nav-pill", ".a11y-toggle", ".dynamic-bar"], {
-                    opacity: 1, y: 0, filter: "blur(0px)",
-                    duration: 1.2, ease: "power3.out", stagger: 0.1
-                });
-
+                gsap.set([".nav-pill", ".a11y-toggle"], { opacity: 0, y: 20, filter: "blur(5px)" });
+                gsap.set(".dynamic-bar", { opacity: 0, y: 20, xPercent: -50, filter: "blur(5px)" });
+                introTl.to([".animate-text", ".nav-pill", ".a11y-toggle", ".dynamic-bar"], { opacity: 1, y: 0, filter: "blur(0px)", duration: 1.2, ease: "power3.out", stagger: 0.1 });
                 sessionStorage.setItem('headerAnimated', 'true');
             }
 
             const images = [".pos-1", ".pos-2", ".pos-3", ".pos-4", ".pos-5", ".pos-6", ".pos-7", ".pos-8"];
-            gsap.set(images, { scale: 0.9, opacity: 0, filter: "blur(10px)", y: 30 });
-
-            // NOTE: CONTROL DELAY HERE (Set to -=1.8 for overlap)
-            introTl.to(images, {
-                scale: 1, opacity: 1, filter: "blur(0px)", y: 0,
-                duration: 1.5, ease: "power3.out", stagger: 0.08
-            }, "-=1.8");
-
-
-            // --- 4. ZOOM SCROLL (LINEAR FIX) ---
-            // Remove explicit visibility set, let autoAlpha handle it
-            gsap.set("#moment-1", { autoAlpha: 1, scale: 1, filter: "blur(0px)" });
-            gsap.set("#moment-4", { autoAlpha: 0, scale: 0.5, filter: "blur(10px)" });
-
-            let zoomTl; // Store timeline reference
-            let a11yThemeTl; // Store a11y theme timeline
-
-            function initZoomScroll() {
-                if (zoomTl) zoomTl.kill(); // Kill existing if any
-
-                // RESET THEME TO LIGHT
-                gsap.set("html", {
-                    "--bg-outer": "#FAFAFA",
-                    "--bg-frame": "#FAFAFA",
-                    "--text-color": "#1a1a1a",
-                    "--nav-bg": "#FAFAFA",
-                    "--toggle-bg": "#e7e9ef",
-                    "--bar-bg": "rgba(238, 238, 238, 0.95)",
-                    "--cursor-color": "#000000",
-                    "--nav-text-color": "#767676",
-                    "--ui-text": "#4a4a4a",
-                    "--badge-bg": "rgb(212, 212, 223)",
-                    "--badge-text": "#5f5f5f",
-                    "--selection-bg": "#000",
-                    "--selection-text": "#fff",
-                    "--cursor-hover-bg": "rgba(26, 26, 26, 0.1)",
-                    "--coming-soon-text": "#333"
-                });
-
-                // Reset properties for GSAP control
-                gsap.set("#moment-1", { autoAlpha: 1, scale: 1, filter: "blur(0px)" });
-                gsap.set("#moment-4", { autoAlpha: 0, scale: 0.5, filter: "blur(10px)" });
-
-                zoomTl = gsap.timeline({
-                    scrollTrigger: {
-                        trigger: ".sticky-wrapper",
-                        scroller: ".app-frame",
-                        start: "top top",
-                        end: "+=2500",
-                        scrub: true,
-                        pin: true,
-                        anticipatePin: 0
-                    }
-                });
-
-                // Simplified scroll: Hero -> Contact with dark theme
-                zoomTl
-                    .to({}, { duration: 0.5 })
-                    .to("#moment-1", { scale: 2, autoAlpha: 0, filter: "blur(20px)", duration: 2, ease: "none" })
-                    .to("#moment-4", { scale: 1, autoAlpha: 1, filter: "blur(0px)", duration: 2, ease: "none" }, "-=1.5")
-                    // Animate CSS variables to Dark Theme
-                    .to("html", {
-                        "--bg-outer": "#2B2A30",
-                        "--bg-frame": "#2B2A30",
-                        "--text-color": "#ffffff",
-                        "--cursor-color": "#ffffff",
-                        "--nav-text-color": "#ffffff",
-                        "--nav-bg": "#383838",
-                        "--toggle-bg": "#333333",
-                        "--bar-bg": "#000000",
-                        "--ui-text": "#ffffff",
-                        "--badge-bg": "#1a1a1a",
-                        "--badge-text": "#ffffff",
-                        "--selection-bg": "#ffffff",
-                        "--selection-text": "#000000",
-                        "--cursor-hover-bg": "rgba(255, 255, 255, 0.2)",
-                        "--coming-soon-text": "#fff",
-                        duration: 2,
-                        ease: "none"
-                    }, "<")
-                    .to({}, { duration: 1 })
+            if (!isGoingToContact) {
+                gsap.set(images, { scale: 0.9, opacity: 0, filter: "blur(10px)", y: 30 });
+                introTl.to(images, { scale: 1, opacity: 1, filter: "blur(0px)", y: 0, duration: 1.5, ease: "power3.out", stagger: 0.08 }, "-=1.8");
+            } else {
+                gsap.set(images, { opacity: 0 });
             }
 
-            // Initialize by default
+            if (!isGoingToContact) {
+                gsap.set("#moment-1", { autoAlpha: 1, scale: 1, filter: "blur(0px)" });
+                gsap.set("#moment-4", { autoAlpha: 0, scale: 0.5, filter: "blur(10px)" });
+            }
+
+            let zoomTl, a11yThemeTl;
+
+            function initZoomScroll() {
+                if (zoomTl) zoomTl.kill();
+                gsap.set("html", { "--bg-outer": "#FAFAFA", "--bg-frame": "#FAFAFA", "--text-color": "#1a1a1a", "--nav-bg": "#FAFAFA", "--toggle-bg": "#e7e9ef", "--bar-bg": "rgba(238, 238, 238, 0.95)", "--cursor-color": "#000000", "--nav-text-color": "#767676", "--ui-text": "#4a4a4a", "--badge-bg": "rgb(212, 212, 223)", "--badge-text": "#5f5f5f", "--selection-bg": "#000", "--selection-text": "#fff", "--cursor-hover-bg": "rgba(26, 26, 26, 0.1)", "--coming-soon-text": "#333" });
+                gsap.set("#moment-1", { autoAlpha: 1, scale: 1, filter: "blur(0px)" });
+                gsap.set("#moment-4", { autoAlpha: 0, scale: 0.5, filter: "blur(10px)" });
+                zoomTl = gsap.timeline({ scrollTrigger: { trigger: ".sticky-wrapper", scroller: ".app-frame", start: "top top", end: "+=2500", scrub: true, pin: true, anticipatePin: 0 } });
+                zoomTl.to({}, { duration: 0.5 }).to("#moment-1", { scale: 2, autoAlpha: 0, filter: "blur(20px)", duration: 2, ease: "none" }).to("#moment-4", { scale: 1, autoAlpha: 1, filter: "blur(0px)", duration: 2, ease: "none" }, "-=1.5").to({}, { duration: 1 });
+            }
             initZoomScroll();
 
-            // --- ACCESSIBILITY MODE LOGIC ---
             let isAccessibilityMode = false;
             const a11yToggle = document.getElementById('a11y-toggle');
             const a11yBadge = document.getElementById('a11y-badge');
-
-            // DISABLED ACCESSIBILITY TOGGLE
-            // a11yToggle.addEventListener('click', toggleAccessibilityMode);
 
             function toggleAccessibilityMode() {
                 isAccessibilityMode = !isAccessibilityMode;
                 document.body.classList.toggle('accessibility-mode', isAccessibilityMode);
                 a11yToggle.classList.toggle('active', isAccessibilityMode);
                 a11yBadge.innerText = isAccessibilityMode ? 'On' : 'Off';
-
                 if (isAccessibilityMode) {
-                    // DISABLE ANIMATIONS
-                    if (zoomTl) {
-                        zoomTl.scrollTrigger.kill();
-                        zoomTl.kill();
-                    }
-
-                    // Force clear GSAP styles so CSS !important takes over cleanly
-                    // We use a small timeout to allow CSS transitions to pick up if needed, 
-                    // but clearProps is immediate. The CSS transition on .hero-img will handle the visual shift.
+                    if (zoomTl) { zoomTl.scrollTrigger.kill(); zoomTl.kill(); }
                     gsap.set([".moment", ".hero-img"], { clearProps: "all" });
-
-                    // Ensure hero images are fully visible (redundant with CSS !important but good for safety)
-                    // gsap.to(".hero-img", { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.5 });
-
-                    // STOP LENIS & RESET SCROLL
-                    lenis.stop();
-                    frame.scrollTop = 0;
-                    window.scrollTo(0, 0);
-
-                    // RESET THEME TO LIGHT (Start fresh)
-                    gsap.set("html", {
-                        "--bg-outer": "#FAFAFA",
-                        "--bg-frame": "#FAFAFA",
-                        "--text-color": "#1a1a1a",
-                        "--cursor-color": "#000000",
-                        "--nav-text-color": "#1a1a1a",
-                        "--nav-bg": "rgba(255, 255, 255, 0)",
-                        "--toggle-bg": "#e7e9ef",
-                        "--bar-bg": "rgba(255, 255, 255, 0.95)",
-                        "--ui-text": "#4a4a4a",
-                        "--badge-bg": "rgb(212, 212, 223)",
-                        "--badge-text": "#5f5f5f",
-                        "--selection-bg": "#000",
-                        "--selection-text": "#fff",
-                        "--cursor-hover-bg": "rgba(26, 26, 26, 0.1)",
-                        "--coming-soon-text": "#333"
-                    });
-
-                    // SETUP A11Y DARK THEME TRIGGER
-                    // Since layout is stacked, we trigger based on #moment-4 position
-                    a11yThemeTl = gsap.to("html", {
-                        scrollTrigger: {
-                            trigger: "#moment-4",
-                            scroller: ".app-frame",
-                            start: "top 60%", // Start darkening when contact is near center
-                            end: "top 20%",
-                            scrub: true
-                        },
-                        "--bg-outer": "#FAFAFA", // Keep Frame White
-                        "--bg-frame": "#000000",
-                        "--text-color": "#ffffff",
-                        "--cursor-color": "#ffffff",
-                        "--nav-text-color": "#ffffff",
-                        "--nav-bg": "#333333",
-                        "--toggle-bg": "#333333",
-                        "--bar-bg": "#333333",
-                        "--ui-text": "#ffffff",
-                        "--badge-bg": "#1a1a1a",
-                        "--badge-text": "#ffffff",
-                        "--selection-bg": "#ffffff",
-                        "--selection-text": "#000000",
-                        "--cursor-hover-bg": "rgba(255, 255, 255, 0.2)",
-                        "--coming-soon-text": "#fff",
-                        ease: "none"
-                    });
-
+                    lenis.stop(); frame.scrollTop = 0; window.scrollTo(0, 0);
+                    gsap.set("html", { "--bg-outer": "#FAFAFA", "--bg-frame": "#FAFAFA", "--text-color": "#1a1a1a", "--cursor-color": "#000000", "--nav-text-color": "#1a1a1a", "--nav-bg": "rgba(255, 255, 255, 0)", "--toggle-bg": "#e7e9ef", "--bar-bg": "rgba(255, 255, 255, 0.95)", "--ui-text": "#4a4a4a", "--badge-bg": "rgb(212, 212, 223)", "--badge-text": "#5f5f5f", "--selection-bg": "#000", "--selection-text": "#fff", "--cursor-hover-bg": "rgba(26, 26, 26, 0.1)", "--coming-soon-text": "#333" });
                 } else {
-                    // ENABLE ANIMATIONS
-                    // Kill A11y Theme Trigger
-                    if (a11yThemeTl) {
-                        a11yThemeTl.scrollTrigger.kill();
-                        a11yThemeTl.kill();
-                    }
-
-                    // Restart Lenis
-                    lenis.start();
-
-                    // Re-initialize Zoom Scroll (This resets theme to light initially)
-                    initZoomScroll();
-
-                    // Explicitly reset hero images
-                    const images = [".pos-1", ".pos-2", ".pos-3", ".pos-4", ".pos-5", ".pos-6", ".pos-7", ".pos-8"];
+                    if (a11yThemeTl) { a11yThemeTl.scrollTrigger.kill(); a11yThemeTl.kill(); }
+                    lenis.start(); initZoomScroll();
                     gsap.set(images, { scale: 1, opacity: 1, filter: "blur(0px)", y: 0 });
-
                     ScrollTrigger.refresh();
                 }
             }
 
-
-            // --- 5. MODAL & NAVIGATION ---
-            // const aboutBtn = document.getElementById('about-btn'); // Removed
             const closeBtn = document.getElementById('close-btn');
             const overlay = document.getElementById('about-overlay');
-
-            const btnProjects = document.getElementById('btn-projects');
             const btnContact = document.getElementById('btn-contact');
 
             function scrollToSection(selector) {
-                const target = document.querySelector(selector);
+                const target = document.querySelector(selector); 
                 if (!target) return;
+                if (selector === '#moment-4') { isAccessibilityMode ? target.scrollIntoView({ behavior: 'smooth' }) : lenis.scrollTo('bottom', { duration: 2 }); return; }
+                isAccessibilityMode ? target.scrollIntoView({ behavior: 'smooth' }) : lenis.scrollTo(target);
+            }
 
-                // Special handling for moment-4 (contact) — it's absolutely positioned
-                // inside a pinned ScrollTrigger, so we scroll to the bottom of the container
-                if (selector === '#moment-4') {
-                    if (isAccessibilityMode) {
-                        target.scrollIntoView({ behavior: 'smooth' });
-                    } else {
-                        lenis.scrollTo('bottom', { duration: 2 });
-                    }
+            function showContactDirect() {
+                if (isAccessibilityMode) {
+                    const target = document.querySelector('#moment-4');
+                    if (target) target.scrollIntoView({ behavior: 'smooth' });
                     return;
                 }
-
-                if (isAccessibilityMode) {
-                    // Native scroll in A11y mode
-                    target.scrollIntoView({ behavior: 'smooth' });
-                } else {
-                    // Lenis scroll in normal mode
-                    lenis.scrollTo(target);
-                }
+                // Kill the scroll-driven zoom timeline so it doesn't conflict
+                if (zoomTl) { zoomTl.scrollTrigger.kill(); zoomTl.kill(); }
+                // Scroll to bottom silently (instant, no visual) so the page state is consistent
+                lenis.scrollTo('bottom', { immediate: true, duration: 0 });
+                // Then animate: fade out moment-1, fade in moment-4 like the scroll version but with easing
+                gsap.to('#moment-1', { scale: 2, autoAlpha: 0, filter: 'blur(20px)', duration: 0.7, ease: 'power3.in' });
+                gsap.to('#moment-4', { scale: 1, autoAlpha: 1, filter: 'blur(0px)', duration: 0.7, ease: 'power3.out', delay: 0.2 });
+                // Fade in contact children just like the intro animate-text
+                gsap.fromTo('#moment-4 .contact-layout > *', 
+                    { opacity: 0, y: 20, filter: 'blur(5px)' },
+                    { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.8, ease: 'power3.out', stagger: 0.08, delay: 0.5 }
+                );
             }
 
-            // About button is now a link to about.html (no click handler needed)
-            // DISABLED PROJECTS LINK
-            // if (btnProjects) btnProjects.addEventListener('click', () => scrollToSection('#moment-2'));
-
-            // REVERTED: Scroll to contact section
-            if (btnContact) {
-                btnContact.addEventListener('click', (e) => {
-                    // Check if mobile
-                    if (window.innerWidth <= 768) {
-                        e.preventDefault();
-                        document.body.classList.add('mobile-contact-active');
-
-                        // Apply Dark Mode Variables Manually
-                        gsap.to("html", {
-                            "--bg-outer": "#FAFAFA",
-                            "--bg-frame": "#000000",
-                            "--text-color": "#ffffff",
-                            "--cursor-color": "#ffffff",
-                            "--nav-text-color": "#ffffff",
-                            "--nav-bg": "#333333",
-                            "--toggle-bg": "#333333",
-                            "--bar-bg": "#333333",
-                            "--ui-text": "#ffffff",
-                            "--badge-bg": "#1a1a1a",
-                            "--badge-text": "#ffffff",
-                            "--selection-bg": "#ffffff",
-                            "--selection-text": "#000000",
-                            "--cursor-hover-bg": "rgba(255, 255, 255, 0.2)",
-                            "--coming-soon-text": "#fff",
-                            duration: 0.5
-                        });
-
-                        // Close button logic for mobile contact view? 
-                        // User didn't ask for one, but "About" has one. 
-                        // For now, clicking "About" or "Projects" (hidden) would be the way out, 
-                        // or toggling it off.
-                        // Let's assume clicking "Contact" again or "About" might reset it?
-                        // Actually, "About" opens a modal.
-
-                    } else {
-                        e.preventDefault();
-                        scrollToSection('#moment-4');
-                    }
-                });
-            }
-
+            if (btnContact) btnContact.addEventListener('click', (e) => { e.preventDefault(); showContactDirect(); });
             closeBtn.addEventListener('click', () => overlay.classList.remove('active'));
             overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.classList.remove('active'); });
 
-            // --- CONTACT CARD: Date label, mailto, delete ---
-            const cardDate = document.getElementById('card-date');
-            const cardInput = document.getElementById('card-input');
-            const cardDelete = document.getElementById('card-delete');
-            const cardSend = document.getElementById('card-send');
+            // --- ENVELOPE ---
+            const envelopeForm    = document.getElementById('envelope-form');
+            const envelopeSentMsg = document.getElementById('envelope-sent-msg');
+            const cardInput       = document.getElementById('card-input');
+            const cardDelete      = document.getElementById('card-delete');
+            const cardSend        = document.getElementById('card-send');
+            let blurTimer;
 
-            // Auto-generate date label: "saturday, DD.MM"
-            if (cardDate) {
-                const now = new Date();
-                const dayName = now.toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
-                const dd = String(now.getDate()).padStart(2, '0');
-                const mm = String(now.getMonth() + 1).padStart(2, '0');
-                cardDate.textContent = `${dayName},  ${dd}.${mm}`;
+            function openEnvelope() { clearTimeout(blurTimer); if (!envelopeForm) return; envelopeForm.classList.add('is-open'); }
+            function closeEnvelope() { if (!envelopeForm) return; envelopeForm.classList.remove('is-open'); }
+
+            if (envelopeForm) envelopeForm.addEventListener('click', openEnvelope);
+            if (cardInput) {
+                cardInput.addEventListener('focus', openEnvelope);
+                cardInput.addEventListener('blur', () => { blurTimer = setTimeout(closeEnvelope, 220); });
             }
-
-            // "Say hi!" button — opens mailto with textarea content
+            if (cardDelete) {
+                cardDelete.addEventListener('mousedown', () => clearTimeout(blurTimer));
+                cardDelete.addEventListener('click', () => { if (cardInput) cardInput.value = ''; closeEnvelope(); });
+            }
             if (cardSend) {
+                cardSend.addEventListener('mousedown', () => clearTimeout(blurTimer));
                 cardSend.addEventListener('click', (e) => {
                     e.preventDefault();
-                    const message = cardInput ? cardInput.value.trim() : '';
-                    const mailtoUrl = 'mailto:hi@nataliabuendia.com?subject=Hi!&body=' + encodeURIComponent(message);
-                    window.location.href = mailtoUrl;
+                    const msg = cardInput ? cardInput.value.trim() : '';
+                    window.location.href = 'mailto:nataliabuendiadesign@gmail.com?subject=Hi!&body=' + encodeURIComponent(msg);
+                    closeEnvelope();
+                    envelopeForm.classList.add('sent');
+                    setTimeout(() => { envelopeForm.classList.add('env-fly'); if (envelopeSentMsg) envelopeSentMsg.classList.add('visible'); }, 480);
+                    setTimeout(() => { envelopeForm.classList.remove('sent', 'env-fly'); if (envelopeSentMsg) envelopeSentMsg.classList.remove('visible'); if (cardInput) cardInput.value = ''; }, 2600);
                 });
             }
 
-            // Trash button — clears textarea
-            if (cardDelete) {
-                cardDelete.addEventListener('click', () => {
-                    if (cardInput) cardInput.value = '';
-                });
-            }
-
-            // Handle #contact hash from project/about page navigation
-            if (window.location.hash === '#contact') {
+            if (isGoingToContact) {
                 history.replaceState(null, '', window.location.pathname);
-                // Scroll instantly to bottom so the contact section is visible on arrival
-                setTimeout(() => {
-                    lenis.scrollTo('bottom', { immediate: true });
-                }, 300);
+                // Small delay to let GSAP & Lenis finish initializing, then fade in contact
+                setTimeout(() => { showContactDirect(); }, 150);
             }
 
-            // SOCIAL DROPDOWN LOGIC
+            // Social dropdown
             const navIcon = document.getElementById('nav-icon');
             const socialDropdown = document.getElementById('social-dropdown');
-
             if (navIcon && socialDropdown) {
-                navIcon.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation(); // Prevent bubbling
-                    socialDropdown.classList.toggle('active');
-                    console.log('Social dropdown toggled'); // Debug
-                });
-
-                // Close when clicking anywhere else
-                document.addEventListener('click', () => {
-                    socialDropdown.classList.remove('active');
-                });
-
-                // Prevent closing when clicking inside dropdown
-                socialDropdown.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                });
+                navIcon.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); socialDropdown.classList.toggle('active'); });
+                document.addEventListener('click', () => { socialDropdown.classList.remove('active'); });
+                socialDropdown.addEventListener('click', (e) => { e.stopPropagation(); });
             }
 
-            // --- CUSTOM PROJECT TRANSITION ---
-
-            // Add transition styles to document
+            // Project transition
             const transitionStyles = document.createElement('style');
             transitionStyles.textContent = `
-                .transition-overlay {
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    width: 100vw;
-                    height: 100vh;
-                    background: #FAFAFA;
-                    z-index: 99998;
-                    opacity: 0;
-                    transition: opacity 0.3s ease;
-                    pointer-events: none;
-                }
-                .transition-overlay.visible {
-                    opacity: 1;
-                }
-                .flying-clone {
-                    position: fixed;
-                    z-index: 99999;
-                    border-radius: 12px;
-                    overflow: hidden;
-                    box-shadow: 0 25px 50px rgba(0,0,0,0.3);
-                    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-                    pointer-events: none;
-                }
-                .flying-clone img {
-                    width: 100%;
-                    height: 100%;
-                    object-fit: cover;
-                    display: block;
-                }
-                .flying-clone.at-header {
-                    border-radius: 50%;
-                    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-                }
-                .hero-img.fading {
-                    opacity: 0 !important;
-                    transform: scale(0.95) !important;
-                    filter: blur(8px) !important;
-                    transition: all 0.4s ease-out !important;
-                }
-                .fade-out-content {
-                    opacity: 0 !important;
-                    transform: translateY(-15px) !important;
-                    transition: all 0.35s ease-out !important;
-                }
+                .transition-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #FAFAFA; z-index: 99998; opacity: 0; transition: opacity 0.3s ease; pointer-events: none; }
+                .transition-overlay.visible { opacity: 1; }
+                .flying-clone { position: fixed; z-index: 99999; border-radius: 12px; overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.3); transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none; }
+                .flying-clone img { width: 100%; height: 100%; object-fit: cover; display: block; }
+                .flying-clone.at-header { border-radius: 50%; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+                .hero-img.fading { opacity: 0 !important; transform: scale(0.95) !important; filter: blur(8px) !important; transition: all 0.4s ease-out !important; }
+                .fade-out-content { opacity: 0 !important; transform: translateY(-15px) !important; transition: all 0.35s ease-out !important; }
             `;
             document.head.appendChild(transitionStyles);
 
-            // Event Listeners for Hero Images
             document.querySelectorAll('.hero-img').forEach(heroImg => {
                 heroImg.addEventListener('click', (e) => {
-                    // Get project ID
                     const projectId = heroImg.getAttribute('data-project');
+                    const comingSoonProjects = ['kotie', 'minimum', 'moresamphire', 'web3'];
+                    if (comingSoonProjects.includes(projectId)) return;
 
-                    // Don't navigate for "coming-soon" projects
-                    if (projectId === 'coming-soon') {
-                        return;
-                    }
-
-                    // Store project ID in localStorage for project page
                     localStorage.setItem('projectId', projectId);
-
                     const innerImg = heroImg.querySelector('img');
-                    const imgSrc = innerImg.src;
-
-                    // Get the clicked image's current position
                     const imgRect = heroImg.getBoundingClientRect();
 
-                    // Create overlay - append to documentElement to escape body overflow
                     const overlay = document.createElement('div');
                     overlay.className = 'transition-overlay';
                     document.documentElement.appendChild(overlay);
 
-                    // Create clone at current position - append to documentElement
                     const clone = document.createElement('div');
                     clone.className = 'flying-clone';
                     clone.style.left = imgRect.left + 'px';
                     clone.style.top = imgRect.top + 'px';
                     clone.style.width = imgRect.width + 'px';
                     clone.style.height = imgRect.height + 'px';
-                    clone.innerHTML = `<img src="${imgSrc}" alt="Project">`;
+                    clone.innerHTML = `<img src="${innerImg.src}" alt="Project">`;
                     document.documentElement.appendChild(clone);
-
-                    // Force reflow to ensure clone is painted
                     clone.offsetHeight;
 
-                    // Hide original
                     heroImg.style.visibility = 'hidden';
+                    document.querySelectorAll('.hero-img').forEach(img => { if (img !== heroImg) img.classList.add('fading'); });
+                    document.querySelectorAll('.intro-text, .nav-pill, .scroll-hint, .a11y-toggle').forEach(el => el.classList.add('fade-out-content'));
 
-                    // Fade out other images
-                    const allImages = document.querySelectorAll('.hero-img');
-                    allImages.forEach(img => {
-                        if (img !== heroImg) {
-                            img.classList.add('fading');
-                        }
-                    });
-
-                    // Fade out other content (header and navbar stay visible)
-                    const otherContent = document.querySelectorAll('.intro-text, .nav-pill, .scroll-hint, .a11y-toggle');
-                    otherContent.forEach(el => el.classList.add('fade-out-content'));
-
-                    // Target position for project-logo (in project page content area)
-                    // Project page has: max-width: 900px, centered, with responsive padding
                     const viewportWidth = window.innerWidth;
-                    const mainMaxWidth = 900;
-                    const mainWidth = Math.min(mainMaxWidth, viewportWidth);
-                    const mainLeftOffset = Math.max(0, (viewportWidth - mainMaxWidth) / 2);
-
-                    // Responsive padding values from project.html CSS
+                    const mainLeftOffset = Math.max(0, (viewportWidth - 900) / 2);
                     const isTablet = viewportWidth <= 768;
-                    const leftPadding = isTablet ? 20 : 40;
-                    const topPadding = isTablet ? 100 : 120;
-
                     const targetSize = isTablet && viewportWidth <= 480 ? 40 : 48;
-                    const targetX = mainLeftOffset + leftPadding + (targetSize / 2);
-                    const targetY = topPadding + (targetSize / 2);
+                    const targetX = mainLeftOffset + (isTablet ? 20 : 40) + targetSize / 2;
+                    const targetY = (isTablet ? 100 : 120) + targetSize / 2;
 
-                    // Timeline with setTimeout for predictable timing
-                    // Step 1: Wait 400ms for fade out
                     setTimeout(() => {
-                        // Step 2: Animate clone to header position
                         clone.style.left = (targetX - targetSize/2) + 'px';
                         clone.style.top = (targetY - targetSize/2) + 'px';
                         clone.style.width = targetSize + 'px';
                         clone.style.height = targetSize + 'px';
                         clone.classList.add('at-header');
-
-                        // Step 3: After clone animation (600ms), show overlay
                         setTimeout(() => {
                             overlay.classList.add('visible');
-
-                            // Step 4: After overlay fade (300ms), navigate
-                            setTimeout(() => {
-                                window.location.href = 'project.html';
-                            }, 300);
+                            setTimeout(() => { window.location.href = 'project.html'; }, 300);
                         }, 600);
                     }, 400);
                 });
             });
 
-            // --- COPY EMAIL FUNCTIONALITY ---
+            // Copy email
             const copyEmailBtn = document.getElementById('copy-email-btn');
             if (copyEmailBtn) {
                 copyEmailBtn.addEventListener('click', async (e) => {
                     e.preventDefault();
-                    const email = copyEmailBtn.getAttribute('data-email');
-
                     try {
-                        await navigator.clipboard.writeText(email);
+                        await navigator.clipboard.writeText(copyEmailBtn.getAttribute('data-email'));
                         copyEmailBtn.classList.add('copied');
-
-                        // Reset after 2 seconds
-                        setTimeout(() => {
-                            copyEmailBtn.classList.remove('copied');
-                        }, 2000);
-                    } catch (err) {
-                        console.error('Failed to copy email:', err);
-                    }
+                        setTimeout(() => { copyEmailBtn.classList.remove('copied'); }, 2000);
+                    } catch (err) { console.error('Failed to copy email:', err); }
                 });
             }
-
         </script>
 </body>
-
 </html>

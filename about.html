@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,551 +9,140 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://unpkg.com/lenis@1.0.45/dist/lenis.min.js"></script>
     <style>
-        /* --- FONT SETUP --- */
-        @font-face {
-            font-family: 'Lausanne';
-            src: url('./fonts/6489c1c644ac7b501ff707bc_TWK\ 350.ttf');
-            letter-spacing: -1.6px;
-        }
+        @font-face { font-family: 'Lausanne'; src: url('./fonts/6489c1c644ac7b501ff707bc_TWK 350.ttf'); letter-spacing: -1.6px; }
 
         :root {
             --font-main: 'Lausanne', 'Inter', Helvetica, Arial, sans-serif;
-            --bg-color: #FAFAFA;
+            --bg-color: #FDFDFD;
             --text-color: #1a1a1a;
             --text-secondary: #666666;
             --text-muted: #999999;
             --card-bg: #F3F3F3;
             --nav-text-color: #767676;
-
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            cursor: none;
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: var(--font-main);
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            line-height: 1.6;
-            cursor: none;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        /* --- CUSTOM CURSOR --- */
-        .cursor {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 14px;
-            height: 14px;
-            background-color: #000;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 999999;
-            transform: translate(-50%, -50%);
-            opacity: 0;
-            transition: opacity 0.15s ease;
-        }
-
-        .cursor.visible {
-            opacity: 1;
-        }
-
-        /* --- HEADER --- */
-        .site-header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 1000;
-            background: var(--bg-color);
-        }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 0;
-        }
-
-        .breadcrumb {
-            display: flex;
-            align-items: center;
-            gap: 0;
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .breadcrumb-link {
-            color: var(--text-color);
-            text-decoration: none;
-            padding: 6px 10px;
-            border-radius: 6px;
-            transition: background-color 0.2s;
-        }
-
-        .breadcrumb-link:hover {
-            background-color: rgba(0, 0, 0, 0.06);
-        }
-
-        .breadcrumb-separator {
-            color: #999;
-            margin: 0 2px;
-            font-weight: 400;
-        }
-
-        .breadcrumb-current {
-            color: var(--text-color);
-            padding: 6px 10px;
-            border-radius: 6px;
-            transition: background-color 0.2s;
-        }
-
-        .breadcrumb-current:hover {
-            background-color: rgba(0, 0, 0, 0.06);
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .email-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .email-link {
-            font-size: 14px;
-            color: #999;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-
-        .email-link:hover {
-            color: var(--text-color);
-        }
-
-        .copy-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 20px;
-            height: 20px;
-            background: transparent;
-            border: none;
-            padding: 0;
-            cursor: none;
-            opacity: 0.4;
-            transition: opacity 0.2s;
-        }
-
-        .copy-btn:hover {
-            opacity: 1;
-        }
-
-        .copy-btn svg {
-            width: 14px;
-            height: 14px;
-            stroke: var(--text-color);
-            fill: none;
-            stroke-width: 2.4;
-        }
-
-        .copy-btn .check-icon {
-            display: none;
-            stroke: #000000;
-            stroke-width: 3.5px;
-        }
-
-        .copy-btn.copied .copy-icon {
-            display: none;
-        }
-
-        .copy-btn.copied .check-icon {
-            display: block;
-            animation: checkPop 0.3s ease-out;
-        }
-
-        @keyframes checkPop {
-            0% { transform: scale(0.5); opacity: 0; }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        /* --- MAIN CONTENT --- */
-        main {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 140px 40px 80px;
-        }
-
-        /* --- ABOUT LAYOUT --- */
-        .about-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            align-items: start;
-        }
-
-        /* --- IMAGE FLIP CONTAINER --- */
-        .image-container {
-            position: sticky;
-            top: 160px;
-            width: 72%;
-            aspect-ratio: 4/5;
-            perspective: 1000px;
-            margin-left: 32px;
-            margin-right: 32px;
-        }
-
-        .image-flipper {
-            position: relative;
-            
-            width: 100%;
-            height: 100%;
-            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            transform-style: preserve-3d;
-            cursor: none;
-        }
-
-        .image-flipper:hover {
-            transform: scale(1.02);
-        }
-
-        .image-flipper.flipped:hover {
-            transform: rotateY(180deg) scale(1.02);
-        }
-
-        .image-flipper.flipped {
-            transform: rotateY(180deg);
-        }
-
-        .image-front,
-        .image-back {
-            position: absolute;
-            background-color: var(--bg-color); 
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            border-radius: 24px;
-            overflow: hidden;
-            /* background: var(--card-bg); */
-        }
-
-        .image-back {
-            transform: rotateY(180deg);
-        }
-
-        .image-front img,
-        .image-back img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        /* --- CONTENT SIDE --- */
-        .content-side {
-            padding-top: 20px;
-        }
-
-        /* --- TOGGLE --- */
-        .toggle-container {
-            display: inline-flex;
-            background: var(--card-bg);
-            border-radius: 50px;
-            padding: 4px;
-            margin-bottom: 40px;
-        }
-
-        .toggle-btn {
-            padding: 12px 16px;
-            border: none;
-            background: transparent;
-            border-radius: 50px;
-            font-family: var(--font-main);
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--text-muted);
-            cursor: none;
-            transition: all 0.3s ease;
-        }
-
-        .toggle-btn.active {
-            background: #ffffff;
-            color: #000000;
-        }
-
-        .toggle-btn svg.toggle-icon {
-            width: 15px;
-            height: 15px;
-            margin-right: 6px;
-            vertical-align: -2px;
-            stroke: currentColor;
-            fill: none;
-            stroke-width: 1.8;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
-        /* --- CONTENT SECTIONS --- */
-        .content-panel {
-            display: none;
-            opacity: 0;
-        }
-
-        .content-panel.active {
-            display: block;
-            animation: fadeInContent 0.5s ease forwards;
-        }
-
-        @keyframes fadeInContent {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .about-title {
-            font-size: 16px;
-            font-weight: 500;
-            margin-bottom: 24px;
-            line-height: 1.5;
-        }
-
-        .about-text {
-            font-size: 16px;
-            line-height: 1.5;
-            color: var(--text-secondary);
-            margin-bottom: 16px;
-        }
-
-        /* --- RESUME SECTIONS --- */
-        .resume-section {
-            margin-top: 40px;
-        }
-
-        .section-label {
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-muted);
-            margin-bottom: 16px;
-        }
-
-        .resume-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
         }
 
-        .resume-item {
-            background: var(--card-bg);
-            padding: 16px 20px;
-            border-radius: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 14px;
-        }
-        .resume-row {
-            padding: 14px 4px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 14px;
-        }
-
-        .resume-item-left {
-            color: var(--text-color);
-        }
-
-        .resume-item-right {
-            color: var(--text-muted);
-            text-align: right;
-        }
-
-        /* --- PERSONAL CONTENT --- */
-        .hobby-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-top: 24px;
-        }
-
-        .hobby-card {
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: 16px;
-        }
-
-        .hobby-icon {
-            font-size: 24px;
-            margin-bottom: 8px;
-        }
-
-        .hobby-title {
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 4px;
-        }
-
-        .hobby-desc {
-            font-size: 13px;
-            color: var(--text-muted);
-        }
-
-        /* --- DYNAMIC BOTTOM BAR --- */
-        .dynamic-bar {
-            position: fixed;
-            bottom: 40px;
-            left: 50%;
-            z-index: 1000;
-            background: rgba(238, 238, 238, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 6px;
-            border-radius: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-        }
-
-        .bar-content-wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .nav-menu {
-            display: flex;
-            gap: 5px;
-            align-items: center;
-        }
-
-        .nav-link {
-            background: transparent;
-            border: none;
-            padding: 12px 16px;
-            border-radius: 8px;
-            font-size: .75rem;
-            font-weight: 300;
-            text-decoration: none;
-            color: var(--nav-text-color);
-            transition: background 0.2s, color 0.2s;
-            font-family: var(--font-main);
-            cursor: none;
-        }
-
-        .nav-link:hover {
-            background: rgba(0, 0, 0, 0.05);
-        }
-
-        /* --- RESPONSIVE --- */
-        @media (max-width: 900px) {
-            .about-container {
-                grid-template-columns: 1fr;
-                gap: 40px;
-            }
-
-            .image-container {
-                position: relative;
-                top: auto;
-                max-width: 400px;
-                margin: 0 auto;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .site-header {
-                padding: 16px 20px;
-            }
-
-            main {
-                padding: 100px 20px 60px;
-            }
-
-            .about-title {
-                font-size: 26px;
-            
-            }
-
-            .hobby-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .resume-item {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 4px;
-            }
-
-            .resume-item-right {
-                text-align: left;
-            }
-        }
-
-        /* --- ANIMATIONS --- */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(20px);
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+        body { font-family: var(--font-main); background-color: var(--bg-color); color: var(--text-color); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+        .cursor { position: fixed; top: 0; left: 0; width: 14px; height: 14px; background-color: #000; border-radius: 50%; pointer-events: none; z-index: 999999; transform: translate(-50%, -50%); opacity: 0; transition: opacity 0.15s ease; }
+        .cursor.visible { opacity: 1; }
+
+        .site-header { position: fixed; top: 0; left: 0; right: 0; padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; z-index: 1000; background: transparent; }
+        .site-header::before { content: ''; position: absolute; inset: 0; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 100%); mask-image: linear-gradient(to bottom, black 0%, transparent 100%); }
+        .header-left { display: flex; align-items: center; gap: 0; position: relative; z-index: 1; }
+        .breadcrumb { display: flex; align-items: center; gap: 0; font-size: 14px; font-weight: 500; }
+        .breadcrumb-link { color: var(--text-color); text-decoration: none; padding: 6px 10px; border-radius: 6px; transition: background-color 0.2s; }
+        .breadcrumb-link:hover { background-color: rgba(0,0,0,0.06); }
+        .breadcrumb-separator { color: #999; margin: 0 2px; font-weight: 400; }
+        .breadcrumb-current { color: var(--text-color); padding: 6px 10px; border-radius: 6px; transition: background-color 0.2s; }
+        .breadcrumb-current:hover { background-color: rgba(0,0,0,0.06); }
+        .header-right { display: flex; align-items: center; gap: 8px; position: relative; z-index: 1; }
+        .email-wrapper { display: flex; align-items: center; gap: 6px; }
+        .email-link { font-size: 14px; color: #999; text-decoration: none; transition: color 0.2s; }
+        .email-link:hover { color: var(--text-color); }
+        .copy-btn { display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; background: transparent; border: none; padding: 0; cursor: none; opacity: 0.4; transition: opacity 0.2s; }
+        .copy-btn:hover { opacity: 1; }
+        .copy-btn svg { width: 14px; height: 14px; stroke: var(--text-color); fill: none; stroke-width: 2.4; }
+        .copy-btn .check-icon { display: none; stroke: #000; stroke-width: 3.5px; }
+        .copy-btn.copied .copy-icon { display: none; }
+        .copy-btn.copied .check-icon { display: block; animation: checkPop 0.3s ease-out; }
+        @keyframes checkPop { 0% { transform: scale(0.5); opacity: 0; } 50% { transform: scale(1.2); } 100% { transform: scale(1); opacity: 1; } }
+
+        main { max-width: 1100px; margin: 0 auto; padding: 140px 40px 80px; }
+        .about-container { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+
+        .image-container { position: sticky; top: 160px; width: 72%; aspect-ratio: 4/5; perspective: 1000px; margin-left: 32px; margin-right: 32px; animation: revealUp 0.6s ease forwards; }
+        .image-flipper { position: relative; width: 100%; height: 100%; transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d; }
+        .image-flipper:hover { transform: scale(1.02); }
+        .image-flipper.flipped { transform: rotateY(180deg); }
+        .image-flipper.flipped:hover { transform: rotateY(180deg) scale(1.02); }
+        .image-front, .image-back { position: absolute; top: 0; left: 0; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 24px; overflow: hidden; background-color: var(--bg-color); }
+        .image-back { transform: rotateY(180deg); }
+        .image-front img, .image-back img { width: 100%; height: 100%; object-fit: cover; }
+
+        .content-side { padding-top: 20px; }
+
+        /* TOGGLE */
+        .toggle-container { display: inline-flex; align-items: center; background: var(--bg-color); border-radius: 50px; padding: 4px; margin-bottom: 40px; position: relative; animation: revealUp 0.6s 0.1s ease both; }
+        .toggle-slider { position: absolute; top: 4px; left: 4px; height: calc(100% - 8px); background: #fff; border-radius: 50px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); z-index: 0; transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), width 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
+        .toggle-btn { display: flex; align-items: center; gap: 7px; padding: 10px 16px; border: none; background: transparent; border-radius: 50px; cursor: none; position: relative; z-index: 1; flex-shrink: 0; transition: color 0.3s ease; color: var(--text-muted); font-family: var(--font-main); font-size: 13px; font-weight: 400; white-space: nowrap; }
+        .toggle-btn.active { color: #000; }
+        .toggle-btn svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+
+        @keyframes revealUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* CONTENT PANELS */
+        .content-panel { display: none; opacity: 0; }
+        .content-panel.active { display: block; animation: fadeInContent 0.4s ease forwards; }
+        @keyframes fadeInContent { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+        .about-title { font-size: 16px; font-weight: 500; margin-bottom: 24px; line-height: 1.5; }
+        .about-text { font-size: 16px; line-height: 1.5; color: var(--text-secondary); margin-bottom: 16px; }
+
+        /* HIGHLIGHT */
+        .text-highlight { position: relative; display: inline; background: linear-gradient(120deg, #e8e4ff 0%, #d8d2ff 100%); border-radius: 4px; padding: 1px 5px; }
+        .highlight-preview { position: fixed; width: 180px; height: 260px; border-radius: 16px; overflow: hidden; box-shadow: 0 12px 40px rgba(0,0,0,0.15); pointer-events: none; z-index: 9000; opacity: 0; transform: scale(0.92) translateY(8px); transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
+        .highlight-preview.visible { opacity: 1; transform: scale(1) translateY(0); }
+        .highlight-preview img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* RESUME */
+        .resume-section { margin-top: 40px; }
+        .section-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 16px; }
+        .resume-list { display: flex; flex-direction: column; gap: 8px; }
+        .resume-item { background: var(--card-bg); padding: 16px 20px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; }
+        .resume-row { padding: 14px 4px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; }
+        .resume-item-left { color: var(--text-color); }
+        .resume-item-right { color: var(--text-muted); text-align: right; }
+
+        /* FRIEND LINKS */
+        .friend-link { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 8px; background: rgba(0,0,0,0.06); text-decoration: none; flex-shrink: 0; transition: background 0.2s; cursor: none; }
+        .friend-link:hover { background: rgba(0,0,0,0.13); }
+        .friend-link svg { width: 13px; height: 13px; stroke: var(--text-color); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+        /* BOTTOM BAR */
+        .dynamic-bar { position: fixed; bottom: 40px; left: 50%; z-index: 1000; background: rgba(238,238,238,0.95); backdrop-filter: blur(10px); padding: 6px; border-radius: 10px; display: flex; justify-content: center; align-items: center; opacity: 0; }
+        .nav-menu { display: flex; gap: 5px; align-items: center; }
+        .nav-link { background: transparent; border: none; padding: 12px 16px; border-radius: 8px; font-size: .75rem; font-weight: 300; text-decoration: none; color: var(--nav-text-color); transition: background 0.2s; font-family: var(--font-main); cursor: none; }
+        .nav-link:hover { background: rgba(0,0,0,0.05); }
+
+        .fade-in { opacity: 0; transform: translateY(20px); }
+
+        @media (max-width: 900px) { .about-container { grid-template-columns: 1fr; } .image-container { position: relative; width: 63%; top: auto; max-width: 400px; margin: 0 auto; } }
+        @media (max-width: 768px) { .site-header { padding: 20px 12px !important; background: var(--bg-color) !important; } .breadcrumb-separator, .breadcrumb-current { display: none; } .breadcrumb-link { font-size: 0; } .breadcrumb-link::after { content: "Natalia B."; font-size: 14px; font-weight: 500; } .email-link { font-size: 13px; } main { padding: 100px 20px 60px; } .resume-item { flex-direction: column; align-items: flex-start; gap: 4px; } .resume-item-right { text-align: left; } }
+        @media (max-width: 480px) { .dynamic-bar { min-width: 290px; } }
     </style>
 </head>
-
 <body>
 
-    <!-- CUSTOM CURSOR -->
-    <div class="cursor"></div>
+    <div class="cursor" id="cursor"></div>
 
-    <!-- HEADER -->
+    <div class="highlight-preview" id="highlight-preview">
+        <img src="/img/violin.jpg" alt="Playing music">
+    </div>
+
     <header class="site-header">
         <div class="header-left">
             <nav class="breadcrumb">
-                <a href="index.html" class="breadcrumb-link">Natalia Buendía</a>
+                <a href="index.html" class="breadcrumb-link">Natalia Buend&#237;a</a>
                 <span class="breadcrumb-separator">/</span>
                 <span class="breadcrumb-current">About</span>
             </nav>
         </div>
         <div class="header-right">
             <div class="email-wrapper">
-                <a href="mailto:hi@nataliabuendia.com" class="email-link">hi@nataliabuendia.com</a>
-                <button class="copy-btn" id="copy-email-btn" data-email="hi@nataliabuendia.com" aria-label="Copy email to clipboard">
-                    <svg class="copy-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                    </svg>
-                    <svg class="check-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
+                <a href="mailto:nataliabuendiadesign@gmail.com" class="email-link">nataliabuendiadesign@gmail.com</a>
+                <button class="copy-btn" id="copy-email-btn" data-email="nataliabuendiadesign@gmail.com" aria-label="Copy email">
+                    <svg class="copy-icon" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <svg class="check-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- MAIN CONTENT -->
     <main>
         <div class="about-container">
-            <!-- LEFT: FLIPPING IMAGE -->
-            <div class="image-container fade-in">
+
+            <div class="image-container">
                 <div class="image-flipper" id="image-flipper">
                     <div class="image-front">
                         <img src="/img/linkedinme.png" alt="Natalia - Work">
@@ -565,126 +153,98 @@
                 </div>
             </div>
 
-            <!-- RIGHT: CONTENT -->
             <div class="content-side">
-                <!-- TOGGLE -->
-                <div class="toggle-container fade-in">
-                    <button class="toggle-btn active" id="toggle-work" data-target="work"><svg class="toggle-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>Linkedin me</button>
-                    <button class="toggle-btn" id="toggle-personal" data-target="personal"><svg class="toggle-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>Real me</button>
+
+                <div class="toggle-container">
+                    <div class="toggle-slider" id="toggle-slider"></div>
+                    <button class="toggle-btn active" id="toggle-work">
+                        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                        Linkedin me
+                    </button>
+                    <button class="toggle-btn" id="toggle-personal">
+                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+                        Real me
+                    </button>
                 </div>
 
-                <!-- WORK CONTENT -->
                 <div class="content-panel active" id="content-work">
-                    <h1 class="about-title">Hey, I'm Natalia, a digital Product Designer currently based in Barcelona. With a curiosity-driven approach, I think design can create value and impact in people and companies.
-                    </h1>
-                  
-                    <p class="about-text">
-                        100% of my friends say I am an empathetic, proactive and curious person. I believe great design comes from collaboration and attention to detail.
-                    </p>
+                    <h1 class="about-title">I'm Natalia, a digital Product Designer currently based in Barcelona. With a curiosity-driven approach, I am currently exploring the intersection of design, behaviour, and technology.</h1>
+                    <p class="about-text">I care about building things that feel simple, useful, and human.</p>
 
                     <div class="resume-section">
                         <div class="section-label">My way</div>
                         <div class="resume-list">
-                            <div class="resume-item">
-                                <span class="resume-item-left">Revolut · Product Designer</span>
-                                <span class="resume-item-right">Barcelona, 2025 - Present</span>
-                            </div>
-                            <div class="resume-item">
-                                <span class="resume-item-left">Samphire Neuroscience · Founding Designer</span>
-                                <span class="resume-item-right">London, 2024 - 2025</span>
-                            </div>
-                            <div class="resume-item">
-                                <span class="resume-item-left">Minimum.run · Visual Product Designer</span>
-                                <span class="resume-item-right">Madrid, 2024</span>
-                            </div>
-                            <div class="resume-item">
-                                <span class="resume-item-left">Spontaneus Generation · Visual Designer</span>
-                                <span class="resume-item-right">2022 / 2023</span>
-                            </div>
+                            <div class="resume-item"><span class="resume-item-left">Revolut &middot; Barcelona</span><span class="resume-item-right">Product Designer</span></div>
+                            <div class="resume-item"><span class="resume-item-left">Samphire Neuroscience &middot; London</span><span class="resume-item-right">Founding Designer</span></div>
+                            <div class="resume-item"><span class="resume-item-left">Minimum.run &middot; Madrid</span><span class="resume-item-right">Visual Product Designer</span></div>
+                            <div class="resume-item"><span class="resume-item-left">Spontaneus Generation &middot; Valencia</span><span class="resume-item-right">Visual Designer</span></div>
                         </div>
                     </div>
 
                     <div class="resume-section">
                         <div class="section-label">Studies</div>
                         <div class="resume-list">
-                            <div class="resume-item">
-                                <span class="resume-item-left">Bachellor Design and Creative Technologies</span>
-                                <span class="resume-item-right">UPV</span>
-                            </div>
-                            <div class="resume-item">
-                                <span class="resume-item-left">Master in interaction Design</span>
-                                <span class="resume-item-right">ESD Madrid</span>
-                            </div>
-                            <div class="resume-item">
-                                <span class="resume-item-left">Design Thinking Course</span>
-                                <span class="resume-item-right">IST Lisbon</span>
-                            </div>
-                            <div class="resume-item">
-                                <span class="resume-item-left">Creative entrepreneurship</span>
-                                <span class="resume-item-right">EFC Oslo</span>
-                            </div>
+                            <div class="resume-item"><span class="resume-item-left">Bachelor Design and Creative Technologies</span><span class="resume-item-right">UPV</span></div>
+                            <div class="resume-item"><span class="resume-item-left">Master in Interaction Design</span><span class="resume-item-right">ESD Madrid</span></div>
+                            <div class="resume-item"><span class="resume-item-left">Design Thinking Course</span><span class="resume-item-right">IST Lisbon</span></div>
+                            <div class="resume-item"><span class="resume-item-left">Creative entrepreneurship</span><span class="resume-item-right">EFC Oslo</span></div>
                         </div>
                     </div>
 
                     <div class="resume-section">
                         <div class="section-label">Awards and Talks</div>
                         <div class="resume-list">
-                            <div class="resume-row">
-                                <span class="resume-item-left">ADG Laus Digital Design</span>
-                                <span class="resume-item-right">Bronze Award</span>
-                            </div>
-                            <div class="resume-row">
-                                <span class="resume-item-left">Designing for Women´s Health</span>
-                                <span class="resume-item-right">PD Ladies London</span>
-                            </div>
-                            <div class="resume-row">
-                                <span class="resume-item-left">Designing the User Persona</span>
-                                <span class="resume-item-right">E ESE DAYS Madrid</span>
-                            </div>
-                            <div class="resume-row">
-                                <span class="resume-item-left">EFC Oslo Creative Futures</span>
-                                <span class="resume-item-right">Best researched project</span>
-                            </div>
+                            <div class="resume-row"><span class="resume-item-left">ADG Laus Digital Design</span><span class="resume-item-right">Bronze Award</span></div>
+                            <div class="resume-row"><span class="resume-item-left">Designing for Women's Health</span><span class="resume-item-right">PD Ladies London</span></div>
+                            <div class="resume-row"><span class="resume-item-left">Designing the User Persona</span><span class="resume-item-right">ESE DAYS Madrid</span></div>
+                            <div class="resume-row"><span class="resume-item-left">EFC Oslo Creative Futures</span><span class="resume-item-right">Best researched project</span></div>
                         </div>
                     </div>
                 </div>
 
-                <!-- PERSONAL CONTENT -->
                 <div class="content-panel" id="content-personal">
-                    <h1 class="about-title">In my downtime, you'll find me playing music or finding a new overpriced coffee in my area (my guilty pleasure). </h1>
+                    <h1 class="about-title">hi, i'm Natalia :)</h1>
+                    <p class="about-text">I'm obsessed with design, chocolate, and long walks.</p>
+                    <p class="about-text">In my downtime, you'll find me <span class="text-highlight" id="music-highlight">playing music</span> or hunting down an overpriced coffee (my guilty pleasure).</p>
 
-                    <p class="about-text">
-                        I like making meaningful connections, sharing ideas or building something new.
-                    </p>
-
-                    <div class="hobby-grid">
-                        <div class="hobby-card">
-                            <div class="hobby-icon">🥾</div>
-                            <div class="hobby-title">Hiking</div>
-                            <div class="hobby-desc">Mountains and trails are my happy place</div>
-                        </div>
-                        <div class="hobby-card">
-                            <div class="hobby-icon">✏️</div>
-                            <div class="hobby-title">Illustration</div>
-                            <div class="hobby-desc">Bringing ideas to life with pen and paper</div>
-                        </div>
-                        <div class="hobby-card">
-                            <div class="hobby-icon">📷</div>
-                            <div class="hobby-title">Music</div>
-                            <div class="hobby-desc">Play the violin since 8</div>
-                        </div>
-                        <div class="hobby-card">
-                            <div class="hobby-icon">✈️</div>
-                            <div class="hobby-title">Currently reading</div>
-                            <div class="hobby-desc">Hamnet</div>
+                    <div class="resume-section">
+                        <div class="section-label">Creative friends that inspire me</div>
+                        <div class="resume-list">
+                            <div class="resume-item">
+                                <span class="resume-item-left">Ana S&#225;nchez</span>
+                                <span class="resume-item-right" style="display:flex;align-items:center;gap:8px;">
+                                    <span>ig @galarbara</span>
+                                    <a href="https://instagram.com/galarbara" target="_blank" class="friend-link" aria-label="Open profile">
+                                        <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                                    </a>
+                                </span>
+                            </div>
+                            <div class="resume-item">
+                                <span class="resume-item-left">Joan Pous</span>
+                                <span class="resume-item-right" style="display:flex;align-items:center;gap:8px;">
+                                    <span>ig @joanpous</span>
+                                    <a href="https://instagram.com/joanpous" target="_blank" class="friend-link" aria-label="Open profile">
+                                        <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                                    </a>
+                                </span>
+                            </div>
+                            <div class="resume-item">
+                                <span class="resume-item-left">&#193;lvaro Mir&#243;</span>
+                                <span class="resume-item-right" style="display:flex;align-items:center;gap:8px;">
+                                    <span>alvaroymiro.com</span>
+                                    <a href="https://alvaroymiro.com" target="_blank" class="friend-link" aria-label="Open website">
+                                        <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                                    </a>
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </main>
 
-    <!-- DYNAMIC BOTTOM BAR -->
     <div class="dynamic-bar" id="dynamic-bar">
         <div class="bar-content-wrapper">
             <nav class="nav-menu">
@@ -696,11 +256,10 @@
     </div>
 
     <script>
-        // --- CUSTOM CURSOR ---
-        const cursor = document.querySelector('.cursor');
+        // CURSOR
+        const cursor = document.getElementById('cursor');
         const xTo = gsap.quickTo(cursor, "x", { duration: 0.1, ease: "power3" });
         const yTo = gsap.quickTo(cursor, "y", { duration: 0.1, ease: "power3" });
-
         window.addEventListener("mousemove", (e) => {
             if (!cursor.classList.contains('visible')) {
                 gsap.set(cursor, { x: e.clientX, y: e.clientY });
@@ -713,71 +272,41 @@
         document.addEventListener('DOMContentLoaded', () => {
             gsap.registerPlugin(ScrollTrigger);
 
-            // --- ENTRY ANIMATIONS ---
             const header = document.querySelector('.site-header');
             const fadeElements = document.querySelectorAll('.fade-in');
             const dynamicBar = document.getElementById('dynamic-bar');
-
-            // Check if header animation has already played in this session
             const headerAnimated = sessionStorage.getItem('headerAnimated');
 
             if (headerAnimated) {
-                // Skip header animation, show immediately
                 gsap.set(header, { opacity: 1, y: 0 });
-                gsap.set(dynamicBar, { opacity: 1, y: 0, xPercent: -50, filter: "blur(0px)" });
-                gsap.set(fadeElements, { opacity: 0, y: 40 });
-
-                // Only animate content
-                gsap.to(fadeElements, {
-                    opacity: 1,
-                    y: 0,
-                    duration: 0.7,
-                    ease: "power3.out",
-                    stagger: 0.1,
-                    delay: 0.1
-                });
+                gsap.set(dynamicBar, { opacity: 1, y: 0, xPercent: -50 });
+                gsap.to(fadeElements, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out", stagger: 0.1, delay: 0.1 });
             } else {
-                // First visit - animate everything
                 gsap.set(header, { opacity: 0, y: -20 });
                 gsap.set(fadeElements, { opacity: 0, y: 40 });
                 gsap.set(dynamicBar, { opacity: 0, y: 20, xPercent: -50, filter: "blur(5px)" });
-
-                const entryTl = gsap.timeline({ delay: 0.1 });
-
-                entryTl.to(header, {
-                    opacity: 1,
-                    y: 0,
-                    duration: 0.5,
-                    ease: "power3.out"
-                });
-
-                entryTl.to(dynamicBar, {
-                    opacity: 1,
-                    y: 0,
-                    xPercent: -50,
-                    filter: "blur(0px)",
-                    duration: 0.6,
-                    ease: "power3.out"
-                }, "-=0.3");
-
-                entryTl.to(fadeElements, {
-                    opacity: 1,
-                    y: 0,
-                    duration: 0.7,
-                    ease: "power3.out",
-                    stagger: 0.1
-                }, "-=0.4");
-
-                // Mark header as animated for this session
+                const tl = gsap.timeline({ delay: 0.1 });
+                tl.to(header, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" });
+                tl.to(dynamicBar, { opacity: 1, y: 0, xPercent: -50, filter: "blur(0px)", duration: 0.6, ease: "power3.out" }, "-=0.3");
+                tl.to(fadeElements, { opacity: 1, y: 0, duration: 0.7, ease: "power3.out", stagger: 0.1 }, "-=0.4");
                 sessionStorage.setItem('headerAnimated', 'true');
             }
 
-            // --- TOGGLE FUNCTIONALITY ---
+            // TOGGLE
             const toggleWork = document.getElementById('toggle-work');
             const togglePersonal = document.getElementById('toggle-personal');
+            const slider = document.getElementById('toggle-slider');
             const imageFlipper = document.getElementById('image-flipper');
             const contentWork = document.getElementById('content-work');
             const contentPersonal = document.getElementById('content-personal');
+
+            function moveSliderTo(btn) {
+                const container = document.querySelector('.toggle-container');
+                const containerRect = container.getBoundingClientRect();
+                const btnRect = btn.getBoundingClientRect();
+                slider.style.width = btnRect.width + 'px';
+                slider.style.transform = 'translateX(' + (btnRect.left - containerRect.left - 4) + 'px)';
+            }
 
             function switchToWork() {
                 toggleWork.classList.add('active');
@@ -785,6 +314,7 @@
                 imageFlipper.classList.remove('flipped');
                 contentWork.classList.add('active');
                 contentPersonal.classList.remove('active');
+                moveSliderTo(toggleWork);
             }
 
             function switchToPersonal() {
@@ -793,83 +323,65 @@
                 imageFlipper.classList.add('flipped');
                 contentPersonal.classList.add('active');
                 contentWork.classList.remove('active');
+                moveSliderTo(togglePersonal);
             }
 
             toggleWork.addEventListener('click', switchToWork);
             togglePersonal.addEventListener('click', switchToPersonal);
-
-            // Click on photo to toggle
             imageFlipper.addEventListener('click', () => {
-                if (imageFlipper.classList.contains('flipped')) {
-                    switchToWork();
-                } else {
-                    switchToPersonal();
-                }
+                imageFlipper.classList.contains('flipped') ? switchToWork() : switchToPersonal();
             });
 
-            // --- SMOOTH SCROLL WITH LENIS ---
-            const lenis = new Lenis({
-                duration: 1.2,
-                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-                smooth: true,
-            });
+            requestAnimationFrame(() => moveSliderTo(toggleWork));
 
+            // HIGHLIGHT HOVER IMAGE
+            const musicHighlight = document.getElementById('music-highlight');
+            const preview = document.getElementById('highlight-preview');
+
+            if (musicHighlight && preview) {
+                musicHighlight.addEventListener('mouseenter', () => preview.classList.add('visible'));
+                musicHighlight.addEventListener('mouseleave', () => preview.classList.remove('visible'));
+                musicHighlight.addEventListener('mousemove', (e) => {
+                    const offset = 20;
+                    let x = e.clientX + offset;
+                    let y = e.clientY + offset;
+                    if (x + 300 > window.innerWidth)  x = e.clientX - 300 - offset;
+                    if (y + 300 > window.innerHeight) y = e.clientY - 300 - offset;
+                    preview.style.left = x + 'px';
+                    preview.style.top  = y + 'px';
+                });
+            }
+
+            // LENIS
+            const lenis = new Lenis({ duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smooth: true });
             lenis.on('scroll', ScrollTrigger.update);
-
-            gsap.ticker.add((time) => {
-                lenis.raf(time * 1000);
-            });
-
+            gsap.ticker.add((time) => { lenis.raf(time * 1000); });
             gsap.ticker.lagSmoothing(0);
 
-            // --- DYNAMIC BAR SCROLL BEHAVIOR ---
-            let lastScrollY = 0;
             let barVisible = true;
-
             lenis.on('scroll', ({ scroll, direction }) => {
-                // direction: 1 = scrolling down, -1 = scrolling up
                 if (direction === 1 && barVisible && scroll > 100) {
-                    // Scrolling down - hide bar
                     barVisible = false;
-                    gsap.to(dynamicBar, {
-                        y: 100,
-                        opacity: 0,
-                        duration: 0.3,
-                        ease: "power2.out"
-                    });
+                    gsap.to(dynamicBar, { y: 100, opacity: 0, duration: 0.3, ease: "power2.out" });
                 } else if (direction === -1 && !barVisible) {
-                    // Scrolling up - show bar
                     barVisible = true;
-                    gsap.to(dynamicBar, {
-                        y: 0,
-                        opacity: 1,
-                        duration: 0.3,
-                        ease: "power2.out"
-                    });
+                    gsap.to(dynamicBar, { y: 0, opacity: 1, duration: 0.3, ease: "power2.out" });
                 }
             });
 
-            // --- COPY EMAIL FUNCTIONALITY ---
+            // COPY EMAIL
             const copyEmailBtn = document.getElementById('copy-email-btn');
             if (copyEmailBtn) {
                 copyEmailBtn.addEventListener('click', async (e) => {
                     e.preventDefault();
-                    const email = copyEmailBtn.getAttribute('data-email');
-
                     try {
-                        await navigator.clipboard.writeText(email);
+                        await navigator.clipboard.writeText(copyEmailBtn.getAttribute('data-email'));
                         copyEmailBtn.classList.add('copied');
-
-                        setTimeout(() => {
-                            copyEmailBtn.classList.remove('copied');
-                        }, 2000);
-                    } catch (err) {
-                        console.error('Failed to copy email:', err);
-                    }
+                        setTimeout(() => copyEmailBtn.classList.remove('copied'), 2000);
+                    } catch (err) { console.error('Failed to copy:', err); }
                 });
             }
         });
     </script>
 </body>
-
 </html>
