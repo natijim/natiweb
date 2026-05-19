@@ -1306,7 +1306,8 @@
             if (fromPeek) {
                 sessionStorage.removeItem('fromPeek');
                 gsap.set(header, { opacity: 1, y: 0 });
-                gsap.set(dynamicBar, { opacity: 1, y: 0, xPercent: -50, filter: "blur(0px)" });
+                gsap.set(dynamicBar, { opacity: 0, y: 30, xPercent: -50, filter: "blur(5px)" });
+                gsap.to(dynamicBar, { opacity: 1, y: 0, xPercent: -50, filter: "blur(0px)", duration: 0.6, ease: "power3.out", delay: 0.3 });
                 gsap.set(fadeElements, { opacity: 1, y: 0 });
                 // Reveal the page now that GSAP has positioned everything
                 document.documentElement.classList.remove('peek-arriving');
